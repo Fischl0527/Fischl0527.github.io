@@ -1,207 +1,243 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Midnight Phantasmagoria!</title><meta name="author" content="Fischl0527"><meta name="copyright" content="Fischl0527"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Midnight Phantasmagoria!">
+<meta property="og:url" content="https://fischl0527.github.io/index.html">
+<meta property="og:site_name" content="Midnight Phantasmagoria!">
 <meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
+<meta property="og:image" content="https://fischl0527.github.io/img/875E73166434C2B697688F4E9DB5AA6B.png">
+<meta property="article:author" content="Fischl0527">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+<meta name="twitter:image" content="https://fischl0527.github.io/img/875E73166434C2B697688F4E9DB5AA6B.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://fischl0527.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
 
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
   
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
     
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
-
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
   
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
-
-<meta name="generator" content="Hexo 7.3.0"></head>
-
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Midnight Phantasmagoria!',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/99693557_p0_master1200.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a></span><div id="menus"></div></nav><div id="site-info"><h1 id="site-title">Midnight Phantasmagoria!</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/18/2025SpringWeek2/" title="2025 Spring Week2">2025 Spring Week2</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-18T03:45:14.000Z" title="Created 2025-03-18 11:45:14">2025-03-18</time></span></div><div class="content">刷题[LitCTF 2023]Follow me and hack me 简单的GET和POST还有改cookie  有彩蛋！扫你目录  彩蛋（虽然我没GET到什么含义）： 1234&lt;?php    // 第三个彩蛋！(看过头号玩家么？)    // _R3ady_Pl4yer_000ne_ (3/?)?&gt;  burp写法  Yakit写法：   [SWPUCTF 2021 新生赛]Do_you_know_http 在这里也可以改包 访问这个文件就行了，secretttt.php yakit解法：  重定向到了a.php，访问a.php 可以了，访问secretttt.php  行了  Burp解法 改User-Agent: WLLM  访问a.php，继续本地访问  访问secretttt.php  [LitCTF...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/09/2025SpringWeek1/" title="2025 Spring Week1">2025 Spring Week1</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-03-09T03:45:14.000Z" title="Created 2025-03-09 11:45:14">2025-03-09</time></span></div><div class="content">工具   找flag既然提示了flag可能在文件里.所以flag就是: flag{hello_world}或xxxctf{we1c0me!}!  算了,直接看.md文件源代码 flag{we1c0me_t0_CTF!} 题目view_source  get_post python脚本1234567891011121314151617181920import hashlibimport itertoolsimport stringdef find_md5_match(prefix=&quot;19ca14&quot;, max_length=6):    chars = string.ascii_letters + string.digits  # 可选字符集（字母+数字）    for length in range(1, max_length + 1):        for candidate in itertools.product(chars, repeat=length):            test_string =...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/01/27/2025Win%E7%AC%AC%E4%B8%89%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="2025 Win SSTI">2025 Win SSTI</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-01-26T16:00:00.000Z" title="Created 2025-01-27 00:00:00">2025-01-27</time></span></div><div class="content">学习文章： 最全SSTI模板注入waf绕过总结（6700+字数！） FLask SSTI从零到入门 - 跳跳糖 使用Python Flask搭建一个简单的Web站点并发布到公网上访问 一、刷题 （一）[安洵杯 2020]Normal SSTI 进到靶场只有一下信息  随便试几个数  这一题关键在于用Unicode编码绕过点和下划线的过滤和用{{ “{%” }}%}绕过{{ “{{“ }}的过滤 这个只要知道了用编码绕过就很好解 学习了一些知识后知道了： &lt;font style&#x3D;”color:rgb(48, 49, 51);”过滤了{{ “{{“ }}}可以使用{{ “{%” }}print()%} 因为.和[]被过滤，所以使用flask的|attr来调用方法 ‘’|attr(“class”)等于 ‘’.class 如果要使用xxx.os(‘xxx’)类似的方法，可以使用 xxx|attr(“os”)(‘xxx’) 用脚本 123class_name = &quot;__class__&quot;unicode_class_name =...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/01/23/2025WIn%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="2025 Win 反序列化">2025 Win 反序列化</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-01-23T03:45:14.000Z" title="Created 2025-01-23 11:45:14">2025-01-23</time></span></div><div class="content">一、讲义内作业 PCRE回溯次数限制：   图中第5步有红颜色，表示匹配不成功。此时b{1,3}已经匹配到了2个字符“b”，准备尝试第三个时，结果发现接下来的字符是“c”。那么就认为b{1,3}就已经匹配完毕。然后状态又回到之前的状态（即第6步，与第4步一样），最后再用子表达式c，去匹配字符“c”。当然，此时整个表达式匹配成功了preg_match的匹配存在回溯，回溯次数上限是1000000次，超过上限后函数直接返回false。  fastcoll 工具  内容不同但是md5值是相同的，伟大！无需多言！  其中被解析的字符第三行开头就有不一样的   is_numeric()函数—获取变检测变量是否为数字或数字字符串 如果var是数字或数字字符串则返回 TRUE，否则返回 FALSE   strcmp()函数—比较字符串大小函数 strcmp只会处理字符串，如果给个数组的话呢，就会返回NULL   sha1()函数—sha1 加密函数 以下值在sha1...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/01/18/2025WIn%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="2025 Win RCE">2025 Win RCE</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-01-18T03:45:14.000Z" title="Created 2025-01-18 11:45:14">2025-01-18</time></span></div><div class="content">一、Ctfhub-RCE模块—-命令注入 打开环境后发现这个页面，按照上课讲的，肯定是先访问自己 接着出现了数组  之后列出目录内容，看一下文件有哪些 1?ip=127.0.0.1;ls   查看这个2760816330439.php文件 1?ip=127.0.0.1;ls;cat 2760816330439.php   再查看页面源代码就可以了得到flag了：ctfhub{4ce5f47f3595fceda2ebb063}  又忍耐不住自己的好奇心，查看了index文件，感觉这个好像是这个页面的文件。  二、RCE-labs[0-8]题（一）[RCE-labs]Level 0 -  代码执行&amp;命令执行打开靶场后发现以下内容：  这个应该是一个学习的靶场，毕竟flag直接给出了 分析一下代码： 1&lt;?php   php代码开始标志  1include (&quot;get_flag.php&quot;);  include文件包含，把get_flag.php文件包含进来  123$code =...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/01/13/2025WIn%E8%AF%BE%E5%89%8D%E5%87%86%E5%A4%87/" title="2025 Win Homework 0">2025 Win Homework 0</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2025-01-13T03:45:14.000Z" title="Created 2025-01-13 11:45:14">2025-01-13</time></span></div><div class="content">一、PHP语言基础 由于之前写过PHP笔记，这里的PHP知识作为补充  （一）php基础1 知识链接：[https://github.com/natro92/HnuSec-Training-Website/blob/main/docs/file/PHP1.pdf](https://github.com/natro92/HnuSec-Training-Website/blob/main/docs/file/PHP1.pdf)   通过函数修改全局变量要在变量前加上global 常量名不加$修饰符 常量定义： bool define ( string $name , mixed $value [, bool $case_insensitive &#x3D; false ] )  name：必选参数，常量名称，即标志符。  value：必选参数，常量的值。  case_insensitive：可选参数，如果设置为 TRUE，该常量则大小写不敏感，默认是大小写敏感的   GLOBALS：  $GLOBALS 是PHP的一个超级全局变量组，在一个PHP脚本的全部作用域中都可以访问。...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/12/02/PHP%E5%AD%A6%E4%B9%A0%E5%8F%8A%E7%BB%83%E4%B9%A0/" title="PHP学习及练习">PHP学习及练习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-12-02T03:45:14.000Z" title="Created 2024-12-02 11:45:14">2024-12-02</time></span></div><div class="content">一、PHP开发入门1.PHP概述PHP最初是由 Rasmus Lerdorf于1994年为了维护个人网页而编写的一个简单程序。这个程序用来显示Rasmus Lerdorf的个人履历以及统计网页流量，因此最初称为个人主页(Personal Home Page)。后来受到GNU的影响，它更名为PHP(Hypertext Preprocessor，超文本预处理器）。 PHP作为服务器端Web程序开发语言，主要有以下两方面原因： 1.PHP是一种服务器端、HTML嵌入式的脚本语言，因此适合Web开发。 2.PHP是B&#x2F;S(Browser&#x2F;Server，浏览器&#x2F;服务器)架构，即服务器启动后，用户可以不使用客户端软件，而是使用浏览器进行访问，这种方式既保持了图形化的用户界面，又大大减少了应用程序的维护量。 PHP的应用领域： 全球有60%...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/11/24/MySQL%E5%AD%A6%E4%B9%A0/" title="MySQL学习">MySQL学习</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-11-24T03:45:14.000Z" title="Created 2024-11-24 11:45:14">2024-11-24</time></span></div><div class="content">写这篇学习笔记时，参考视频为：【MySQL数据库基础教程_数据库_小白零基础带你掌握SQL数据库_包括（下载、安装和卸载）_小白必看】 https://www.bilibili.com/video/BV1y2mKYQEeg/?share_source&#x3D;copy_web&amp;vd_source&#x3D;26a21a8ac3f19fd0d663fb58dee41081 参考资料为：《MySQL5.7从入门到精通（视频教学版)（第二版)》 一、SQL 概述1.基本概念SQL (Structured Query Language:结构化查询语言) 是用于管理关系数据库管理系统（RDBMS）。 SQL 通过一系列的语句和命令来执行数据定义、数据查询、数据操作和数据控制等功能,包括数据插入、查询、更新和删除，数据库模式创建和修改，以及数据访问控制。 2.SQL 分类DDL（Data Definition Language）：数据定义语言，用来定义数据库对象：库、表、列等； DML（Data Manipulation...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/11/15/BaseCTF2024%E6%96%B0%E7%94%9F%E8%B5%9B%E5%A4%8D%E7%8E%B04_6/" title="BaseCTF2024新生赛复现 week1 4~6">BaseCTF2024新生赛复现 week1 4~6</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-11-15T03:45:14.000Z" title="Created 2024-11-15 11:45:14">2024-11-15</time></span></div><div class="content">本次复现题目为upload、md5绕过欸、Aura 酱的礼物 复现这些题目时我是跟着这个视频一步一步来的: https://www.bilibili.com/video/BV19wWEeoE1o/share_source&#x3D;copy_web&amp;vd_source&#x3D;26a21a8ac3f19fd0d663fb58dee41081 一、upload upload是一个无过滤的一种文件上传，解这道题需要一句话木马  **&lt;?php eval($_POST[0]);  ** 意思是直接把POST的参数里的0传到eval函数里面。 **&lt;?php **表示这是个文件的开头，说明后面的所有内容都是PHP的代码。 eval() 函数表示要动态执行。 POST 是获取到一些POST的信息。 0...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2024/11/12/Hello-Web/" title="Hello-Web">Hello-Web</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2024-11-12T03:45:14.000Z" title="Created 2024-11-12 11:45:14">2024-11-12</time></span></div><div class="content">本人大一新生，专业是信息安全，第一次注册账号打开BaseCTF2024新生赛，看了一下里面的题目，对于一个连C语言学的都有些吃力的大一学生来说确实有些晦涩难懂。但是这些知识早晚都得学，所以我也想借这个机会好好去学习一下，了解一下互联网。       这些题目的答案的提交都需要flag，我查了一下flag的含义： “flag用于标记某种状态、属性或情况等。比如设置一个“flag”来表明某个用户是否已经登录（登录状态设为一种“flag”值，未登录设为另一种），或者标记某个任务是否完成（完成设为一个特定“flag”值，未完成是另一个）等，方便程序在运行过程中根据这些“flag”的值来进行不同的处理操作。” 能力有限，所以复现题目为web中week1的内容：A dark...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Fischl0527</div><div class="author-info-description">「在哪里去追寻意义。夜色已深，梦还活着。」</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">11</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>Fischl0527</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/18/2025SpringWeek2/" title="2025 Spring Week2">2025 Spring Week2</a><time datetime="2025-03-18T03:45:14.000Z" title="Created 2025-03-18 11:45:14">2025-03-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/09/2025SpringWeek1/" title="2025 Spring Week1">2025 Spring Week1</a><time datetime="2025-03-09T03:45:14.000Z" title="Created 2025-03-09 11:45:14">2025-03-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/27/2025Win%E7%AC%AC%E4%B8%89%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="2025 Win SSTI">2025 Win SSTI</a><time datetime="2025-01-26T16:00:00.000Z" title="Created 2025-01-27 00:00:00">2025-01-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/23/2025WIn%E7%AC%AC%E4%BA%8C%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="2025 Win 反序列化">2025 Win 反序列化</a><time datetime="2025-01-23T03:45:14.000Z" title="Created 2025-01-23 11:45:14">2025-01-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/01/18/2025WIn%E7%AC%AC%E4%B8%80%E6%AC%A1%E4%BD%9C%E4%B8%9A/" title="2025 Win RCE">2025 Win RCE</a><time datetime="2025-01-18T03:45:14.000Z" title="Created 2025-01-18 11:45:14">2025-01-18</time></div></div></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
       
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-
-      <div class="outer">
-        <section id="main">
   
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2025/03/04/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2025-03-04T03:38:16.038Z" itemprop="datePublished">2025-03-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2025/03/04/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
+    <ul class="card-archive-list">
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              March 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
       
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2025/03/04/hello-world/" data-id="cm7ty7za80000eodfftdn7eou" data-title="Hello World" class="article-share-link"><span class="fa fa-share">Share</span></a>
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/01/">
+            <span class="card-archive-list-date">
+              January 2025
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
       
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              December 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
       
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/11/">
+            <span class="card-archive-list-date">
+              November 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
       
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/03/">March 2025</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2025/03/04/hello-world/">Hello World</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2021/03/">
+            <span class="card-archive-list-date">
+              March 2021
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
       
-      &copy; 2025 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">11</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-03-18T16:33:31.921Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2025 By Fischl0527</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (flase) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (flase) {
+      const sub = "「在哪里去追寻意义。夜色已深，梦还活着。」".slice()
 
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
 
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
 
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
-</html>
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  typedJSFn.processSubtitle("「在哪里去追寻意义。夜色已深，梦还活着。」")
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
