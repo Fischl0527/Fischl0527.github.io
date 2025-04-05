@@ -1,0 +1,15 @@
+/* 自定义文章正文背景样式 */
+#post {
+  background: linear-gradient(135deg, rgba(221, 214, 243, 0.9), rgba(243, 230, 255, 0.9));
+  border-radius: 20px;
+  padding: 30px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 20px rgba(160, 130, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+/* 可选：段落间距微调 */
+#post p {
+  line-height: 1.8;
+  margin-bottom: 1em;
+}
