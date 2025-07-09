@@ -1,0 +1,250 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2025 Spring Week2 | Midnight Phantasmagoria!</title><meta name="author" content="Fischl0527"><meta name="copyright" content="Fischl0527"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="刷题[LitCTF 2023]Follow me and hack me 简单的GET和POST还有改cookie  有彩蛋！扫你目录  彩蛋（虽然我没GET到什么含义）： 1234&lt;?php    &#x2F;&#x2F; 第三个彩蛋！(看过头号玩家么？)    &#x2F;&#x2F; _R3ady_Pl4yer_000ne_ (3&#x2F;?)?&gt;  burp写法  Yakit写法：   [SWPUCTF 2021 新生赛">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025 Spring Week2">
+<meta property="og:url" content="https://fischl0527.github.io/2025/03/18/HnuSecTraining/2025SpringWeek2/index.html">
+<meta property="og:site_name" content="Midnight Phantasmagoria!">
+<meta property="og:description" content="刷题[LitCTF 2023]Follow me and hack me 简单的GET和POST还有改cookie  有彩蛋！扫你目录  彩蛋（虽然我没GET到什么含义）： 1234&lt;?php    &#x2F;&#x2F; 第三个彩蛋！(看过头号玩家么？)    &#x2F;&#x2F; _R3ady_Pl4yer_000ne_ (3&#x2F;?)?&gt;  burp写法  Yakit写法：   [SWPUCTF 2021 新生赛">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://fischl0527.github.io/img/cover/2025SpringWeek2.jpg">
+<meta property="article:published_time" content="2025-03-18T03:45:14.000Z">
+<meta property="article:modified_time" content="2025-05-05T17:24:58.571Z">
+<meta property="article:author" content="Fischl0527">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fischl0527.github.io/img/cover/2025SpringWeek2.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2025 Spring Week2",
+  "url": "https://fischl0527.github.io/2025/03/18/HnuSecTraining/2025SpringWeek2/",
+  "image": "https://fischl0527.github.io/img/cover/2025SpringWeek2.jpg",
+  "datePublished": "2025-03-18T03:45:14.000Z",
+  "dateModified": "2025-05-05T17:24:58.571Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Fischl0527",
+      "url": "https://fischl0527.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://fischl0527.github.io/2025/03/18/HnuSecTraining/2025SpringWeek2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2025 Spring Week2',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archiveC"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover/2025SpringWeek2.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a><a class="nav-page-title" href="/"><span class="site-name">2025 Spring Week2</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archiveC"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2025 Spring Week2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2025-03-18T03:45:14.000Z" title="Created 2025-03-18 11:45:14">2025-03-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2025-05-05T17:24:58.571Z" title="Updated 2025-05-06 01:24:58">2025-05-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">467</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>1mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><meta name="referrer" content="no-referrer"/>
+
+<h1 id="刷题"><a href="#刷题" class="headerlink" title="刷题"></a>刷题</h1><h2 id="LitCTF-2023-Follow-me-and-hack-me"><a href="#LitCTF-2023-Follow-me-and-hack-me" class="headerlink" title="[LitCTF 2023]Follow me and hack me"></a><font style="color:rgb(0, 0, 0);">[LitCTF 2023]Follow me and hack me</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742282498420-96590239-b045-408b-94e1-f30adcf2e256.png"></p>
+<p>简单的GET和POST还有改cookie</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742282990412-38aa37e4-e338-4d9c-b9b5-a8703e4e04f7.png"></p>
+<p>有彩蛋！扫你目录</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742282780502-3d941721-d657-464d-b99d-11df5fb37cff.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742283017838-7311adca-b8a6-4935-82b7-a7480c3d84c4.png"></p>
+<p>彩蛋（虽然我没GET到什么含义）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="comment">// 第三个彩蛋！(看过头号玩家么？)</span></span><br><span class="line">    <span class="comment">// _R3ady_Pl4yer_000ne_ (3/?)</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>burp写法</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742283918229-a5306ad4-2c02-4283-850c-ce3f6581f40c.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742284080149-6866d247-9a7f-41e4-b2a3-c8cc77730bed.png">Yakit写法：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742283260367-8b69135b-5354-4665-8473-45a5939ebebd.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742283486300-60309929-46c1-482f-8b81-a00569de4c62.png"></p>
+<h2 id="SWPUCTF-2021-新生赛-Do-you-know-http"><a href="#SWPUCTF-2021-新生赛-Do-you-know-http" class="headerlink" title="[SWPUCTF 2021 新生赛]Do_you_know_http"></a><font style="color:rgb(0, 0, 0);">[SWPUCTF 2021 新生赛]Do_you_know_http</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742284200057-073d9253-2fe5-4293-82f3-a62ce892bca4.png"></p>
+<p>在这里也可以改包</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742284383447-6e941b82-d5eb-4ccc-a6fe-3ae5b7693289.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742284934428-6c10edb7-4858-4f23-bb05-3576c8478288.png">访问这个文件就行了，secretttt.php<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742284951707-67c7f19a-78bf-42d1-afa0-8d629b92a025.png"></p>
+<p>yakit解法：</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285112040-a49a3945-8e80-4cc0-8710-426f9f969146.png"></p>
+<p>重定向到了a.php，访问a.php<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285167397-7c773ed6-3b49-4c04-a29b-ca52426ded7c.png"></p>
+<p>可以了，访问secretttt.php</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285196623-51cbea51-2b12-4a09-854e-38c646ac9fa9.png"></p>
+<p>行了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285239582-976121e2-bd6e-4767-a7cd-39e31b148e34.png"></p>
+<p>Burp解法</p>
+<p>改User-Agent: WLLM</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285314781-31f0dc41-6358-407c-9874-fb3e803e15f7.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285354435-734529d2-935c-4781-86a3-68687cf16dec.png">访问a.php，继续本地访问</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285419128-e2199ca9-7d00-49c7-9a5b-401ab70d3796.png"></p>
+<p>访问secretttt.php</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742285450910-917580a0-aaa3-4690-bd64-7ff13973b325.png"></p>
+<h2 id="LitCTF-2023-就当无事发生"><a href="#LitCTF-2023-就当无事发生" class="headerlink" title="[LitCTF 2023]就当无事发生"></a><font style="color:rgb(0, 0, 0);">[LitCTF 2023]就当无事发生</font></h2><p>考的是git泄露，一般来说是要扫网站目录的，但是这道题直接把网站给出来了，还是GitHub上的，那就不需要了</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742287084460-601bf63c-e156-4d3d-8069-c96183440fc7.png"></p>
+<p>访问一下<a target="_blank" rel="noopener" href="https://probiusofficial.github.io/">https://ProbiusOfficial.github.io</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742286974685-5bbbb367-6207-49f6-949d-b966a44c599a.png"></p>
+<p>找他GitHub</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742287161937-e0f33ae2-844a-43ee-abf4-c4bda15f3226.png"></p>
+<p>看提交记录<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742287185214-7a3ad195-faab-407b-84f9-9e8010ecf9aa.png"></p>
+<p>看看版本及时间，方便找flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742286943655-8a53fcd9-7269-45c4-a8ab-c5dd61e7102d.png"></p>
+<p>找23年45月份的，Flag在此</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742287110602-372c97e2-d986-4618-a508-d352ffbddc7d.png"></p>
+<h2 id="第五空间-2021-WebFTP"><a href="#第五空间-2021-WebFTP" class="headerlink" title="[第五空间 2021]WebFTP"></a><font style="color:rgb(0, 0, 0);">[第五空间 2021]WebFTP</font></h2><p>看标签是git泄露，所以目录扫描一下</p>
+<p>py dirsearch.py -u <a target="_blank" rel="noopener" href="http://node7.anna.nssctf.cn:24629/">http://node7.anna.nssctf.cn:24629/</a></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742288819588-8f766bb5-307c-4c44-87fd-151b60277364.png"></p>
+<p>访问README.md</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742288803245-af96f404-c8ad-470a-ab0a-7286af04e003.png"></p>
+<p>找到用户名和密码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742289023634-338561df-1969-4cff-9772-f2d12cb91626.png"></p>
+<p>找flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742289040913-10fc6f66-e818-42f1-9b82-d7f4b9987cb2.png"></p>
+<p>之后查看phpinfo.php找flag就行</p>
+<p>Ctrl+f全局搜索flag。搜NSSCTF也行<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742289296273-04b21aea-7767-4f0b-b0f2-615f3104e128.png"></p>
+<p>在 dirsearch中又看到phpinfo.php，访问一下还是刚才的页面，刚才的步骤麻烦了<img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742289311932-1c161b7f-40cd-4b79-b899-b927b45e1f21.png"></p>
+<h2 id="SWPUCTF-2021-新生赛-easyrce"><a href="#SWPUCTF-2021-新生赛-easyrce" class="headerlink" title="[SWPUCTF 2021 新生赛]easyrce"></a><font style="color:rgb(0, 0, 0);">[SWPUCTF 2021 新生赛]easyrce</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742288140022-aa885f2c-e4f1-4f6e-afdb-1bc34da008c4.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742288175231-323aba4a-053e-479f-84ec-368e953de2f3.png"></p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742288205112-2beefb72-998c-4f39-af71-b17b04fc3df9.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742288222987-568b72b9-70c5-41f0-bd7d-83c6308a80f2.png"></p>
+<h2 id="LitCTF-2023-Ping"><a href="#LitCTF-2023-Ping" class="headerlink" title="[LitCTF 2023]Ping"></a><font style="color:rgb(0, 0, 0);">[LitCTF 2023]Ping</font></h2><p>ping命令通常用来作为网络可用性的检查。ping命令可以对一个网络地址发送测试数据包，看该网络地址是否有响应并统计响应时间，以此测试网络。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742290804173-04bd1f3f-4f23-4e3a-b7dd-88b1dccae9d5.png"></p>
+<p>分号隔开，看看文件</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742290824878-08cc78c7-5604-4925-b1f8-1c731941baea.png"></p>
+<p>ls看看根目录</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742290966166-5d38530c-5850-4ad5-b3c0-417d0776c774.png"></p>
+<p>cat &#x2F;flag</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291038267-9c39b73d-ba51-4dbc-97c6-c8c951b40b70.png"></p>
+<h2 id="SWPUCTF-2022-新生赛-奇妙的MD5"><a href="#SWPUCTF-2022-新生赛-奇妙的MD5" class="headerlink" title="[SWPUCTF 2022 新生赛]奇妙的MD5"></a><font style="color:rgb(0, 0, 0);">[SWPUCTF 2022 新生赛]奇妙的MD5</font></h2><p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291212989-4e8ce82c-c34b-4339-8913-721ba6d62303.png"><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291242327-4ac612c4-e4e4-419b-96f6-570ef6c2b82d.png"></p>
+<p>php弱比较，数组绕过</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291286547-5c625893-deab-45c1-b615-56f608350ddb.png"></p>
+<p>还是数组绕过</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291580536-3f01cd27-3c48-4fc0-b450-6068e04b56b4.png"></p>
+<h2 id="BJDCTF-2020-easy-md5"><a href="#BJDCTF-2020-easy-md5" class="headerlink" title="[BJDCTF 2020]easy_md5"></a><font style="color:rgb(0, 0, 0);">[BJDCTF 2020]easy_md5</font></h2><p>相应标头有hint</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291866525-87cbd11d-1c5e-40f0-8b3f-b7d33beb58ce.png"></p>
+<p>提交一下</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742291911604-d637a1c5-7d2e-4578-85c3-872cd9afe77a.png"></p>
+<p>出现了这个</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742292057505-580c0f56-aaf5-4431-a952-3527b3e14ce9.png"></p>
+<p>看源代码</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742292180717-2f2c7364-c817-46cf-88d3-cdc7f2ea1def.png"></p>
+<p>还是弱比较,数组绕过,或者也可以直接访问levell14.php也行,</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742292264323-d250e12a-d3d1-4cb2-b323-c5acefea4725.png"></p>
+<p>出现了这个页面</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742292273640-cead8cf4-9d22-48a4-9714-83305fccf1d2.png"></p>
+<p>数组绕过</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2025/png/50616406/1742292547508-1e598cc6-6766-4e5e-a0b1-2c176f001b52.png"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io">Fischl0527</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io/2025/03/18/HnuSecTraining/2025SpringWeek2/">https://fischl0527.github.io/2025/03/18/HnuSecTraining/2025SpringWeek2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/cover/2025SpringWeek2.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2025/03/09/HnuSecTraining/2025SpringWeek1/" title="2025 Spring Week1"><img class="cover" src="/img/cover/2025SpringWeek1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">2025 Spring Week1</div></div></div></a><a class="pagination-related  no-desc" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp"><img class="cover" src="/img/cover/2025GHCTFwp.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">2025GHCTFwp</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Fischl0527</div><div class="author-info-description">��������ȥ׷Ѱ���塣ҹɫ����λ����š���</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">16</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>Fischl0527</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. I am a CTFer. Welcome everyone!</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%B7%E9%A2%98"><span class="toc-number">1.</span> <span class="toc-text">刷题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#LitCTF-2023-Follow-me-and-hack-me"><span class="toc-number">1.1.</span> <span class="toc-text">[LitCTF 2023]Follow me and hack me</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-Do-you-know-http"><span class="toc-number">1.2.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]Do_you_know_http</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LitCTF-2023-%E5%B0%B1%E5%BD%93%E6%97%A0%E4%BA%8B%E5%8F%91%E7%94%9F"><span class="toc-number">1.3.</span> <span class="toc-text">[LitCTF 2023]就当无事发生</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4-2021-WebFTP"><span class="toc-number">1.4.</span> <span class="toc-text">[第五空间 2021]WebFTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPUCTF-2021-%E6%96%B0%E7%94%9F%E8%B5%9B-easyrce"><span class="toc-number">1.5.</span> <span class="toc-text">[SWPUCTF 2021 新生赛]easyrce</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LitCTF-2023-Ping"><span class="toc-number">1.6.</span> <span class="toc-text">[LitCTF 2023]Ping</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SWPUCTF-2022-%E6%96%B0%E7%94%9F%E8%B5%9B-%E5%A5%87%E5%A6%99%E7%9A%84MD5"><span class="toc-number">1.7.</span> <span class="toc-text">[SWPUCTF 2022 新生赛]奇妙的MD5</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BJDCTF-2020-easy-md5"><span class="toc-number">1.8.</span> <span class="toc-text">[BJDCTF 2020]easy_md5</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)"><img src="/img/cover/%E9%87%8D%E8%B5%B0BUUWEB%E8%B7%AF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUWEB(持续学习中)"/></a><div class="content"><a class="title" href="/2025/07/06/BUUWEB/" title="BUUWEB(持续学习中)">BUUWEB(持续学习中)</a><time datetime="2025-07-06T03:45:14.000Z" title="Created 2025-07-06 11:45:14">2025-07-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp"><img src="/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025御网杯wp"/></a><div class="content"><a class="title" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp">2025御网杯wp</a><time datetime="2025-05-11T03:45:14.000Z" title="Created 2025-05-11 11:45:14">2025-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF"><img src="/img/cover/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="十六届蓝桥杯CTF"/></a><div class="content"><a class="title" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF">十六届蓝桥杯CTF</a><time datetime="2025-04-26T03:45:14.000Z" title="Created 2025-04-26 11:45:14">2025-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp"><img src="/img/cover/2025sqCTF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025sqCTFwp"/></a><div class="content"><a class="title" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp">2025sqCTFwp</a><time datetime="2025-04-04T03:45:14.000Z" title="Created 2025-04-04 11:45:14">2025-04-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp"><img src="/img/cover/2025GHCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025GHCTFwp"/></a><div class="content"><a class="title" href="/2025/03/21/2025CTF/2025GHCTFwp/" title="2025GHCTFwp">2025GHCTFwp</a><time datetime="2025-03-21T03:45:14.000Z" title="Created 2025-03-21 11:45:14">2025-03-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2"><img src="/img/cover/2025SpringWeek2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025 Spring Week2"/></a><div class="content"><a class="title" href="/2025/03/18/HnuSecTraining/2025SpringWeek2/" title="2025 Spring Week2">2025 Spring Week2</a><time datetime="2025-03-18T03:45:14.000Z" title="Created 2025-03-18 11:45:14">2025-03-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Fischl0527</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
