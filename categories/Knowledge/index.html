@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Category: Knowledge | Midnight Phantasmagoria!</title><meta name="author" content="Fischl0527"><meta name="copyright" content="Fischl0527"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Midnight Phantasmagoria!">
+<meta property="og:url" content="https://fischl0527.github.io/categories/Knowledge/index.html">
+<meta property="og:site_name" content="Midnight Phantasmagoria!">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://fischl0527.github.io/img/875E73166434C2B697688F4E9DB5AA6B.png">
+<meta property="article:author" content="Fischl0527">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fischl0527.github.io/img/875E73166434C2B697688F4E9DB5AA6B.png"><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://fischl0527.github.io/categories/Knowledge/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Category: Knowledge',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'category'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url(/img/category.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="page-site-info"><h1 id="site-title">Knowledge</h1></div></header><main class="layout" id="content-inner"><div id="category"><div class="article-sort-title">Category - Knowledge</div><div class="article-sort"><div class="article-sort-item year">2025</div><div class="article-sort-item"><a class="article-sort-item-img" href="/2025/08/25/%E7%9F%A5%E8%AF%86/PHPSerialize-labs/" title="PHPSerialize-labs"><img src="/img/cover/PHPSerialize-labs.jpg" alt="PHPSerialize-labs" onerror="this.onerror=null;this.src='/img/404.jpg'"></a><div class="article-sort-item-info"><div class="article-sort-item-time"><i class="far fa-calendar-alt"></i><time class="post-meta-date-created" datetime="2025-08-25T03:45:14.000Z" title="Created 2025-08-25 11:45:14">2025-08-25</time></div><a class="article-sort-item-title" href="/2025/08/25/%E7%9F%A5%E8%AF%86/PHPSerialize-labs/" title="PHPSerialize-labs">PHPSerialize-labs</a></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Fischl0527</div><div class="author-info-description">「在哪里去追寻意义。夜色已深，梦还活着。」</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">18</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">6</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>Fischl0527</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. I am a CTFer. Welcome everyone!</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/08/25/%E7%9F%A5%E8%AF%86/PHPSerialize-labs/" title="PHPSerialize-labs"><img src="/img/cover/PHPSerialize-labs.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PHPSerialize-labs"/></a><div class="content"><a class="title" href="/2025/08/25/%E7%9F%A5%E8%AF%86/PHPSerialize-labs/" title="PHPSerialize-labs">PHPSerialize-labs</a><time datetime="2025-08-25T03:45:14.000Z" title="Created 2025-08-25 11:45:14">2025-08-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/08/08/HelloWeb/BUUWEB/" title="BUUCTFWEB"><img src="/img/cover/BUUCTFWEB.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BUUCTFWEB"/></a><div class="content"><a class="title" href="/2025/08/08/HelloWeb/BUUWEB/" title="BUUCTFWEB">BUUCTFWEB</a><time datetime="2025-08-08T03:45:14.000Z" title="Created 2025-08-08 11:45:14">2025-08-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/08/04/2025CTF/2025%20SWPU-NSSCTF/" title="2025SWPU-NSSCTFwp"><img src="/img/cover/2025SWPU-NSSCTFwp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025SWPU-NSSCTFwp"/></a><div class="content"><a class="title" href="/2025/08/04/2025CTF/2025%20SWPU-NSSCTF/" title="2025SWPU-NSSCTFwp">2025SWPU-NSSCTFwp</a><time datetime="2025-08-04T03:45:14.000Z" title="Created 2025-08-04 11:45:14">2025-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp"><img src="/img/cover/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025御网杯wp"/></a><div class="content"><a class="title" href="/2025/05/11/2025CTF/2025%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2025御网杯wp">2025御网杯wp</a><time datetime="2025-05-11T03:45:14.000Z" title="Created 2025-05-11 11:45:14">2025-05-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF"><img src="/img/cover/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="十六届蓝桥杯CTF"/></a><div class="content"><a class="title" href="/2025/04/26/2025CTF/%E5%8D%81%E5%85%AD%E5%B1%8A%E8%93%9D%E6%A1%A5%E6%9D%AFCTFwriteup/" title="十六届蓝桥杯CTF">十六届蓝桥杯CTF</a><time datetime="2025-04-26T03:45:14.000Z" title="Created 2025-04-26 11:45:14">2025-04-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp"><img src="/img/cover/2025sqCTF.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2025sqCTFwp"/></a><div class="content"><a class="title" href="/2025/04/04/2025CTF/sqCTFwp/" title="2025sqCTFwp">2025sqCTFwp</a><time datetime="2025-04-04T03:45:14.000Z" title="Created 2025-04-04 11:45:14">2025-04-04</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>Categories</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/2025CTF/"><span class="card-category-list-name">2025CTF</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/2025Win/"><span class="card-category-list-name">2025Win</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/HelloWeb/"><span class="card-category-list-name">HelloWeb</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/HnuSecTraining/"><span class="card-category-list-name">HnuSecTraining</span><span class="card-category-list-count">5</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Knowledge/"><span class="card-category-list-name">Knowledge</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/test/"><span class="card-category-list-name">test</span><span class="card-category-list-count">1</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/PHP/" style="font-size: 1.37em; color: #99a4b2">PHP</a> <a href="/tags/Compete/" style="font-size: 1.23em; color: #999ea6">Compete</a> <a href="/tags/SSTI/" style="font-size: 1.1em; color: #999">SSTI</a> <a href="/tags/SQL/" style="font-size: 1.1em; color: #999">SQL</a> <a href="/tags/CTFWeb/" style="font-size: 1.37em; color: #99a4b2">CTFWeb</a> <a href="/tags/test/" style="font-size: 1.1em; color: #999">test</a> <a href="/tags/RCE/" style="font-size: 1.1em; color: #999">RCE</a> <a href="/tags/Training/" style="font-size: 1.5em; color: #99a9bf">Training</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>Archives</span>
+      
+    </div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/08/">
+            <span class="card-archive-list-date">
+              August 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/05/">
+            <span class="card-archive-list-date">
+              May 2025
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/04/">
+            <span class="card-archive-list-date">
+              April 2025
+            </span>
+            <span class="card-archive-list-count">2</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/03/">
+            <span class="card-archive-list-date">
+              March 2025
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2025/01/">
+            <span class="card-archive-list-date">
+              January 2025
+            </span>
+            <span class="card-archive-list-count">4</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/12/">
+            <span class="card-archive-list-date">
+              December 2024
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2024/11/">
+            <span class="card-archive-list-date">
+              November 2024
+            </span>
+            <span class="card-archive-list-count">3</span>
+          </a>
+        </li>
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2021/03/">
+            <span class="card-archive-list-date">
+              March 2021
+            </span>
+            <span class="card-archive-list-count">1</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">18</div></div><div class="webinfo-item"><div class="item-name">Total Word Count :</div><div class="item-count">56.1k</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2025-08-27T18:21:40.996Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Fischl0527</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,YOU" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
