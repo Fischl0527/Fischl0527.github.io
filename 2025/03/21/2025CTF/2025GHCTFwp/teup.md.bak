@@ -1,0 +1,162 @@
+---
+title: 十六届蓝桥杯CTF
+date: 2025-4-26 11:45:14
+cover: /img/cover/十六届蓝桥杯CTFwriteup.jpg
+tags:
+  - Compete
+categories:
+  - 2025CTF
+---
+<meta name="referrer" content="no-referrer"/>
+
+写出了5道基础的签到题,基本上是有省奖了,但是web的黑客的那道题真的不会python,看不懂加密函数,解密方法就不知道了,真的该好好学python了。
+
+# 解题情况
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745768487350-b3fd3c21-fdb2-4de1-a7d9-f43ef1da86b3.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766796913-3903ade8-15a4-4498-891d-2b5a68cb7b35.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766797220-2486e1d6-b145-4ebc-a0a7-2d97db74d3fe.png)
+
+# Enigma
+
+工具：CyberChef
+
+看题目可以知道这是Enima进行加密
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766797478-d5c70722-90da-40d1-9b65-c77edb6f4fef.png)
+
+所以我们反过来,打开CyberChef,选择Enigma,把刚才题目的密文复制进去,得到的是可读的字符串,flag包裹一下去除空格就可以了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766797714-352f1730-0e6c-41ba-8ff5-002a92aa6d2f.png)
+
+flag：flag{HELLOCTFERTHISISAMESSAGEFORYOU}
+
+# 星际xml解释器
+
+很简单的xml,直接用通用playload就行了,甚至/flag都不用改,甚至username,password都不用改。直接file伪协议读取根目录下的flag即/flag就行
+
+Playload：
+
+```plain
+<!DOCTYPE ANY [
+    <!ENTITY test SYSTEM "file:///flag">
+]>
+```
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766798032-b6b3984c-3a45-4ea7-a2b9-0cbef842205a.png)
+
+flag：flag{78f6ec92-9da9-4cb5-8be9-8fed6f46b931}
+
+# ezEvtx
+
+把附件下载之后打开,对事件筛选一下,排除干扰的选项就行了
+
+干扰事件选项为7036,4624,4688,4634。
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766798363-2404f2b8-59be-40c1-a77a-098a22c34185.png)
+
+右上角筛选,把几个事件级别都勾选上,然后把这几个-7036,-4624,-4688,-4634,填上去注意要加负号代表剔除,然后就发现只有一个
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766798655-559e9370-f285-47ba-90c2-2dd3c4efe26b.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766798973-fe818bb7-303e-4cdd-82e4-7710e730257d.png)
+
+flag：flag{confidential.docx}
+
+# Flowzip
+
+工具：Wireshark
+
+这一题真的有点废时间,我一开始从头看到尾都没有结果,甚至随便找了给压缩包就尝试解压,发现不行,有看一下这个是个比较简单的题目,应该直接找就行了,观察length不同的就行了,真的需要耐心。结果是202的不一样,位置在第46个压缩包,其他的都是196和260等干扰选项。然后用追踪流http打开这个就行了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766799311-6cea7fd8-d463-4e4d-ad62-1332d943292a.png)
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766799606-25fa3a34-fed9-4b49-97e2-bfee687f1a44.png)
+
+flag：flag{c6db63e6-6459-4e75-bb37-3aec5d2b947b}
+
+# ShadowPhases
+
+工具：ida
+
+这道re题动态调试一下直接出来了也没有什么反调试函数,真的很简单。动态调试有个很好的作用,直接可以绕过繁琐的加密函数和头大的字符,直接看到结果,这样我们就不用对前面的繁琐的加密代码进行分析了
+
+断点下在scanf上,因为之后就是进行检测你的输入比较flag了
+
+printf(&Format);
+
+<font style="color:#D83931;"> scanf("%127s", Str1);</font>
+
+  if ( !strcmp(Str1, Str2) )
+
+puts(&byte_40502A);
+
+&Format是什么呢？动态调试一下应该是这个
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766799822-85546417-3ced-4902-b951-d547ea8770e3.png)
+
+这样就更加证明了断点加在scanf是合适的
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766800048-6558e315-7134-474f-8f70-cea5bf4c497c.png)
+
+因为之后是对Str1和Str2进行比较,所以分别看看Str1和Str2就行了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766800235-881406a8-66fd-4179-9539-15772beb50cd.png)
+
+flag在Str2里,显而易见
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766800444-e4130cbf-a0b1-495e-9737-df6ab0bd72fc.png)
+
+| 之后再左上角点击Edit进行导出就可以直接看到flag了 |  |
+| :--- | --- |
+
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766800701-527059ef-3ebf-464b-beba-60dead23c27a.png)
+
+记得要选择string literal,直接就能看到flag,可以直接复制
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766800955-99ea7e65-5b47-4408-8892-fbd0ef64b20d.png)
+
+flag：flag{0fa830e7-b699-4513-8e01-51f35b0f3293}
+
+# 黑客密室逃脱（未解出,只差解密的一步）
+
+题目页面
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766801278-9ecfac5d-c09f-48d2-91ce-686f04666d54.png)
+
+访问一下这个日志文件,要获取的应该就是加密的flag
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766801655-9c4ecef0-4b43-4667-a57a-79dab7c50801.png)
+
+这个提示输入file?name=xxx访问文件
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766802009-46b87dd1-6720-4c47-94ad-5fcd745e28b8.png)
+
+根目录的文件试了几个都不行
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766802378-41395aa1-8337-4afa-a98f-7a7d1da64c10.png)
+
+所以就尝试app.py,代码就出来了
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766802725-5580bc3b-887d-457c-b074-476274a3a36d.png)
+
+关键的几个代码如图
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766803192-98ebd975-5991-4e10-a854-dcdd17919bda.png)
+
+发现了hidden.txt
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766803487-f42642f4-cc6e-4503-a24e-96ae19fd28e8.png)
+
+用file?name=hidden.txt访问一下
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766803763-948a8193-d9ad-4095-a6e5-ca4cdb45b2c4.png)
+
+密钥就有了,在加上加密函数已知,密文已知,就可以推导出加密的flag是什么了,但是这个加密函数我看不懂,在平时就直接搜了,但是考试就没办法了,所以这一题就寄了。
+
+![](https://cdn.nlark.com/yuque/0/2025/png/50616406/1745766804070-ca5543ec-49ac-4040-ba25-c8e0e32aa0f1.png)
+
+**<font style="color:#646A73;"></font>**
