@@ -13,6 +13,7 @@
   line-height: 1.8;
   margin-bottom: 1em;
 }
+
 #go-up {
   display: flex;
   justify-content: center;
@@ -27,4 +28,62 @@
   top: 50%;
   transform: translate(-50%, -50%);
   line-height: 1;
+}
+
+/* hexo-blog-encrypt button fix */
+#hexo-blog-encrypt .hbe-content {
+  text-align: center;
+}
+
+#hexo-blog-encrypt .hbe-action-wrap {
+  position: relative;
+  z-index: 20;
+  display: block;
+  width: 100%;
+  margin-top: 28px;
+  text-align: center;
+  clear: both;
+}
+
+#hexo-blog-encrypt .hbe-unlock-btn {
+  display: inline-block;
+  min-width: 160px;
+  height: 42px;
+  line-height: 42px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #b86eff, #813ac4);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(129, 58, 196, 0.28);
+  transition: all 0.25s ease;
+}
+
+#hexo-blog-encrypt .hbe-unlock-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(129, 58, 196, 0.35);
+}
+
+#hexo-blog-encrypt .hbe-unlock-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  box-shadow: none;
+}
+
+#hexo-blog-encrypt .hbe-unlock-message {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 0 12px;
+  color: #d14d72;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+  white-space: nowrap;
+  writing-mode: horizontal-tb !important;
 }
