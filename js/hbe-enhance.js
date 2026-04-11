@@ -1,17 +1,29 @@
 (function () {
   const LOCK_MS = 3000;
+  let isDispatchingUnlock = false;
 
   function dispatchUnlock(mainElement) {
-    const event = new KeyboardEvent('keydown', {
-      key: 'Enter',
-      code: 'Enter',
-      keyCode: 13,
-      which: 13,
-      bubbles: true,
-      cancelable: true
-    });
+    if (isDispatchingUnlock) return;
+    isDispatchingUnlock = true;
 
-    mainElement.dispatchEvent(event);
+    try {
+      const event = new Event('keydown', {
+        bubbles: true,
+        cancelable: true
+      });
+
+      Object.defineProperty(event, 'key', { value: 'Enter' });
+      Object.defineProperty(event, 'code', { value: 'Enter' });
+      Object.defineProperty(event, 'keyCode', { value: 13 });
+      Object.defineProperty(event, 'which', { value: 13 });
+      Object.defineProperty(event, 'isComposing', { value: false });
+
+      mainElement.dispatchEvent(event);
+    } finally {
+      setTimeout(function () {
+        isDispatchingUnlock = false;
+      }, 0);
+    }
   }
 
   function lockButton(button, messageEl) {
@@ -54,7 +66,6 @@
       }
     }, 1000);
   }
-
 
   function patchAlert(button, messageEl, wrongPassMessage) {
     if (window.__hbe_alert_patched__) return;
@@ -103,19 +114,21 @@
 
     button.addEventListener('click', function () {
       if (button.disabled) return;
-      messageEl.style.display = 'none';
       messageEl.textContent = '';
+      messageEl.style.display = 'none';
       dispatchUnlock(mainElement);
     });
 
     input.addEventListener('keydown', function (event) {
       if (event.key !== 'Enter') return;
+      if (isDispatchingUnlock) return;
+
       event.preventDefault();
       event.stopPropagation();
 
       if (button.disabled) return;
-      messageEl.style.display = 'none';
       messageEl.textContent = '';
+      messageEl.style.display = 'none';
       dispatchUnlock(mainElement);
     });
 
