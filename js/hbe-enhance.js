@@ -16,6 +16,10 @@
     mainElement.dispatchEvent(event);
   }
 
+  function isLocked(button) {
+    return !!button && (button.disabled || button.dataset.locked === '1');
+  }
+
   function lockButton(button, messageEl) {
     if (!button || button.dataset.locked === '1') return;
 
@@ -75,7 +79,8 @@
     if (mainElement.dataset.hbeEnhanced === '1') return;
 
     const content = mainElement.querySelector('.hbe-content');
-    if (!content) return;
+    const input = document.getElementById('hbePass');
+    if (!content || !input) return;
 
     const wrongPassMessage = mainElement.dataset.wpm || '密码错误';
 
@@ -101,7 +106,7 @@
     patchAlert(button, messageEl, wrongPassMessage);
 
     button.addEventListener('click', function () {
-      if (button.disabled) return;
+      if (isLocked(button)) return;
 
       if (!window.isSecureContext || !(window.crypto && window.crypto.subtle)) {
         alert('当前页面未启用安全加密环境，请使用 HTTPS 访问后再解锁。');
@@ -112,6 +117,29 @@
       messageEl.style.display = 'none';
       triggerUnlock(mainElement);
     });
+
+    input.addEventListener(
+      'keydown',
+      function (event) {
+        if (event.key !== 'Enter') return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+
+        if (isLocked(button)) return;
+
+        if (!window.isSecureContext || !(window.crypto && window.crypto.subtle)) {
+          alert('当前页面未启用安全加密环境，请使用 HTTPS 访问后再解锁。');
+          return;
+        }
+
+        messageEl.textContent = '';
+        messageEl.style.display = 'none';
+        triggerUnlock(mainElement);
+      },
+      true
+    );
 
     mainElement.dataset.hbeEnhanced = '1';
   }
