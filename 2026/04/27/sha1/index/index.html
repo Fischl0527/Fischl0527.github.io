@@ -1,0 +1,800 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SHA-1 消息摘要算法实验讲解 | Midnight Phantasmagoria!</title><meta name="author" content="LFischl"><meta name="copyright" content="LFischl"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="SHA-1 消息摘要算法实验讲解本页面用于展示现代密码学实验三：消息摘要算法 SHA-1 的实现。页面内容分为三部分：第一部分说明 SHA-1 的背景与算法流程，第二部分对应分析我的 C&#x2F;C++ 实验代码，第三部分通过浏览器中的 JavaScript 交互演示填充、消息扩展、摘要计算和雪崩效应。 一、实验背景1. Hash 函数的作用Hash 函数可以把任意长度的输入映射为固定长度的输出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SHA-1 消息摘要算法实验讲解">
+<meta property="og:url" content="https://fischl0527.github.io/2026/04/27/sha1/index/index.html">
+<meta property="og:site_name" content="Midnight Phantasmagoria!">
+<meta property="og:description" content="SHA-1 消息摘要算法实验讲解本页面用于展示现代密码学实验三：消息摘要算法 SHA-1 的实现。页面内容分为三部分：第一部分说明 SHA-1 的背景与算法流程，第二部分对应分析我的 C&#x2F;C++ 实验代码，第三部分通过浏览器中的 JavaScript 交互演示填充、消息扩展、摘要计算和雪崩效应。 一、实验背景1. Hash 函数的作用Hash 函数可以把任意长度的输入映射为固定长度的输出">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://fischl0527.github.io/img/1722920933672d22504100a327490bbfb662b0e28148678603a6e2595e64c4c986b7c795d5b22.0.jpg">
+<meta property="article:published_time" content="2026-04-27T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-27T14:09:09.230Z">
+<meta property="article:author" content="LFischl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://fischl0527.github.io/img/1722920933672d22504100a327490bbfb662b0e28148678603a6e2595e64c4c986b7c795d5b22.0.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SHA-1 消息摘要算法实验讲解",
+  "url": "https://fischl0527.github.io/2026/04/27/sha1/index/",
+  "image": "https://fischl0527.github.io/img/1722920933672d22504100a327490bbfb662b0e28148678603a6e2595e64c4c986b7c795d5b22.0.jpg",
+  "datePublished": "2026-04-27T14:00:00.000Z",
+  "dateModified": "2026-04-27T14:09:09.230Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "LFischl",
+      "url": "https://fischl0527.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://fischl0527.github.io/2026/04/27/sha1/index/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"No results found for: ${query}","hits_stats":"${hits} articles found"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"Author: LFischl","link":"Link: ","source":"Source: Midnight Phantasmagoria!","info":"Copyright belongs to the author. For commercial use, please contact the author for authorization. For non-commercial use, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"You have switched to Traditional Chinese","cht_to_chs":"You have switched to Simplified Chinese","day_to_night":"You have switched to Dark Mode","night_to_day":"You have switched to Light Mode","bgLight":"#b86eff","bgDark":"#7b35c9","position":"bottom-left"},
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SHA-1 消息摘要算法实验讲解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div></div></div><div class="post type-page" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/index_img.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a><a class="nav-page-title" href="/"><span class="site-name">SHA-1 消息摘要算法实验讲解</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">SHA-1 消息摘要算法实验讲解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-04-27T14:00:00.000Z" title="Created 2026-04-27 22:00:00">2026-04-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-04-27T14:09:09.230Z" title="Updated 2026-04-27 22:09:09">2026-04-27</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">3.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>16mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="SHA-1-消息摘要算法实验讲解"><a href="#SHA-1-消息摘要算法实验讲解" class="headerlink" title="SHA-1 消息摘要算法实验讲解"></a>SHA-1 消息摘要算法实验讲解</h1><p>本页面用于展示现代密码学实验三：消息摘要算法 SHA-1 的实现。页面内容分为三部分：第一部分说明 SHA-1 的背景与算法流程，第二部分对应分析我的 C&#x2F;C++ 实验代码，第三部分通过浏览器中的 JavaScript 交互演示填充、消息扩展、摘要计算和雪崩效应。</p>
+<h2 id="一、实验背景"><a href="#一、实验背景" class="headerlink" title="一、实验背景"></a>一、实验背景</h2><h3 id="1-Hash-函数的作用"><a href="#1-Hash-函数的作用" class="headerlink" title="1. Hash 函数的作用"></a>1. Hash 函数的作用</h3><p>Hash 函数可以把任意长度的输入映射为固定长度的输出。在密码学中，Hash 函数常用于完整性校验、数字签名、消息认证码、文件指纹和口令存储等场景。</p>
+<p>例如，对一个文件计算 SHA-1 摘要后，只要文件中任意一个字节发生变化，最终摘要就会发生明显变化。接收方可以重新计算摘要并对比，从而判断数据是否被修改。</p>
+<h3 id="2-Hash-函数的基本性质"><a href="#2-Hash-函数的基本性质" class="headerlink" title="2. Hash 函数的基本性质"></a>2. Hash 函数的基本性质</h3><p>一个密码学 Hash 函数通常希望满足以下性质：</p>
+<table>
+<thead>
+<tr>
+<th>性质</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>确定性</td>
+<td>相同输入一定得到相同摘要</td>
+</tr>
+<tr>
+<td>固定长度输出</td>
+<td>不论输入多长，输出长度固定</td>
+</tr>
+<tr>
+<td>单向性</td>
+<td>从摘要难以反推出原文</td>
+</tr>
+<tr>
+<td>抗弱碰撞</td>
+<td>给定一个消息，难以找到另一个消息具有相同摘要</td>
+</tr>
+<tr>
+<td>抗强碰撞</td>
+<td>难以找到任意两个不同消息具有相同摘要</td>
+</tr>
+<tr>
+<td>雪崩效应</td>
+<td>输入发生微小变化，输出应出现明显变化</td>
+</tr>
+</tbody></table>
+<p>SHA-1 输出长度为 160 bit，也就是 20 字节，通常写成 40 个十六进制字符。</p>
+<h3 id="3-SHA-1-的安全性现状"><a href="#3-SHA-1-的安全性现状" class="headerlink" title="3. SHA-1 的安全性现状"></a>3. SHA-1 的安全性现状</h3><p>SHA-1 曾经被广泛用于数字签名、证书、版本控制和文件校验等场景。但随着碰撞攻击研究的发展，SHA-1 已经不再适合用于高安全要求的数字签名和证书体系。目前更推荐使用 SHA-256、SHA-3 或我国商用密码标准中的 SM3。</p>
+<p>本实验实现 SHA-1 的意义主要在于理解 Merkle-Damgard 结构、消息填充、消息扩展和压缩函数这些经典 Hash 算法思想。</p>
+<h2 id="二、SHA-1-算法总览"><a href="#二、SHA-1-算法总览" class="headerlink" title="二、SHA-1 算法总览"></a>二、SHA-1 算法总览</h2><p>SHA-1 的整体流程可以概括为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">任意长度消息</span><br><span class="line">  -&gt; 消息填充</span><br><span class="line">  -&gt; 按 512 bit 分组</span><br><span class="line">  -&gt; 每组拆成 16 个 32 bit 字</span><br><span class="line">  -&gt; 扩展为 80 个 32 bit 字</span><br><span class="line">  -&gt; 80 轮压缩函数</span><br><span class="line">  -&gt; 输出 160 bit 摘要</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-输入与输出"><a href="#1-输入与输出" class="headerlink" title="1. 输入与输出"></a>1. 输入与输出</h3><p>SHA-1 的输入是任意长度的二进制消息，输出固定为 160 bit。最终的 160 bit 摘要由 5 个 32 bit 状态字拼接而成：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">digest = H0 || H1 || H2 || H3 || H4</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-初始常量"><a href="#2-初始常量" class="headerlink" title="2. 初始常量"></a>2. 初始常量</h3><p>SHA-1 初始化时使用 5 个固定的 32 bit 常量：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">H0 = 0x67452301</span><br><span class="line">H1 = 0xEFCDAB89</span><br><span class="line">H2 = 0x98BADCFE</span><br><span class="line">H3 = 0x10325476</span><br><span class="line">H4 = 0xC3D2E1F0</span><br></pre></td></tr></table></figure>
+
+<p>我的代码中对应为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> H[<span class="number">5</span>] = &#123;</span><br><span class="line">    <span class="number">0x67452301</span>,</span><br><span class="line">    <span class="number">0xEFCDAB89</span>,</span><br><span class="line">    <span class="number">0x98BADCFE</span>,</span><br><span class="line">    <span class="number">0x10325476</span>,</span><br><span class="line">    <span class="number">0xC3D2E1F0</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-四组轮函数"><a href="#3-四组轮函数" class="headerlink" title="3. 四组轮函数"></a>3. 四组轮函数</h3><p>SHA-1 的 80 轮压缩被分成 4 个阶段，每个阶段 20 轮。不同阶段使用不同的逻辑函数和常量。</p>
+<table>
+<thead>
+<tr>
+<th>轮数范围</th>
+<th>逻辑函数 <code>f(B,C,D)</code></th>
+<th>常量 K</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0-19</td>
+<td><code>(B &amp; C) | (~B &amp; D)</code></td>
+<td><code>0x5A827999</code></td>
+</tr>
+<tr>
+<td>20-39</td>
+<td><code>B ^ C ^ D</code></td>
+<td><code>0x6ED9EBA1</code></td>
+</tr>
+<tr>
+<td>40-59</td>
+<td><code>(B &amp; C) | (B &amp; D) | (C &amp; D)</code></td>
+<td><code>0x8F1BBCDC</code></td>
+</tr>
+<tr>
+<td>60-79</td>
+<td><code>B ^ C ^ D</code></td>
+<td><code>0xCA62C1D6</code></td>
+</tr>
+</tbody></table>
+<p>每一轮的核心公式是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">temp = ROTL5(A) + f(B,C,D) + E + W[t] + K[t]</span><br><span class="line">E = D</span><br><span class="line">D = C</span><br><span class="line">C = ROTL30(B)</span><br><span class="line">B = A</span><br><span class="line">A = temp</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>ROTLn(x)</code> 表示对 32 bit 整数 <code>x</code> 进行循环左移 <code>n</code> 位。</p>
+<h2 id="三、SHA-1-详细流程解析"><a href="#三、SHA-1-详细流程解析" class="headerlink" title="三、SHA-1 详细流程解析"></a>三、SHA-1 详细流程解析</h2><h3 id="1-消息填充"><a href="#1-消息填充" class="headerlink" title="1. 消息填充"></a>1. 消息填充</h3><p>SHA-1 在处理消息前必须先进行填充。填充的目标是让最终消息长度变成 512 bit 的整数倍，并且在最后 64 bit 记录原始消息长度。</p>
+<p>填充规则如下：</p>
+<ol>
+<li>在消息末尾追加一个 <code>1</code> bit。按字节表示就是追加 <code>0x80</code>。</li>
+<li>继续补若干个 <code>0</code> bit，使当前长度满足 <code>448 mod 512</code>。</li>
+<li>最后追加 64 bit 原始消息长度，采用大端序。</li>
+</ol>
+<p>如果以字节为单位，标准公式可以写为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pad = (56 - (input_len + 1) mod 64 + 64) mod 64</span><br></pre></td></tr></table></figure>
+
+<p>这里的 <code>56</code> 是因为每个分组共 64 字节，最后 8 字节要保留给原始长度，因此前面内容需要停在第 56 字节。</p>
+<h3 id="2-分组与字拆分"><a href="#2-分组与字拆分" class="headerlink" title="2. 分组与字拆分"></a>2. 分组与字拆分</h3><p>填充后的消息长度一定是 512 bit 的整数倍。每个 512 bit 分组等于 64 字节。每个分组再拆成 16 个 32 bit 字：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W[0], W[1], ..., W[15]</span><br></pre></td></tr></table></figure>
+
+<p>SHA-1 使用大端序，因此连续 4 个字节组合为一个 32 bit 字时，高位字节在前。</p>
+<h3 id="3-消息扩展"><a href="#3-消息扩展" class="headerlink" title="3. 消息扩展"></a>3. 消息扩展</h3><p>前 16 个字来自原始分组，后 64 个字由前面的字扩展得到：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">W[t] = ROTL1(W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16])</span><br></pre></td></tr></table></figure>
+
+<p>这一步的作用是让原始分组中的每一部分逐渐扩散到后续压缩轮次中，增强混淆和扩散效果。</p>
+<h3 id="4-80-轮压缩"><a href="#4-80-轮压缩" class="headerlink" title="4. 80 轮压缩"></a>4. 80 轮压缩</h3><p>每个 512 bit 分组都会进入一次 80 轮压缩。压缩开始前，先把当前 Hash 状态复制到 5 个工作变量：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A = H0</span><br><span class="line">B = H1</span><br><span class="line">C = H2</span><br><span class="line">D = H3</span><br><span class="line">E = H4</span><br></pre></td></tr></table></figure>
+
+<p>80 轮结束后，再把工作变量加回状态：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">H0 = H0 + A</span><br><span class="line">H1 = H1 + B</span><br><span class="line">H2 = H2 + C</span><br><span class="line">H3 = H3 + D</span><br><span class="line">H4 = H4 + E</span><br></pre></td></tr></table></figure>
+
+<p>这里的加法是 32 bit 模加法，溢出部分会自然丢弃。</p>
+<h2 id="四、我的-C-C-实现解析"><a href="#四、我的-C-C-实现解析" class="headerlink" title="四、我的 C&#x2F;C++ 实现解析"></a>四、我的 C&#x2F;C++ 实现解析</h2><p>实验代码主要由三个函数组成：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Full()</code></td>
+<td>完成 SHA-1 消息填充</td>
+</tr>
+<tr>
+<td><code>Every_block()</code></td>
+<td>处理单个 512 bit 分组</td>
+</tr>
+<tr>
+<td><code>Encrypt_SHA1()</code></td>
+<td>初始化状态、循环处理分组并输出摘要</td>
+</tr>
+</tbody></table>
+<h3 id="1-Full-：消息填充"><a href="#1-Full-：消息填充" class="headerlink" title="1. Full()：消息填充"></a>1. <code>Full()</code>：消息填充</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">Full</span><span class="params">(<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* input, <span class="type">int</span> input_len, <span class="type">unsigned</span> <span class="type">char</span>* output)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> pad = (<span class="number">119</span> - (input_len % <span class="number">64</span>)) % <span class="number">64</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memcpy</span>(output, input, input_len);</span><br><span class="line">    output[input_len] = <span class="number">0x80</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= pad; i++) &#123;</span><br><span class="line">        output[input_len + i] = <span class="number">0x00</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span> bits = (<span class="type">unsigned</span> <span class="type">long</span> <span class="type">long</span>)input_len * <span class="number">8</span>;</span><br><span class="line">    <span class="type">int</span> pos = input_len + <span class="number">1</span> + pad;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++) &#123;</span><br><span class="line">        output[pos + j] = (bits &gt;&gt; (<span class="number">56</span> - <span class="number">8</span> * j)) &amp; <span class="number">0xFF</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> input_len + <span class="number">1</span> + pad + <span class="number">8</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码对应 SHA-1 的填充阶段。</p>
+<p><code>memcpy(output, input, input_len)</code> 将原始消息复制到输出缓冲区。随后 <code>output[input_len] = 0x80</code> 追加二进制的 <code>10000000</code>，也就是标准中的追加一个 <code>1</code> bit，然后补若干个 <code>0</code> bit。</p>
+<p>代码中的：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> pad = (<span class="number">119</span> - (input_len % <span class="number">64</span>)) % <span class="number">64</span>;</span><br></pre></td></tr></table></figure>
+
+<p>与标准公式等价。因为程序已经单独追加了 <code>0x80</code>，所以 <code>pad</code> 表示在 <code>0x80</code> 后面还需要补多少个 <code>0x00</code> 字节，使得长度字段前的位置刚好停在每个 64 字节分组的第 56 字节。</p>
+<p>最后的循环：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; <span class="number">8</span>; j++) &#123;</span><br><span class="line">    output[pos + j] = (bits &gt;&gt; (<span class="number">56</span> - <span class="number">8</span> * j)) &amp; <span class="number">0xFF</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>负责把原始消息的比特长度写入最后 8 字节，并采用大端序。也就是说，高位字节先写入，低位字节后写入。</p>
+<h3 id="2-Every-block-：单分组压缩"><a href="#2-Every-block-：单分组压缩" class="headerlink" title="2. Every_block()：单分组压缩"></a>2. <code>Every_block()</code>：单分组压缩</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Every_block</span><span class="params">(<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* block, <span class="type">unsigned</span> <span class="type">int</span> H[<span class="number">5</span>])</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> w[<span class="number">80</span>] = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> A = H[<span class="number">0</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> B = H[<span class="number">1</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> C = H[<span class="number">2</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> D = H[<span class="number">3</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> E = H[<span class="number">4</span>];</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> K[<span class="number">4</span>] = &#123;</span><br><span class="line">        <span class="number">0x5A827999</span>,</span><br><span class="line">        <span class="number">0x6ED9EBA1</span>,</span><br><span class="line">        <span class="number">0x8F1BBCDC</span>,</span><br><span class="line">        <span class="number">0xCA62C1D6</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>w[80]</code> 用于保存消息扩展结果。前 16 个字来自当前 512 bit 分组，后 64 个字由扩展公式计算得到。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">w[i] = (block[<span class="number">4</span> * i] &lt;&lt; <span class="number">24</span>)</span><br><span class="line">     | (block[<span class="number">4</span> * i + <span class="number">1</span>] &lt;&lt; <span class="number">16</span>)</span><br><span class="line">     | (block[<span class="number">4</span> * i + <span class="number">2</span>] &lt;&lt; <span class="number">8</span>)</span><br><span class="line">     | block[<span class="number">4</span> * i + <span class="number">3</span>];</span><br></pre></td></tr></table></figure>
+
+<p>这段代码将连续 4 个字节组合成一个 32 bit 字，并且使用大端序。<code>block[4 * i]</code> 被放到最高 8 位，<code>block[4 * i + 3]</code> 被放到最低 8 位。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">w[t] = ((w[t - <span class="number">3</span>] ^ w[t - <span class="number">8</span>] ^ w[t - <span class="number">14</span>] ^ w[t - <span class="number">16</span>]) &lt;&lt; <span class="number">1</span>)</span><br><span class="line">     | ((w[t - <span class="number">3</span>] ^ w[t - <span class="number">8</span>] ^ w[t - <span class="number">14</span>] ^ w[t - <span class="number">16</span>]) &gt;&gt; <span class="number">31</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这段代码实现 <code>ROTL1</code>。左移 1 位后，原本最高位会丢失，所以需要通过右移 31 位把最高位补回最低位。</p>
+<h3 id="3-switch-case：四阶段-80-轮计算"><a href="#3-switch-case：四阶段-80-轮计算" class="headerlink" title="3. switch-case：四阶段 80 轮计算"></a>3. <code>switch-case</code>：四阶段 80 轮计算</h3><p>代码使用 <code>switch (j / 20)</code> 将 80 轮分为 4 组，每组使用对应的逻辑函数和常量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (j / <span class="number">20</span>) &#123;</span><br><span class="line"><span class="keyword">case</span> <span class="number">0</span>:</span><br><span class="line">    temp = <span class="built_in">ROTL5</span>(A) + ((B &amp; C) | (~B &amp; D)) + E + w[j] + K[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">    temp = <span class="built_in">ROTL5</span>(A) + (B ^ C ^ D) + E + w[j] + K[<span class="number">1</span>];</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">    temp = <span class="built_in">ROTL5</span>(A) + ((B &amp; C) | (B &amp; D) | (C &amp; D)) + E + w[j] + K[<span class="number">2</span>];</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line"><span class="keyword">case</span> <span class="number">3</span>:</span><br><span class="line">    temp = <span class="built_in">ROTL5</span>(A) + (B ^ C ^ D) + E + w[j] + K[<span class="number">3</span>];</span><br><span class="line">    <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种写法比把 80 轮拆成四段重复代码更紧凑，也能清楚体现 SHA-1 的四阶段结构。</p>
+<p>每轮结束后都执行：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">E = D;</span><br><span class="line">D = C;</span><br><span class="line">C = ((B &lt;&lt; <span class="number">30</span>) | (B &gt;&gt; <span class="number">2</span>));</span><br><span class="line">B = A;</span><br><span class="line">A = temp;</span><br></pre></td></tr></table></figure>
+
+<p>这里 <code>C = ROTL30(B)</code> 是 SHA-1 的固定更新规则。注意这不是普通左移，而是循环左移。</p>
+<h3 id="4-Encrypt-SHA1-：整体摘要计算"><a href="#4-Encrypt-SHA1-：整体摘要计算" class="headerlink" title="4. Encrypt_SHA1()：整体摘要计算"></a>4. <code>Encrypt_SHA1()</code>：整体摘要计算</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">Encrypt_SHA1</span><span class="params">(<span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span>* plaintext, <span class="type">int</span> len, <span class="type">unsigned</span> <span class="type">char</span> chipertext[<span class="number">20</span>])</span> </span>&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> H[<span class="number">5</span>] = &#123;</span><br><span class="line">        <span class="number">0x67452301</span>,</span><br><span class="line">        <span class="number">0xEFCDAB89</span>,</span><br><span class="line">        <span class="number">0x98BADCFE</span>,</span><br><span class="line">        <span class="number">0x10325476</span>,</span><br><span class="line">        <span class="number">0xC3D2E1F0</span></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">char</span> filled_plaintext[MAXSIZE + <span class="number">64</span>];</span><br><span class="line">    <span class="type">int</span> filled_len = <span class="built_in">Full</span>(plaintext, len, filled_plaintext);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; filled_len; i += <span class="number">64</span>) &#123;</span><br><span class="line">        <span class="built_in">Every_block</span>(filled_plaintext + i, H);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数负责把 SHA-1 的各个步骤串起来。首先初始化 <code>H[5]</code>，然后调用 <code>Full()</code> 完成填充，再按 64 字节为单位循环处理每个分组。</p>
+<p>最终输出时：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chipertext[<span class="number">4</span> * i + <span class="number">0</span>] = (H[i] &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>;</span><br><span class="line">chipertext[<span class="number">4</span> * i + <span class="number">1</span>] = (H[i] &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>;</span><br><span class="line">chipertext[<span class="number">4</span> * i + <span class="number">2</span>] = (H[i] &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>;</span><br><span class="line">chipertext[<span class="number">4</span> * i + <span class="number">3</span>] = H[i] &amp; <span class="number">0xFF</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这一步同样使用大端序，将 5 个 32 bit 状态字拆成 20 个字节，最终打印为 40 个十六进制字符。</p>
+<h3 id="5-批量测试数据"><a href="#5-批量测试数据" class="headerlink" title="5. 批量测试数据"></a>5. 批量测试数据</h3><p>报告中将单个字符串测试扩展为二维数组，从而一次计算 6 组明文的 SHA-1：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">unsigned</span> <span class="type">char</span> plaintext[][MAXSIZE] = &#123;</span><br><span class="line">    <span class="string">&quot;iscbupt&quot;</span>,</span><br><span class="line">    <span class="string">&quot;seven&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Hainan University&quot;</span>,</span><br><span class="line">    <span class="string">&quot;This is a secret&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Symmetric Cryptosystem and Public Key Cryptosystem&quot;</span>,</span><br><span class="line">    <span class="string">&quot;The proposed scheme is not only able to provide mutual authentication without communication with the trusted third party, but also fulfills various security features, such as user anonymity, forward secrecy, etc.&quot;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这里需要注意每次处理完一个字符串后，要把 <code>j</code> 和 <code>len</code> 重置为 0。否则下一组明文的长度计算会受到上一组影响。</p>
+<h2 id="五、交互演示"><a href="#五、交互演示" class="headerlink" title="五、交互演示"></a>五、交互演示</h2><p>下面的交互区域使用浏览器 Web Crypto API 计算标准 SHA-1 摘要，同时用 JavaScript 展示填充和消息扩展过程。Web Crypto 需要 HTTPS 或 localhost 环境，因此页面部署到服务器后应使用 HTTPS 访问。</p>
+<div class="sha1-lab">
+  <section class="sha1-panel sha1-focus-panel">
+    <div class="sha1-panel-head">
+      <h2>在线计算 SHA-1</h2>
+      <span>160 bit / 40 hex chars</span>
+    </div>
+    <label class="sha1-label" for="sha1-input">输入明文</label>
+    <textarea id="sha1-input" class="sha1-input">I_LOVE_FISCHL</textarea>
+    <div class="sha1-actions">
+      <button class="sha1-btn" id="sha1-run">计算 SHA-1</button>
+      <button class="sha1-btn sha1-btn-secondary" id="sha1-padding">查看填充</button>
+      <button class="sha1-btn sha1-btn-secondary" id="sha1-schedule">查看 W[t]</button>
+    </div>
+    <div class="sha1-output" id="sha1-output">等待计算...</div>
+  </section>
+
+  <section class="sha1-panel">
+    <div class="sha1-panel-head">
+      <h2>实验数据快速验证</h2>
+      <span>点击样例自动计算并对比报告结果</span>
+    </div>
+    <div class="sha1-samples" id="sha1-samples"></div>
+  </section>
+
+  <section class="sha1-panel">
+    <div class="sha1-panel-head">
+      <h2>填充过程展示</h2>
+      <span>对应 C++ 中的 Full()</span>
+    </div>
+    <pre class="sha1-pre" id="sha1-padding-output">点击“查看填充”后显示。</pre>
+  </section>
+
+  <section class="sha1-panel">
+    <div class="sha1-panel-head">
+      <h2>消息扩展展示</h2>
+      <span>展示第一个 512 bit 分组的 W[0] 到 W[79]</span>
+    </div>
+    <div class="sha1-word-grid" id="sha1-schedule-output">点击“查看 W[t]”后显示。</div>
+  </section>
+
+  <section class="sha1-panel">
+    <div class="sha1-panel-head">
+      <h2>雪崩效应演示</h2>
+      <span>只改动一个字符，观察摘要变化</span>
+    </div>
+    <input class="sha1-line-input" id="sha1-a" value="I_LOVE_FISCHL">
+    <input class="sha1-line-input" id="sha1-b" value="I_LOVE_FISCHL!">
+    <button class="sha1-btn" id="sha1-avalanche">对比摘要差异</button>
+    <div class="sha1-output" id="sha1-avalanche-output">等待对比...</div>
+  </section>
+</div>
+
+<h2 id="六、实验结果"><a href="#六、实验结果" class="headerlink" title="六、实验结果"></a>六、实验结果</h2><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>明文</th>
+<th>SHA-1</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>iscbupt</code></td>
+<td><code>664dc9f017dc1aee4a4366bcfb8511afc89f9430</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>seven</code></td>
+<td><code>a00bbe560e6b0f5263e3e6cba4ff3fb9a6fe9ef0</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>Hainan University</code></td>
+<td><code>7f6901c5d21108d6e457263f6ba1271f1fd8154c</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>This is a secret</code></td>
+<td><code>71800b4c97bcccbe286bcde42701be53f4852de8</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>Symmetric Cryptosystem and Public Key Cryptosystem</code></td>
+<td><code>d86c3f866c88d544e75391a7cb15be5b8f6a3709</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>The proposed scheme is not only able to provide mutual authentication without communication with the trusted third party, but also fulfills various security features, such as user anonymity, forward secrecy, etc.</code></td>
+<td><code>9a1a297fa737b459e32f6a336798ecab24bfb1f6</code></td>
+</tr>
+</tbody></table>
+<h2 id="七、实验问题与解决"><a href="#七、实验问题与解决" class="headerlink" title="七、实验问题与解决"></a>七、实验问题与解决</h2><table>
+<thead>
+<tr>
+<th>序号</th>
+<th>问题</th>
+<th>分析与解决</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>误用 <code>char</code> 和 <code>strlen</code> 处理字节数据</td>
+<td>SHA-1 处理的是字节序列，填充后可能包含 <code>0x00</code>。如果依赖 <code>strlen</code>，遇到 <code>0x00</code> 会提前结束。因此使用 <code>unsigned char</code> 并单独传入长度。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>80 轮代码组织繁琐</td>
+<td>使用 <code>switch (j / 20)</code> 将 80 轮分成 4 组，代码更清晰。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>填充 0 字节数计算错误</td>
+<td>正确目标是追加 <code>0x80</code> 后，使长度模 64 等于 56，再追加 8 字节长度字段。</td>
+</tr>
+<tr>
+<td>4</td>
+<td>普通左移和循环左移混淆</td>
+<td>SHA-1 中的 <code>ROTL1</code>、<code>ROTL5</code>、<code>ROTL30</code> 都是循环左移，必须把移出的高位补到低位。</td>
+</tr>
+<tr>
+<td>5</td>
+<td>二维数组批量测试时长度未重置</td>
+<td>每处理完一个字符串后，需要重置 <code>j = 0</code> 和 <code>len = 0</code>。</td>
+</tr>
+</tbody></table>
+<style>
+.sha1-lab {
+  display: grid;
+  gap: 22px;
+  margin: 26px 0;
+}
+
+.sha1-panel {
+  padding: 20px;
+  border: 1px solid rgba(126, 79, 190, .22);
+  border-radius: 10px;
+  background: rgba(246, 239, 255, .76);
+  box-shadow: 0 10px 28px rgba(129, 58, 196, .11);
+}
+
+.sha1-focus-panel {
+  border-color: rgba(126, 79, 190, .36);
+}
+
+.sha1-panel-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sha1-panel-head h2 {
+  margin: 0;
+  font-size: 1.28rem;
+  color: #4d3868;
+}
+
+.sha1-panel-head span {
+  font-size: .9rem;
+  color: #7f6a9c;
+}
+
+.sha1-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #6d3cb2;
+}
+
+.sha1-input,
+.sha1-line-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(126, 79, 190, .35);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .82);
+  color: #2f2540;
+  font-size: 15px;
+}
+
+.sha1-input {
+  min-height: 120px;
+  padding: 12px;
+  resize: vertical;
+}
+
+.sha1-line-input {
+  margin: 8px 0;
+  padding: 10px 12px;
+}
+
+.sha1-actions,
+.sha1-samples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.sha1-btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(to bottom, #b86eff, #9150df);
+  border-bottom: 3px solid #7432bd;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .16);
+}
+
+.sha1-btn:hover {
+  background: linear-gradient(to bottom, #c281ff, #a35df0);
+}
+
+.sha1-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .16);
+}
+
+.sha1-btn-secondary {
+  background: linear-gradient(to bottom, #8f7cff, #6e5ddd);
+  border-bottom-color: #5848be;
+}
+
+.sha1-output,
+.sha1-pre {
+  margin-top: 12px;
+  padding: 13px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .78);
+  color: #30263f;
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.sha1-output {
+  word-break: break-all;
+}
+
+.sha1-pre {
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.sha1-word-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sha1-word {
+  padding: 8px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, .78);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 13px;
+}
+
+.sha1-diff {
+  color: #d14d72;
+  font-weight: 800;
+}
+</style>
+
+<script>
+(() => {
+  const samples = [
+    ['iscbupt', '664dc9f017dc1aee4a4366bcfb8511afc89f9430'],
+    ['seven', 'a00bbe560e6b0f5263e3e6cba4ff3fb9a6fe9ef0'],
+    ['Hainan University', '7f6901c5d21108d6e457263f6ba1271f1fd8154c'],
+    ['This is a secret', '71800b4c97bcccbe286bcde42701be53f4852de8'],
+    ['Symmetric Cryptosystem and Public Key Cryptosystem', 'd86c3f866c88d544e75391a7cb15be5b8f6a3709'],
+    ['The proposed scheme is not only able to provide mutual authentication without communication with the trusted third party, but also fulfills various security features, such as user anonymity, forward secrecy, etc.', '9a1a297fa737b459e32f6a336798ecab24bfb1f6']
+  ];
+
+  const enc = new TextEncoder();
+  const $ = id => document.getElementById(id);
+
+  function bytesToHex(bytes) {
+    return [...bytes].map(x => x.toString(16).padStart(2, '0')).join('');
+  }
+
+  function wordHex(word) {
+    return (word >>> 0).toString(16).padStart(8, '0');
+  }
+
+  function rotl(word, bits) {
+    return ((word << bits) | (word >>> (32 - bits))) >>> 0;
+  }
+
+  async function sha1(text) {
+    if (!window.isSecureContext || !crypto.subtle) {
+      throw new Error('SHA-1 演示需要 HTTPS 或 localhost 环境。');
+    }
+    const digest = await crypto.subtle.digest('SHA-1', enc.encode(text));
+    return bytesToHex(new Uint8Array(digest));
+  }
+
+  function paddedBytes(text) {
+    const input = enc.encode(text);
+    const padZero = (56 - ((input.length + 1) % 64) + 64) % 64;
+    const total = input.length + 1 + padZero + 8;
+    const out = new Uint8Array(total);
+    out.set(input);
+    out[input.length] = 0x80;
+    const bitLen = BigInt(input.length) * 8n;
+    for (let i = 0; i < 8; i++) {
+      out[total - 8 + i] = Number((bitLen >> BigInt(56 - 8 * i)) & 0xffn);
+    }
+    return { input, out, padZero, total };
+  }
+
+  function paddingInfo(text) {
+    const { input, padZero, total } = paddedBytes(text);
+    return [
+      `原始字节数: ${input.length}`,
+      `原始比特数: ${input.length * 8}`,
+      `追加 0x80: 1 字节`,
+      `补 0x00: ${padZero} 字节`,
+      `追加长度字段: 8 字节`,
+      `填充后总长度: ${total} 字节 = ${total * 8} bit`,
+      `是否为 512 bit 整数倍: ${(total * 8) % 512 === 0 ? '是' : '否'}`,
+      '',
+      `填充后前 64 字节十六进制:`,
+      bytesToHex(paddedBytes(text).out.slice(0, 64)).replace(/(.{8})/g, '$1 ').trim()
+    ].join('\n');
+  }
+
+  function messageSchedule(text) {
+    const block = paddedBytes(text).out.slice(0, 64);
+    const w = new Array(80).fill(0);
+    for (let i = 0; i < 16; i++) {
+      w[i] = (
+        (block[i * 4] << 24) |
+        (block[i * 4 + 1] << 16) |
+        (block[i * 4 + 2] << 8) |
+        block[i * 4 + 3]
+      ) >>> 0;
+    }
+    for (let t = 16; t < 80; t++) {
+      w[t] = rotl(w[t - 3] ^ w[t - 8] ^ w[t - 14] ^ w[t - 16], 1);
+    }
+    return w;
+  }
+
+  function renderSchedule(text) {
+    const wrap = $('sha1-schedule-output');
+    wrap.innerHTML = '';
+    messageSchedule(text).forEach((word, i) => {
+      const item = document.createElement('div');
+      item.className = 'sha1-word';
+      item.textContent = `W[${String(i).padStart(2, '0')}] = ${wordHex(word)}`;
+      wrap.appendChild(item);
+    });
+  }
+
+  function markDiff(a, b) {
+    return [...a].map((ch, i) => ch === b[i] ? ch : `<span class="sha1-diff">${ch}</span>`).join('');
+  }
+
+  function initSha1Page() {
+    if (!$('sha1-input') || $('sha1-input').dataset.ready === '1') return;
+    $('sha1-input').dataset.ready = '1';
+
+    $('sha1-run').onclick = async () => {
+      try {
+        $('sha1-output').textContent = await sha1($('sha1-input').value);
+      } catch (e) {
+        $('sha1-output').textContent = e.message;
+      }
+    };
+
+    $('sha1-padding').onclick = () => {
+      $('sha1-padding-output').textContent = paddingInfo($('sha1-input').value);
+    };
+
+    $('sha1-schedule').onclick = () => {
+      renderSchedule($('sha1-input').value);
+    };
+
+    $('sha1-avalanche').onclick = async () => {
+      try {
+        const a = await sha1($('sha1-a').value);
+        const b = await sha1($('sha1-b').value);
+        const diff = [...a].filter((ch, i) => ch !== b[i]).length;
+        $('sha1-avalanche-output').innerHTML = `A: ${markDiff(a, b)}<br>B: ${markDiff(b, a)}<br>不同的十六进制位数: ${diff} / 40`;
+      } catch (e) {
+        $('sha1-avalanche-output').textContent = e.message;
+      }
+    };
+
+    samples.forEach(([text, expect], i) => {
+      const btn = document.createElement('button');
+      btn.className = 'sha1-btn sha1-btn-secondary';
+      btn.textContent = `样例 ${i + 1}`;
+      btn.onclick = async () => {
+        $('sha1-input').value = text;
+        const got = await sha1(text);
+        $('sha1-output').textContent = `${got}\n${got === expect ? '与实验报告结果一致' : '与实验报告结果不一致'}`;
+        $('sha1-padding-output').textContent = paddingInfo(text);
+        renderSchedule(text);
+      };
+      $('sha1-samples').appendChild(btn);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initSha1Page);
+  window.addEventListener('load', initSha1Page);
+  window.addEventListener('pjax:complete', initSha1Page);
+})();
+</script>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io">LFischl</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://fischl0527.github.io/2026/04/27/sha1/index/">https://fischl0527.github.io/2026/04/27/sha1/index/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/1722920933672d22504100a327490bbfb662b0e28148678603a6e2595e64c4c986b7c795d5b22.0.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026PolarisCTFwp.md"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026PolarisCTFwp.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">2026PolarisCTFwp.md</div></div><div class="info-2"><div class="info-item-1">比赛情况已经排名，感谢Rewind、Bewater和SdTVdp师傅的倾力付出  WEB_LFischl_ez_python题目分析分析源码可以发现，关键点在于可控地修改 config.filename。只要把默认读取的 app.py 改成目标文件，再访问 /read 即可读出...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/875E73166434C2B697688F4E9DB5AA6B.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LFischl</div><div class="author-info-description">「在哪里去追寻意义。夜色已深，梦还活着。」</div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">30</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">15</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>LFischl</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog. Daisuki Fischl von Luftschloss Narfidort</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SHA-1-%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">SHA-1 消息摘要算法实验讲解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%9E%E9%AA%8C%E8%83%8C%E6%99%AF"><span class="toc-number">1.1.</span> <span class="toc-text">一、实验背景</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Hash-%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-number">1.1.1.</span> <span class="toc-text">1. Hash 函数的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Hash-%E5%87%BD%E6%95%B0%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%A7%E8%B4%A8"><span class="toc-number">1.1.2.</span> <span class="toc-text">2. Hash 函数的基本性质</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-SHA-1-%E7%9A%84%E5%AE%89%E5%85%A8%E6%80%A7%E7%8E%B0%E7%8A%B6"><span class="toc-number">1.1.3.</span> <span class="toc-text">3. SHA-1 的安全性现状</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81SHA-1-%E7%AE%97%E6%B3%95%E6%80%BB%E8%A7%88"><span class="toc-number">1.2.</span> <span class="toc-text">二、SHA-1 算法总览</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BE%93%E5%85%A5%E4%B8%8E%E8%BE%93%E5%87%BA"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 输入与输出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%9D%E5%A7%8B%E5%B8%B8%E9%87%8F"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 初始常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9B%9B%E7%BB%84%E8%BD%AE%E5%87%BD%E6%95%B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 四组轮函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81SHA-1-%E8%AF%A6%E7%BB%86%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90"><span class="toc-number">1.3.</span> <span class="toc-text">三、SHA-1 详细流程解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%B6%88%E6%81%AF%E5%A1%AB%E5%85%85"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 消息填充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%88%86%E7%BB%84%E4%B8%8E%E5%AD%97%E6%8B%86%E5%88%86"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 分组与字拆分</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E6%B6%88%E6%81%AF%E6%89%A9%E5%B1%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. 消息扩展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-80-%E8%BD%AE%E5%8E%8B%E7%BC%A9"><span class="toc-number">1.3.4.</span> <span class="toc-text">4. 80 轮压缩</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%88%91%E7%9A%84-C-C-%E5%AE%9E%E7%8E%B0%E8%A7%A3%E6%9E%90"><span class="toc-number">1.4.</span> <span class="toc-text">四、我的 C&#x2F;C++ 实现解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-Full-%EF%BC%9A%E6%B6%88%E6%81%AF%E5%A1%AB%E5%85%85"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. Full()：消息填充</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-Every-block-%EF%BC%9A%E5%8D%95%E5%88%86%E7%BB%84%E5%8E%8B%E7%BC%A9"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. Every_block()：单分组压缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-switch-case%EF%BC%9A%E5%9B%9B%E9%98%B6%E6%AE%B5-80-%E8%BD%AE%E8%AE%A1%E7%AE%97"><span class="toc-number">1.4.3.</span> <span class="toc-text">3. switch-case：四阶段 80 轮计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Encrypt-SHA1-%EF%BC%9A%E6%95%B4%E4%BD%93%E6%91%98%E8%A6%81%E8%AE%A1%E7%AE%97"><span class="toc-number">1.4.4.</span> <span class="toc-text">4. Encrypt_SHA1()：整体摘要计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%89%B9%E9%87%8F%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE"><span class="toc-number">1.4.5.</span> <span class="toc-text">5. 批量测试数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BA%A4%E4%BA%92%E6%BC%94%E7%A4%BA"><span class="toc-number">1.5.</span> <span class="toc-text">五、交互演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.6.</span> <span class="toc-text">在线计算 SHA-1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.7.</span> <span class="toc-text">实验数据快速验证</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.8.</span> <span class="toc-text">填充过程展示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.9.</span> <span class="toc-text">消息扩展展示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">1.10.</span> <span class="toc-text">雪崩效应演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%AE%9E%E9%AA%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">1.11.</span> <span class="toc-text">六、实验结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%AE%9E%E9%AA%8C%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E5%86%B3"><span class="toc-number">1.12.</span> <span class="toc-text">七、实验问题与解决</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/04/27/sha1/index/" title="SHA-1 消息摘要算法实验讲解"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/1722920933672d22504100a327490bbfb662b0e28148678603a6e2595e64c4c986b7c795d5b22.0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SHA-1 消息摘要算法实验讲解"/></a><div class="content"><a class="title" href="/2026/04/27/sha1/index/" title="SHA-1 消息摘要算法实验讲解">SHA-1 消息摘要算法实验讲解</a><time datetime="2026-04-27T14:00:00.000Z" title="Created 2026-04-27 22:00:00">2026-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026PolarisCTFwp.md"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026PolarisCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026PolarisCTFwp.md"/></a><div class="content"><a class="title" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026PolarisCTFwp.md">2026PolarisCTFwp.md</a><time datetime="2026-04-11T03:45:14.000Z" title="Created 2026-04-11 11:45:14">2026-04-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/21/2026CTF/2026SUCTFwp/" title="2026SUCTFwp"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026SUCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026SUCTFwp"/></a><div class="content"><a class="title" href="/2026/03/21/2026CTF/2026SUCTFwp/" title="2026SUCTFwp">2026SUCTFwp</a><time datetime="2026-03-21T03:45:14.000Z" title="Created 2026-03-21 11:45:14">2026-03-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/03/17/HelloWeb/BaseCTF2024%E6%96%B0%E7%94%9F%E8%B5%9B%E5%A4%8D%E7%8E%B0/" title="BaseCTF2024新生赛复现"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/BaseCTF2024%E6%96%B0%E7%94%9F%E8%B5%9B%E5%A4%8D%E7%8E%B0.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BaseCTF2024新生赛复现"/></a><div class="content"><a class="title" href="/2026/03/17/HelloWeb/BaseCTF2024%E6%96%B0%E7%94%9F%E8%B5%9B%E5%A4%8D%E7%8E%B0/" title="BaseCTF2024新生赛复现">BaseCTF2024新生赛复现</a><time datetime="2026-03-17T03:45:14.000Z" title="Created 2026-03-17 11:45:14">2026-03-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/02/19/Elysia/Hello-Elysia!/" title="Hello-Elysia!"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/Hello-Elysia!.jpeg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello-Elysia!"/></a><div class="content"><a class="title" href="/2026/02/19/Elysia/Hello-Elysia!/" title="Hello-Elysia!">Hello-Elysia!</a><time datetime="2026-02-19T03:45:14.000Z" title="Created 2026-02-19 11:45:14">2026-02-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2026 By LFischl</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (true) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="/js/hbe-enhance.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = false;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,FISCHL" data-fontsize="15px" data-random="false" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
