@@ -222,3 +222,58 @@
   /* 覆盖插件原始 top 位移逻辑 */
   top: 0;
 }
+
+/* ===== Fischl 暗夜雷闪 ===== */
+
+/* banner 区域闪电 canvas */
+#fischl-lightning-canvas {
+  /* 绝对定位覆盖 banner */
+  position: absolute;
+  /* 铺满整个 banner */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 不阻挡鼠标事件 */
+  pointer-events: none;
+  /* 确保在其他内容之上 */
+  z-index: 5;
+}
+
+/* 闪电触发时页面边缘紫色光晕（class 添加时瞬间出现，移除时平滑淡出） */
+.fischl-lightning-glow {
+  box-shadow: inset 0 0 80px rgba(184, 110, 255, 0.3),
+              inset 0 0 200px rgba(123, 53, 201, 0.15),
+              inset 0 0 400px rgba(100, 40, 180, 0.05);
+  /* 淡入 50ms 快速响应，淡出 300ms 柔和消散 */
+  transition: box-shadow 0.05s ease-in, box-shadow 0.3s ease-out;
+}
+
+/* ===== Fischl 暗夜粒子场 & 鸦羽飘落 ===== */
+
+/* 确保 #body-wrap 作为 canvas 的定位参考 */
+#body-wrap {
+  position: relative;
+}
+
+/* 粒子 canvas（覆盖整个 main 区域） */
+#fischl-particles-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* 鸦羽 canvas（覆盖整个 main 区域） */
+#fischl-feathers-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
