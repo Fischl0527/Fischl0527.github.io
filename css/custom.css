@@ -251,29 +251,29 @@
 
 /* ===== Fischl 暗夜粒子场 & 鸦羽飘落 ===== */
 
-/* 确保 #body-wrap 作为 canvas 的定位参考 */
-#body-wrap {
-  position: relative;
-}
-
-/* 粒子 canvas（覆盖整个 main 区域） */
+/* 粒子 canvas（只覆盖当前视口，避免长文章生成超大画布） */
 #fischl-particles-canvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 4;
 }
 
-/* 鸦羽 canvas（覆盖整个 main 区域） */
+/* 鸦羽 canvas（只覆盖当前视口，避免长文章生成超大画布） */
 #fischl-feathers-canvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 3;
+}
+@media (max-width: 418px) {
+  .aplayer.aplayer-fixed .aplayer-body {
+    max-width: calc(100vw - 18px) !important;
+  }
 }

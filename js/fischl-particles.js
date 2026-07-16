@@ -269,16 +269,17 @@
   }
 
   /**
-   * 调整 canvas 像素尺寸，与父容器 #body-wrap 的 offset 宽高一致。
-   *
-   * canvas 的 width/height 属性控制实际像素数，
-   * CSS 的 width/height 控制显示尺寸（已在 CSS 中设为 100%），
-   * 两者必须匹配才能正确渲染。
+   * 调整 canvas 像素尺寸，使其只覆盖当前视口。
+   * 不使用 #body-wrap 的文章全文高度，避免长文章创建超大画布。
    */
   function resize() {
-    if (!canvas || !canvas.parentElement) return;
-    canvas.width = canvas.parentElement.offsetWidth;
-    canvas.height = canvas.parentElement.offsetHeight;
+    if (!canvas) return;
+
+    var width = Math.max(1, document.documentElement.clientWidth || window.innerWidth || 1);
+    var height = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+
+    if (canvas.width !== width) canvas.width = width;
+    if (canvas.height !== height) canvas.height = height;
   }
 
   // ==================== 动画主循环 ====================
