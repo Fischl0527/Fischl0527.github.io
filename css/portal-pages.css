@@ -1,0 +1,220 @@
+#page:has(.lf-portal),
+#page:has(.lf-not-found) {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.lf-portal,
+.lf-not-found {
+  --lf-portal-surface: rgba(239, 229, 248, 0.91);
+  --lf-portal-border: rgba(143, 71, 209, 0.34);
+  --lf-portal-text: #2f2936;
+  --lf-portal-muted: #655d6d;
+  --lf-portal-accent: #8f47d1;
+  --lf-portal-tag: rgba(39, 132, 138, 0.1);
+  --lf-portal-tag-text: #216a70;
+  color: var(--lf-portal-text);
+}
+
+html[data-theme='dark'] .lf-portal,
+html[data-theme='dark'] .lf-not-found {
+  --lf-portal-surface: rgba(31, 25, 39, 0.93);
+  --lf-portal-border: rgba(199, 125, 255, 0.28);
+  --lf-portal-text: #f2edf6;
+  --lf-portal-muted: #c1b7c9;
+  --lf-portal-accent: #c58aff;
+  --lf-portal-tag: rgba(84, 190, 194, 0.14);
+  --lf-portal-tag-text: #8ed9dc;
+}
+
+.lf-portal-heading {
+  max-width: 760px;
+  margin-bottom: 28px;
+}
+
+.lf-portal-kicker,
+.lf-portal-label {
+  margin: 0 0 8px;
+  color: var(--lf-portal-accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.lf-portal-heading h1,
+.lf-not-found h1 {
+  margin: 0 0 10px;
+  color: var(--lf-portal-text);
+  font-size: 32px;
+  line-height: 1.25;
+}
+
+.lf-portal-heading > p:last-child,
+.lf-not-found > p {
+  margin: 0;
+  color: var(--lf-portal-muted);
+  line-height: 1.75;
+}
+
+.lf-portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.lf-portal-card {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--lf-portal-border);
+  border-radius: 8px;
+  background: var(--lf-portal-surface);
+  -webkit-backdrop-filter: blur(16px) saturate(1.1);
+  backdrop-filter: blur(16px) saturate(1.1);
+  box-shadow: 0 10px 28px rgba(52, 37, 66, 0.14);
+  color: var(--lf-portal-text);
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lf-portal-card:hover {
+  border-color: var(--lf-portal-accent);
+  box-shadow: 0 14px 34px rgba(74, 43, 97, 0.2);
+  color: var(--lf-portal-text);
+  transform: translateY(-3px);
+}
+
+.lf-portal-media {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: rgba(36, 31, 42, 0.08);
+}
+
+.lf-portal-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.lf-portal-card:hover .lf-portal-media img {
+  transform: scale(1.025);
+}
+
+.lf-portal-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.lf-portal-copy h2 {
+  margin: 0 0 10px;
+  color: var(--lf-portal-text);
+  font-size: 21px;
+  line-height: 1.35;
+}
+
+.lf-portal-description {
+  margin: 0;
+  color: var(--lf-portal-muted);
+  line-height: 1.7;
+}
+
+.lf-portal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: auto 0 0;
+  padding: 18px 0 0;
+  list-style: none;
+}
+
+.lf-portal-tags li {
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: var(--lf-portal-tag);
+  color: var(--lf-portal-tag-text);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.lf-not-found {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.lf-not-found > img {
+  display: block;
+  width: min(560px, 100%);
+  height: auto;
+  margin: 0 auto 24px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.lf-not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.lf-not-found-actions a,
+.lf-not-found-actions button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border: 1px solid var(--lf-portal-border);
+  border-radius: 7px;
+  background: var(--lf-portal-surface);
+  color: var(--lf-portal-text);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.lf-not-found-actions .lf-primary-action {
+  border-color: #8f47d1;
+  background: #8f47d1;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .lf-portal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lf-portal-heading h1,
+  .lf-not-found h1 {
+    font-size: 27px;
+  }
+
+  .lf-portal-copy {
+    padding: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-portal-card,
+  .lf-portal-media img {
+    transition: none;
+  }
+
+  .lf-portal-card:hover,
+  .lf-portal-card:hover .lf-portal-media img {
+    transform: none;
+  }
+}
