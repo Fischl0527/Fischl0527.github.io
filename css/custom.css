@@ -36,33 +36,6 @@ html[data-theme='dark'] {
   margin-bottom: 1em;
 }
 
-/* 回到顶部按钮整体布局 */
-#go-up {
-  /* 使用 flex 居中内部元素 */
-  display: flex;
-  /* 水平居中 */
-  justify-content: center;
-  /* 垂直居中 */
-  align-items: center;
-  /* 为内部绝对定位元素提供参考 */
-  position: relative;
-}
-
-/* 回到顶部按钮里的百分比和图标 */
-#go-up .scroll-percent,
-#go-up i {
-  /* 使用绝对定位叠在按钮中心 */
-  position: absolute;
-  /* 水平中心 */
-  left: 50%;
-  /* 垂直中心 */
-  top: 50%;
-  /* 通过 transform 精准居中 */
-  transform: translate(-50%, -50%);
-  /* 统一行高，避免偏移 */
-  line-height: 1;
-}
-
 /* hexo-blog-encrypt 解锁区整体内容居中 */
 #hexo-blog-encrypt .hbe-content {
   /* 让内部文字和按钮默认居中 */
