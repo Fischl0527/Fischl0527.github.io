@@ -3,33 +3,56 @@
 
   var PLAYER_ID = 'lf-butterfly-aplayer';
   var INSTANCE_KEY = '__lfButterflyAPlayer';
-  var tracks = [
-    {
-      name: '不虚此行 On the Journey',
-      artist: '魏晨, Nea, HOYO-MiX',
-      url: encodeURI('/music/魏晨,Nea,HOYO-MiX - 不虚此行 On the Journey.mp3'),
-      cover: '/img/music.png'
-    },
-    {
-      name: '新页 New Page',
-      artist: 'HOYO-MiX',
-      url: encodeURI('/music/HOYO-MiX - 新页 New Page.mp3'),
-      cover: '/img/music.png'
-    },
-    {
-      name: '拂晓 Proi Proi',
-      artist: 'HOYO-MiX, NIDA',
-      url: encodeURI('/music/HOYO-MiX,NIDA - 拂晓 Proi Proi.mp3'),
-      cover: '/img/music.png'
+  var MANIFEST_KEY = '__lfButterflyMusicManifest';
+  var BOOT_KEY = '__lfButterflyMusicBooted';
+
+  function getContainer() {
+    return document.getElementById(PLAYER_ID);
+  }
+
+  function markUnavailable(message) {
+    var container = getContainer();
+    if (!container) return;
+
+    container.classList.add('lf-music-unavailable');
+    container.setAttribute('aria-hidden', 'true');
+    container.title = message;
+  }
+
+  function loadManifest() {
+    if (!window[MANIFEST_KEY]) {
+      window[MANIFEST_KEY] = fetch('/music/playlist.json', { cache: 'no-cache' })
+        .then(function (response) {
+          if (!response.ok) throw new Error('HTTP ' + response.status);
+          return response.json();
+        })
+        .then(function (manifest) {
+          if (!manifest || !Array.isArray(manifest.tracks)) {
+            throw new Error('invalid playlist format');
+          }
+          return manifest.tracks;
+        })
+        .catch(function (error) {
+          window[MANIFEST_KEY] = null;
+          throw error;
+        });
     }
-  ];
 
-  function initPlayer() {
-    var container = document.getElementById(PLAYER_ID);
+    return window[MANIFEST_KEY];
+  }
+
+  function createPlayer(tracks) {
+    var container = getContainer();
     if (!container || typeof window.APlayer !== 'function') return false;
+    if (window[INSTANCE_KEY]) return true;
 
-    var existing = window[INSTANCE_KEY];
-    if (existing && document.documentElement.contains(container)) return true;
+    if (!tracks.length) {
+      markUnavailable('本地音乐列表为空');
+      return false;
+    }
+
+    container.classList.remove('lf-music-unavailable');
+    container.removeAttribute('aria-hidden');
 
     window[INSTANCE_KEY] = new window.APlayer({
       container: container,
@@ -50,10 +73,24 @@
     return true;
   }
 
-  function boot() {
-    if (initPlayer()) return;
+  function ensurePlayer() {
+    if (window[INSTANCE_KEY]) return Promise.resolve(true);
 
-    window.addEventListener('load', initPlayer, { once: true });
+    return loadManifest()
+      .then(createPlayer)
+      .catch(function (error) {
+        markUnavailable('音乐播放器暂时不可用');
+        console.warn('[LFischl music] ' + error.message);
+        return false;
+      });
+  }
+
+  function boot() {
+    ensurePlayer();
+
+    if (window[BOOT_KEY]) return;
+    window[BOOT_KEY] = true;
+    document.addEventListener('pjax:complete', ensurePlayer);
   }
 
   if (document.readyState === 'loading') {
@@ -61,6 +98,4 @@
   } else {
     boot();
   }
-
-  document.addEventListener('pjax:complete', initPlayer);
 })();

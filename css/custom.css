@@ -1,17 +1,31 @@
-/* 自定义文章正文背景样式 */
+:root {
+  --lf-post-surface: rgba(248, 244, 252, 0.9);
+  --lf-post-border: rgba(184, 110, 255, 0.3);
+  --lf-post-shadow: 0 12px 30px rgba(89, 55, 118, 0.16);
+}
+
+html[data-theme='dark'] {
+  --lf-post-surface: rgba(29, 21, 40, 0.9);
+  --lf-post-border: rgba(199, 125, 255, 0.34);
+  --lf-post-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+}
+
+/* 文章正文使用独立表面色，不叠加背景图片或渐变。 */
 #post {
-  /* 使用浅紫色渐变作为文章正文背景 */
-  background: linear-gradient(135deg, rgba(221, 214, 243, 0.9), rgba(243, 230, 255, 0.9));
-  /* 卡片圆角 */
-  border-radius: 20px;
-  /* 正文内边距 */
   padding: 30px;
-  /* 背景模糊玻璃效果 */
-  backdrop-filter: blur(6px);
-  /* 紫色柔和阴影 */
-  box-shadow: 0 0 20px rgba(160, 130, 255, 0.2);
-  /* 所有样式变化添加过渡动画 */
-  transition: all 0.3s ease;
+  border: 1px solid var(--lf-post-border);
+  border-radius: 8px;
+  background: var(--lf-post-surface);
+  -webkit-backdrop-filter: blur(16px) saturate(1.12);
+  backdrop-filter: blur(16px) saturate(1.12);
+  box-shadow: var(--lf-post-shadow);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+@media (max-width: 768px) {
+  #post {
+    padding: 20px;
+  }
 }
 
 /* 可选：段落间距微调 */
@@ -272,6 +286,23 @@
   pointer-events: none;
   z-index: 3;
 }
+
+.lf-music-unavailable {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #fischl-lightning-canvas,
+  #fischl-particles-canvas,
+  #fischl-feathers-canvas {
+    display: none !important;
+  }
+
+  .fischl-lightning-glow {
+    box-shadow: none !important;
+  }
+}
+
 @media (max-width: 418px) {
   .aplayer.aplayer-fixed .aplayer-body {
     max-width: calc(100vw - 18px) !important;

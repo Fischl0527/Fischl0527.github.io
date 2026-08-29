@@ -109,6 +109,21 @@
   top: 1px;
 }
 
+.hbe-button:after {
+  content: "";
+  width: 0;
+  height: 0;
+  display: block;
+  border-top: 20px solid #187dbc;
+  border-bottom: 20px solid #187dbc;
+  border-left: 16px solid transparent;
+  border-right: 20px solid #187dbc;
+  position: absolute;
+  opacity: 0.6;
+  right: 0;
+  top: 0;
+  border-radius: 0 5px 5px 0;
+}
 /* hbe button in post page */
 
 /* default theme {{{ */

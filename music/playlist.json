@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-29T15:36:16.784Z",
+  "tracks": [
+    {
+      "name": "不虚此行 On the Journey",
+      "artist": "魏晨, Nea, HOYO-MiX",
+      "url": "/music/%E9%AD%8F%E6%99%A8%2CNea%2CHOYO-MiX%20-%20%E4%B8%8D%E8%99%9A%E6%AD%A4%E8%A1%8C%20On%20the%20Journey.mp3",
+      "cover": "/img/music.png",
+      "lrc": ""
+    },
+    {
+      "name": "新页 New Page",
+      "artist": "HOYO-MiX",
+      "url": "/music/HOYO-MiX%20-%20%E6%96%B0%E9%A1%B5%20New%20Page.mp3",
+      "cover": "/img/music.png",
+      "lrc": ""
+    },
+    {
+      "name": "拂晓 Proi Proi",
+      "artist": "HOYO-MiX, NIDA",
+      "url": "/music/HOYO-MiX%2CNIDA%20-%20%E6%8B%82%E6%99%93%20Proi%20Proi.mp3",
+      "cover": "/img/music.png",
+      "lrc": ""
+    }
+  ]
+}

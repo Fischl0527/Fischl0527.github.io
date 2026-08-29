@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>服务器使用与训练环境笔记 | Midnight Phantasmagoria!</title><meta name="author" content="LFischl"><meta name="copyright" content="LFischl"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="Here&#39;s something encrypted, password is required to continue reading.">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>服务器使用与训练环境笔记 | Midnight Phantasmagoria!</title><meta name="author" content="LFischl"><meta name="copyright" content="LFischl"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Here&#39;s something encrypted, password is required to continue reading.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="服务器使用与训练环境笔记">
 <meta property="og:url" content="https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/index.html">
@@ -25,54 +25,95 @@
     {
       "@type": "Person",
       "name": "LFischl",
-      "url": "https://www.lfischl.xyz/"
+      "url": "https://www.lfischl.xyz"
     }
   ]
-}</script><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+}</script><link rel="shortcut icon" href="/img/null-5119bf9f9071d171.jpg"><link rel="canonical" href="https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
     (() => {
       
     const saveToLocal = {
       set: (key, value, ttl) => {
-        if (!ttl) return
-        const expiry = Date.now() + ttl * 86400000
-        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
       },
       get: key => {
         const itemStr = localStorage.getItem(key)
-        if (!itemStr) return undefined
-        const { value, expiry } = JSON.parse(itemStr)
-        if (Date.now() > expiry) {
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
           localStorage.removeItem(key)
-          return undefined
         }
-        return value
       }
     }
 
+    const scriptCache = new Map()
+    const cssCache = new Map()
     window.btf = {
       saveToLocal,
-      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
-        const script = document.createElement('script')
-        script.src = url
-        script.async = true
-        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
-        script.onload = script.onreadystatechange = () => {
-          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
         }
-        script.onerror = reject
-        document.head.appendChild(script)
-      }),
-      getCSS: (url, id) => new Promise((resolve, reject) => {
-        const link = document.createElement('link')
-        link.rel = 'stylesheet'
-        link.href = url
-        if (id) link.id = id
-        link.onload = link.onreadystatechange = () => {
-          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
         }
-        link.onerror = reject
-        document.head.appendChild(link)
-      }),
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
       addGlobalFn: (key, fn, name = false, parent = window) => {
         if (!true && key.startsWith('pjax')) return
         const globalFn = parent.globalFn || {}
@@ -83,16 +124,17 @@
     }
   
       
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
       const activateDarkMode = () => {
-        document.documentElement.setAttribute('data-theme', 'dark')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
         }
       }
       const activateLightMode = () => {
-        document.documentElement.setAttribute('data-theme', 'light')
-        if (document.querySelector('meta[name="theme-color"]') !== null) {
-          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
         }
       }
 
@@ -101,7 +143,15 @@
 
       const theme = saveToLocal.get('theme')
     
-          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+          const hour = new Date().getHours()
+          const start = 8
+          const end = 22
+          const isNight =
+            start < end
+                ? hour < start || hour >= end
+                : hour >= start || hour < end
+          if (theme === undefined) isNight ? activateDarkMode() : activateLightMode()
+          else theme === 'light' ? activateLightMode() : activateDarkMode()
         
       
       const asideStatus = saveToLocal.get('aside-status')
@@ -121,7 +171,7 @@
   </script><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":true,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
   translate: undefined,
   highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
   copy: {
@@ -145,7 +195,7 @@
   lightbox: 'fancybox',
   Snackbar: {"chs_to_cht":"已切换为繁体中文","cht_to_chs":"已切换为简体中文","day_to_night":"已切换为深色模式","night_to_day":"已切换为浅色模式","bgLight":"#b86eff","bgDark":"#7b35c9","position":"bottom-left"},
   infinitegrid: {
-    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
     buttonText: '加载更多'
   },
   isPhotoFigcaption: false,
@@ -161,8 +211,8 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover/How_to_use_Server.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a><a class="nav-page-title" href="/"><span class="site-name">服务器使用与训练环境笔记</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">服务器使用与训练环境笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-27T03:45:14.000Z" title="发表于 2025-10-27 11:45:14">2025-10-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-08-20T02:14:07.307Z" title="更新于 2026-08-20 10:14:07">2026-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">14</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Nope~ Try again!" data-whm="Decryption verification failed, but you may still view the content.">
-  <script id="hbeData" type="hbeData" data-hmacdigest="ece7dbced317f3bcb7a2e0eb15c8cc13907890229d6627e95f3ad3a9ea99211c">751c67b3d2ffb406258b0bbe70739d7f7b54bb9f2af88bc46ca9f953cd05e01fbf6761959252bc6c91d1a8ec52f58e702b95fafe0e03384391bc41504f4665baffa939fbb4dbdc77a61a5bb4b2e63cf730b59408336b39c76364139b7d6dcc4cde13e6d63d254e5888407839bdea26a6799f247efaffc5edb9719ea59fbb20d1b140ad903eeb40e88294e52507c4ecb7f3f9447c27efcaccd1aeb3b5135f7b787e8ca32fb2991ba1fa141ceb16807d03f425ab7010ffc5b02ae0e47213f1c26c007b30660b16855967c70c93a1618da5c97fa3ca57edabc803bad214cef2ac4ed0385acfeea8ccfb1fcb5f1486ca24dfcb6e41d96bdc395499d9c3a84c5d0fc6a1121f1b8417f21e11258c5d753b9fc8350f215fc053a947288867ab34d2f307596da1d156100f448d325e6fa312955ccd5ae63f3080c714e4906b7c6689cefaebd3becf7c6b9b8109d841f47aa0ac51a6f718c950bd8ed27cf87eb05afa395b1166cb1fd6950b2b1f780224b4833752bc9849dc556edfea6ef7049f236a904a4f3c5f9e12baced5bd12661834b1966dfe867fc66c68aa950ab416216f242977443e329beefe0fb2cf9b94a21f2a2abd47a5069a29b51a3eb34754e895642ef1faf55aaf8f6864f22be8e9d1cfd0c9afcd4b5825305a63358339857fe99112ff7c773c938d6e6a33d06028b982898bcef2df5e32a8b5a12a1cf34910e820d3cf3c8b2c506773b2735eeb3e76afbbe044c0a5401ab479ce4eea729cf020bc31625a1db0f54e17d600f69be3896826b5b6d34ad8038ff5824e47960df0005fe248ce7163ef17925df8e3d082b3a3ed81c12c754ef2ddb523fa2ab8d266c8050522ce02150639fbfa6614535dbd6ed0159e57f432cea81dd1d9d1f2c1a546e08b10c786ceb1e8fc9029dcff280c3bff105bcfc86fac74fa9a5b3ee726b4cc919d88b2897683826974e19022da812c91e4a417930103a74e4a926a20bc880bfa1058169c265613c61a2317b7f1cd0fdb30056261e8c1735e17be7920071d6dd5e01f56bb81cf57c8b333ce2912f4a10371ad8c11dec9c8dd68573dde7cf1d53f42378ce38ed108f560305fcc28ad283cc016fdea0672dddbacf27705838c00f80045c2b6053da83042f02e106fb266ba920396d8a825b19b0bd2bbd5c15dde629d59aeaf8fb1595edb17ac9dc6e86d9fd74f0c13f8e20bd1ffa2eceda98922fc9161d9eca9d89e368450912bda59b3f0f845600c70a4147aa233ea778ce8f7ac251962ebe21dc3936a7834d2910ec5783e6bf330d2077b7330032032f678d162d1ae4b129ce3c4e333203b7d61b4d6cb9d4bcf923a6107180a4edddf95b24c014e302d532f263bd85e57b90c17a356224d687beea8b828278af0f90d6569c0759658b2c2a21c1470012b7c2638977792e0ccc3b5a9bcc1a0f398b20b730ab4cba032145125a17a2b81d1b4d71b9cd6a2c46b558c1cf9c7c5f090eed68f1c1d429c145bec2a72cd26568f36c1fcc4e1503b6cc949dbaa2eb986bf1528534a9543732e19bec4decd8f631937164de7efd6da7ddc417eed14ff5cc5ec46d63fc05ecbea2ddf0b84453ff78cd5fc98114e3a4b6b714658ab8a04b87ea315978f886ba1a2c6704e4813c8dee987bd63a0b86710b62411da34597bb6e9acb79ba6e9761fda99be42e9b32fa5163a0768627345d53697333d3cbbbab660b21392a0fc188875a6d422a11a6316be23180edeafbd23f6eee9106d2e34837f40fcdb131d73485f5fafdd4ac3c7f4e6d1d19ceea7f6f85025944bd3a3a30adb672f2ed423b0758f7f92b346d4643d2624f7573c2cbb48b8c9839ec79597fa2f4b11e1279cf8c155d1b7868dfb99eff0051a1af49047c55ac08f96c8a44e75e451ade51587b0f22817a753180591469ab395cf1dfd8b7f217bd4e8a47f60c630edbc6bb404e598cfc4c299a50c3c8249e38ae06442a9592204ecec1abd4b2c1492735d429384eb7654ca316bd68c5265d83667ce8b1ced7993c892addac2b1c2ef692488da7b14e8b1ed56d66ac00bd204fdcafe8aae99e614c4613b7a485be17e1f9e5b306a7da287f5d2b49e084d3520057202bcc5823061aa24b23a6fb02aa1fa5ed1f3b911f46d8ae95f44c94d23011452bc070e9923b97f078a47aff4b5aa6b0eb93113248e99c3cea209ab99a659fd0a3b49802740b22a6813ee8690dce6c7047cabb0fd9ea4590c371dbd44160b5d316833de95b421ca597650754830a25812dc2213d5e29f4a957aba89fe5bf954c03dd18d33f331bd7f6bdf7ee23c995a564bb5cb99e058953a87cc8568e40c8bd88b3973bbf4353b23854bf549bd8cf2ad7633dab0a13122e53496cc6bc4e9311450e3dad1b5375d5b2483de138cc7f4f1ef42249f24c53aae2ab8f2d736d9656be88d7585dad21ad9b7402cc50900f75c3d2b7a503f584b5c55e45c31621045e4149d0e8cac65e675e626c1b49a03df80bdbd5714b3407e857d473b1cdaa1e71fe148583509dd0ce0399b0ac8bcce0efa36ee696a587203c684d468c5cb49476a21292f54126a30841f9bf6a04e939341778d25feac753c1b585ded178afa5817735d0a52dedad839201ac7531379578e9bbeb129375992d5871f8d23c9a6e0be63ad042d76115b81e284d2fa0eff0181c05dbe6330ca4330cfd13892234c9efbf8f7b15b3d2986fb4350878cba344a74d954cc609480f4db23ac3ccf18ffb6bcca175fd02f79b1b2fb1d1a673ef9a4492fe6046b55909e142778dc8768b6875b1e189a3bee1a62d32f4b90a69db3bc13c008645784d04b3cd2c0b3807035fabf83da0a06dcf32045f17036ddbb09625e14feb5d3d3000df6b0721ce4126755e55db8428f7e9ea02a4b10c7bfb797e0bfb413a0ae4927d8b986ae702fc9f469f3b5f7f276836b1a5bf86d11922d25e8c8b9c66645989c6d4ebdcb7ae1eedd1c4527ee462d5f218321907d69873c92129ab0318603ec46fe3061b275e7ac141d1529ea01a10b2f293d96c3ab0dc860a4686876f2263ab9dd203b926df0fc443b172cd85ffc47456d91de6d945315e5cdfcc341768a1b77f9b19f3188b387bca54eac6e6c50085536bc90818aa282f368830adfc3cc223ee438ebefbc6d2cfbd0a876ff8832ae9d86e2d3637a0f04005de1bd5a5ec5c11a2487215b45e3b117fdc8a1c4b31e322080c18984dc3dcaea2c4d5a870e385fa47bb7af6639a0759087cfb4d4fac92b4ff242559056f238e6225fc50f38f943321132cc50de2a59f4e9a574c870adcf2395a2fe54a103508db978614ed16ccc1b49c40e44da3d89127c07501a1c37fb9947e7940fa0ee1243eb867ba7856f9b98504faa70968ac976c8a209e0239eaa323550e736301e809c7b5e2bfa8db0eba776c7df32bc07af5903edbe3042be96c605b5d917760cec6abccccfea769d3d227027027a76342d96943c3b89c3307d20721563658accdd85630d72af76ef458607a73931249bf6d4ea143d7a6ce2157d2638ede023dcdd10319993031a574a218b65d8afd5be62e9b106609dabfc85568225458cf36622691404babb2443ac58bbad0146bf7ac9f37004dd584bf8636a5377ea2e39ff6e97444d1e3ca4dca53687753a89dbb6062e53a857a631bc3c196bb7fc63703667745cb403bd56e7fd875917e8134414eea33c4a7e023e6411eb557973e7124945fae16ca36a4debc2f910199e2560a7a3d2d21f8357ec003e9dc6d69c7f5830e5ee215b5472adb8933a875fae4ad85b9c4980bc7bc1934be781151e59ebfed80a9ea3fe08fdab78d32c68ffb61677b409bbd3778ed8fb0c2dc34fca8a4ebeb52a455eac6a13bf27885a4d64272bd184ed8848925ff6d60271111b5463318f587dc61e74947426193988408e2df5f99e70c848b2418856a3d5b3cdd3ea5276427a1667c9e2496731f546213d88352d46433846004cfd3ade5889572a4552b6c1923de453a0ed46e8b7c9dd4bc5563e9a1b2c551e7183682ad104c54b7148bc39473d3763013e2c4fe57a5eb43215cd6e0566a97ad0cc4ca3bf7062ea7ea1750dc14308592e4cebdf07204ce0aef8b4cd12281bb46f7ed9a883cd1aeea2d97a78fc7ad729adc57d0efb58b06721977978866822818faf16d4235a9cf18562834b18a8fe3847e6940e8a002733b26e10342a17eac32b7865efd13fe2ed4fba222462226b07ad46fee55685dbc055afa4acc284d40a0e59760bfe47a33127690a3a510ac3b80621298e1b944cd3f3d9548ec52b79b6a41cd72bdf5d08be420ada4e56ca28561c7c94868788019f7be14611ba5b29d1b66e12caf09d3e7c06635f561f11769d0593a1d7ac73d3da5596571e23b7beb1d875b012e87314c5a1a7410d77c944e5e956c1675c3ed89be2bf8c7cb9cbe41cb3201c332b19a094dd555e241f60ee2e321dcd2e6c6f3abd904895f0f1676ad9321810c9834e741728375c3c60de1cd49cefbbda220d2ea80651b06dca04452f7eb0d91edad96d04447cbf6ee83696073ca1ebeb841fa0d1e7b6d28b8cea578cf5218ad055bc293ab999cd817931c5bea94ffb1fb230b60dcea9f90ad9c2b4df74371a904c8b1fabce87bc6bd51ebe0c652057e639696155144dce54d27b21da720ea3a924efd408d4604b89502594fa53da55f703db7a53bcf18001d898454d497f85b2529ddbad0ca90ce5048f9b4e94c8578ae0f5175654c46b0f9acb3a5396b1c1788021b2368e8ff3d19ba3fc63e8ab6438ef4743f12c6a1f14694b105a4686ffbeabc48ab58f6f63ab878ccc9e27b0333dc53d475402492723d3acceee5dfa823a8aaba05efa326ec6c01e59f8be70a4797a0b099bdda36d4b985e4d1598e3295e333639e8be35ccfa40c993402ce446421fb65fa0327393f3c68d0ccd72d189ddb00f98af964f5ab08d25b3c81884d9b8720b63c0432007839fe203cf32cdbb9defd1346c26f578672dae69e62e3d3e4273de9c619aea46200f2256bd4a29537b8a36180208ef2f4173dab14e519eaf715affa2c82f45c362f088e41c381286093b719e5b8ceea003b7a87f087f4790def5e0e0585079ec8b022d0e531b65f203209c58b3875fd46a30e5858fa34fe53c62ac73b1c1584a4175f543b32ffff057b9232ce7e005c33c4be6e84a5c7fd9c5d5d0bf970f93980e2fe9e07ac154a3be9fb8a881dbe2500c4cd3c20ae4f35d457ab970d39d18b96783fb9f6c11dd760f8d39072afd8aece0a29e4cb7a95dab9b95dbf9d4324ab6912d4d6d62237d1bd45e15afa2ab229bdcd39fd16e07e4b0edd508189fec02f065ab28327184dcc3a646c3475e54112118cdf066f2e2b3dd1ef3d2499062dfef0c195bd0745462471aecb00af57cce88eb22f56ed31003cfe759f7557a918aaad762637c58121b2c80ebba49d2cbc01116d827bf85a3df2a6ff56539348d9c8c9dd55eb1e5d353933e4919e07428d9295cb3de667cab3e717f97cd380000f866b89d88bbfbf02cbc8c3356efa2d82ca4083da9d1687d02516868a476330402825f350fe6f30c17a25a3f708aaaece01500fb023ca9b2f0073cc45d5698f2e5a7a4126e7906057c01ab3699a039fa62369d781c9d092f287dcd5a6da0c5137dbc55671538be76f61107df2b15032e482cfc64da8a8a527acaf2354f88d1ba50cd0504275ce767d9b9f806fa5565feda127975af3d5cbe73bc0970ce296d0e1d793b1fc13ac52777e39753cc22d347d84d0f099631b9cfc55e0668a85f2e579a55275146c0a25bc5134049e4d31e8f344a6c2dfa6fce51666ae4ba9b88125d8e449bad0d8ff4f9d196e5d8454bbff899548c1dc2e09fd2fe96fb68fe390b584948e92fc37283ec3455ada1973068ae87ffd8384a27379077b2701db69ef6d8fd07397b4a0451f2d585daa2ab5ee9eb8b6a0062f2078c75334fdfd5f2e303bcd541920f996a11f1836c93aa1b6fcd096421c16301cc17b46e8118abeb0e34cf6ed835e73f73c12f9a5ead168910a4cbf4df6b4325948822d8f65660b3642607ffb71dab1fe93802e103e17a72462ad3249391d4206f00db769574734c07e1bbd9836ffff26f77c9a949d2d346002749030d639816dee323edbf9ff3c9ce4861fd393471e07e701d4fc50c7c639224d531152ee9a7bbda538562831917016ef25532c921049a64c2ceeb50f6d1b91c8ef002dd8bec9174764079545ca9877517806e972e82fddd8ca4d7e3649c66311efbf40df839b562393d280f5b40e0af20693ed411fcc89991cd53072b5ee7f9d568ab07de1111f2f902e2faa214ddf96091d8e276edf588796b3ed9dde81adf4da5223f50800a3a5a749dd8246629cae77b57e16ab7b98f30ffb678df85e741a591aafe5f67151961d5e4d4d60cd7e99c1267a4d9a3c15a0b2f6fec6bc96df7c3fec688f6faeef024449222b87c77e8920a5ed9e35f047ba9481eea8241d67c105ad90cccc1abf1eb3c0909f4b3517c85c38f8e79625c3482d4b67e247ae9b058160c874f62b92d52a5e584fb161f5cef5cfc7a698a070e3b1b9252021f9d0ec442ec920e3e305f4ecc273ac38bcb47553050ba3c384afe7bbd8f4a2d585188cbf02a33cf14edce63195f788e85960b6f93efed84122ea0c1f72a71060eb165fd4322161dd3d2089f4de5aa660407081ba8a1d6a8aa382f1a59ccd3e49d940cb031b92df3abd0e2a63c074c1aacc6dc1bf408fe5c7134ef748d92314ff1a4d0356331f94383359362c1062b4d9a8006c307e2634153f8f6ddb4abfc9c1b85553cb864b4e0fc470cec5e85acabd3dfdef8091b3a7b9459ad4621f828e5f96d66bc72e066e20d672012ec6d4fc911ab41295cb80678ca861c886758d5b993528cf3e54adb60f1f04227a84029e5fab5ab8bc597c97cfc9ef99633682eec9f089d4d74696bfd2fedd3f0077d588ab3a3a036fff95a932bcf07df324a022ea34bda5c06cf539634826990a114b18c7d1a9f65da075ef6e5d09218badb5264848b36725db40eebdede6100d79cdbc318bce545459e9cf510b578dd840dc3d46e880a1bbe735a0c10dcfa9c23bc265b086e36a2d0466ffb038cb03e614578b07047f8b7a99ac90ccf07f74554116c3786bb4406a9f06bda75fb3f7af952ae147403bdb9b6481959d7a1e04415e6c931f810ded0140f06a9f3f5a97b5be53da1407823f67ad6cd63025fab80bd668a01d0c60c9c415a211880dc423bccd74bd7c29a2825ad1138b7e0305c488c9a8b0017b16cd7ac1fc203c9a32edb6b1195611fa09087e42ef391b78657cdde5a309f64a02f7d1a7895b7cc54a0fb466ac943da2c4456a37cf029bdbe1a8ef44931909fe7779680e8265b4d047ae4cd9a02f76d2607b405920048ecc1fb21036f297da04257a7f322589c127f17a51cc8b6425c4881717f8b3953bd41a82e5d8a6154d3e7e660af8d7379f1edac58a7e7081f6a4c4446e271cbe4659777a73bdb282cc54ae72179f0de2146f2e28fb96ea7e2b2182f6445439b5b43c28fd2af8fbd9c98a831749aaa76ce1af6cf18314bd11345f085b35a6eef7869c8c3051c8c408ae389605f26b5f1c40d1421b52b8a40022b4e4e03ff4c38394b88ef21d4017d6091cb38a4efd9145d58c47c829173204b7a2df11d48e0edab4a874e2cfc6f2144d392dd287132c29536ad2ed2fc39e21fe5612e39c17b2499e5d1ccd42434121b847c73ce9f96ce86b87ecb7db742a81c422f3eae1d0b633b2dbfc22919295b06153fb6cadc51074bee7847253d827c2410344b0c2f98f03355d5e4a5b8ef6c3a93caddc73fe7c5b856293499fd196131b4e86298b41776e1742a3c93acea7a54844ac01745620a4d3fe09ab5531ec5b617b1d6c61f549d6e234a51c4475b22e706f7835c5290f12c3d61f12b49be6c6d4497aa0ac822893040e55693ee828efc13cf11e87f2710fd1e296467edeba5a87668e3ca9f515072527ee232ad5eab0753eaaf9af62983a1c8059da47ec0f3c52cc56a1b831bf0e96fb1de782615b8db</script>
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css"><link rel="stylesheet" href="/css/custom.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover/How_to_use_Server.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Midnight Phantasmagoria!</span></a><a class="nav-page-title" href="/"><span class="site-name">服务器使用与训练环境笔记</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">服务器使用与训练环境笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-10-27T03:45:14.000Z" title="发表于 2025-10-27 11:45:14">2025-10-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-08-20T02:14:07.307Z" title="更新于 2026-08-20 10:14:07">2026-08-20</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">14</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>1分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Nope~ Try again!" data-whm="Decryption verification failed, but you may still view the content.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="0c499f5e4d87fa820ceb7b1f471d932d7225bf831fa981bb576ee148595eb4a9">751c67b3d2ffb406258b0bbe70739d7f7b54bb9f2af88bc46ca9f953cd05e01fbf6761959252bc6c91d1a8ec52f58e702b95fafe0e03384391bc41504f4665baffa939fbb4dbdc77a61a5bb4b2e63cf730b59408336b39c76364139b7d6dcc4cde13e6d63d254e5888407839bdea26a6799f247efaffc5edb9719ea59fbb20d1b140ad903eeb40e88294e52507c4ecb7f3f9447c27efcaccd1aeb3b5135f7b787e8ca32fb2991ba1fa141ceb16807d03f425ab7010ffc5b02ae0e47213f1c26c007b30660b16855967c70c93a1618da5c97fa3ca57edabc803bad214cef2ac4ed0385acfeea8ccfb1fcb5f1486ca24dfcb6e41d96bdc395499d9c3a84c5d0fc6a1121f1b8417f21e11258c5d753b9fc8350f215fc053a947288867ab34d2f307596da1d156100f448d325e6fa312955ccd5ae63f3080c714e4906b7c6689cefaebd3becf7c6b9b8109d841f47aa0ac51a6f718c950bd8ed27cf87eb05afa395b1166cb1fd6950b2b1f780224b4833752bc9849dc556edfea6ef7049f236a904a4f3c5f9e12baced5bd12661834b1966dfe867fc66c68aa950ab416216f242977443e329beefe0fb2cf9b94a21f2a2abd47a5069a29b51a3eb34754e895642ef1faf55aaf8f6864f22be8e9d1cfd0c9afcd4b5825305a63358339857fe99112ff7c773c938d6e6a33d06028b982898bcef2df5e32a8b5a12a1cf34910e820d3cf3c8b2c506773b2735eeb3e76afbbe044c0a5401ab479ce4eea729cf020bc31625a1db0f54e17d600f69be3896826b5b6d34ad8038ff5824e47960df0005fe248ce7163ef17925df8e3d082b3a3ed81c12c754ef2ddb523fa2ab8d266c8050522ce02150639fbfa6614535dbd6ed0159e57f432cea81dd1d9d1f2c1a546e08b10c786ceb1e8fc9029dcff280c3bff105bcfc86fac74fa9a5b3ee726b4cc919d88b2897683826974e19022da812c91e4a417930103a74e4a926a20bc880bfa1058169c265613c61a2317b7f1cd0fdb30056261e8c1735e17be7920071d6dd5e01f56bb81cf57c8b333ce2912f4a10371ad8c11dec9c8dd68573dde7cf1d53f42378ce38ed108f560305fcc28ad283cc016fdea0672dddbacf27705838c00f80045c2b6053da83042f02e106fb266ba920396d8a825b19b0bd2bbd5c15dde629d59aeaf8fb1595edb17ac9dc6e86d9fd74f0c13f8e20bd1ffa2eceda98922fc9161d9eca9d89e368450912bda59b3f0f845600c70a4147aa233ea778ce8f7ac251962ebe21dc3936a7834d2910ec5783e6bf330d2077b7330032032f678d162d1ae4b129ce3c4e333203b7d61b4d6cb9d4bcf923a6107180a4edddf95b24c014e302d532f263bd85e57b90c17a356224d687beea8b828278af0f90d6569c0759658b2c2a21c1470012b7c2638977792e0ccc3b5a9bcc1a0f398b20b730ab4cba032145125a17a2b81d1b4d71b9cd6a2c46b558c1cf9c7c5f090eed68f1c1d429c145bec2a72cd26568f36c1fcc4e1503b6cc949dbaa2eb986bf1528534a9543732e19bec4decd8f631937164de7efd6da7ddc417eed14ff5cc5ec46d63fc05ecbea2ddf0b84453ff78cd5fc98114e3a4b6b714658ab8a04b87ea315978f886ba1a2f85f306a62561ffe02d5c65fa489fd9ba025d29fbb8eb4fe29f1a54a3217eab9ecfefa8891594d4fa64857439d620d9d2367da3c3f1d9877d9925e87c8c623bba7b27dc2ad57f6df08ab8a8f0a60cf9c5344d2761eb0c610bba498314ca6fd6c01e439d27b72a37c4fcbf276cf35bc1d2452a9e7ba2200f1ef78ea1bb255a886cd219d7c870dd0ff96d0887a69ef1eb1fc09701728c6d71a3ed6f88233022692bf6156d8db4358ebc40f0f8848ced19e99fef3de3830b642796170747d53e4eadb60e911177a74e4bcbe9ae79e063742a44bd9a65695f82c675168614248c2956b21101918840ca4553e698d944108e5725b99c508fdf24040ea20e368e898990d9c517fb1d20ef442d51f6b1e24f3cf4934e461389cc72c54eed6c25806cd9d972dc7f7878a0209858b54f29159e5202e24ba68db517caac8232b760ab1676acc71c76eafed403fd261a482f11abee8d110694d92279a5b662a7520e53274af5510386222873682e64f5e4a2585f07cda11c7fbeab05a0f71680dd1f2c55422beb93991f301197884c27175bf66c6272f6f973efa77c2149dbb60d221c28c3f4d046b34c8e7ececbc85b51d4d195601ce482056b8d50eafbeb7fefbfc1717981799f3b4fbe139e83e76cadb9cc11584c86f0c36fe1725cae2e7a860a48778c75997fe2f00bfd0021f478f2a3bede94ea93fd978eb66373c78544cc9bcdb47a5b4a0aa3bcdc5c45a18fbe1e9bbfb86a3ef6baabe043a107c58a62088cfc42448c6e9500d80f89058670bec333031cfcbf5d9f5093a33e3c843a66fc17e762587ffe99031310d6c6fd61fa8a45c5b54c65a752b12f201cb655739893689e2f645417cd14fd45fdd8454c9e03ee6ac72939b2e2d822162ac4d8038ca35aa7646fa75e9c31bc38d4ad75bf9eb13147e629d25d28367dc09eb6e503dfcb9bf0da22e9e3447c6ab227b2a3fce5ce52c332b944de4da987595e59e08246d068b0a12c39324bb86a68ec715b746cf52d451ced4456d2ae99d0a19a80babd4f27e41ceb767944d10aa0df55872409fde74f22d4aeeb8c8fb33ad224798196f173dc217b1c5f8920e8277d558f089652f15eb341f813af2a7a8704f3ba088f65def659971ceb1380d641c001bb559d9f7db7b9c49eda6c51317ab04054bc6076986e022e5dc9c54ec63a8d1297d4426beccc29127fbb02e50b65d501800504876679b10e2619de753912f2e3e6bb41f369e1d346204f2d8023906f8e5b1cd3d90bfcdef10a216a179b478a6cec51fb6c3c52a022f181b741676da98247fb3aae6f38bf9e632cc253111b37b8bc3eb67069623bd335b4cb20fc51f6a147929f6df04cc55cbceb3bf81328fbc561a543f7f6153621cac944c85aaaec2b25def801ddf818af5f50fb443bb2125d7fb87bc00745f9dedf8cdac36c777ccab81ff6577f903fa56c60c92961d812b7bcd556e938c74a931db74850a9d40d874233f30488bc7ae664c2d0f4568a004c8b1708fbc62f5ee87f9f1c4998b2aebb3a67d1c2092d9a6f7ad125e77c20d76d7d7a40b085af53c40d9671553b7d6e6859f6b99ae827ed81525e7d0b8620c7417dd1358579aa1682f90e4a6016852b2c1c124ff048ae228b2659d20363135d3495efd54f775da73c81be0dad2576a6b8b2b309a119f17c059d005d579dfac4d9a6ec0bef9620f414967d5110afe95159f3c5edc40d4bdad527abf5e82f49b79d07ddb0f45901e4bb25277bbb5bce81d41820199b895e2be1e64da497a953c1549fce71ae8047f24f3261a63454186816ff189f3af747930163da847c2096739dd28a9606ca372963a5898f6b8d00672df8b1140f631cb55274c5ba476dba5a49938fd5cb83c62b190162b5abaf1803f4532561b7f516517595665c59d311f2ae2eca0be73358a7c6301857da0390189d5a23e49ebaf8ff3aba9daf4163abfc6d489dad22441559c06e07669b20f22b0ae62548ea3ce939c613759b88dee2739134b6557255a83f3ac096187538ab68a8d42f6520f0d185caf38c88d98ea10b73e094640476339dd34a9ee1f879e17b272b98d55d9ab82d3917b0062b9bff2d90d8c81cb8bc83358838c3b4bbc5e9125df22e5ad0668ba57ae17e6ada12b7479a0356a2d31bd0da0a2c2586fc65c3881b0268c08b359553284b7fd2cbfcb0a8728a4fa4f03b6f8592a77f70d00443abe8f7268852e06cd0b1c4a5f23e582964409c60521092741c9557a1eb5c46e1072410d4378a82a39334085473e9be93e5cc84985c597c6c9b8a77f7f3620471bacd11d4280006022582755163192e3780ebb328b7e0cd3284a31deebaa5ef1e418cba779cfda9d953462f435dd97b0519c2d63c65b11b67fa61df72244b2f91e0982a0665b7c7b78b10df0e82a58fc889af89509f50610ac94752df74c5263448db0d478297293fb7eb3505d718184c2a0b8e34a4edf3ea912fbf4d020bcba8cf9a04b4a5b47ae93f1cf75f91f979d726d2b40e7ee92b93428ad94c9ceebcb3ce0b3ead1029f3cc905dceb463e31d19e2cfd13950be219725dd36f4923542f278f9f3a17c297b95b65ca4901d9cbef68ccdbe2a6bae9ebe94c43e8e742e522e269494eeaf7b4a44bafbd4fc6dba2dcb1f411ca5efa0f8bb17e5c4c3f504fe71907860959cb3e761035b0073f34c3b4b2ca6430366a165a2b25bb70d2dc39c42ad00d1ba4222021c9ea1a1280332d8bfc26d8a9e2ad5c90286dd29113ba1f1f9677059bbf6f562b6ec95e4c6e33c8a998a786250448bfbe1aebe5aaccb094350079bd5ec14171b8eb453db92696a85d2746b464355eb9b85472383c1751d91f717269271fb9b317b3dc16888d7d9872dce15b5b3a77fa6ba4d1acdaba6aafa561c97e30684282d81275baadb3b8cb10b5c4dc5dc6d2a3f9e5e7c63cfe4c68b7cbe9345f61ad5e369d1b6132597b3b84df19519413488dc0dbbadee10f6c0eb05a6cf581afdc097c2888a6489fec25a417b81287b306882a7b4f2741c974c405905a87a704156c6512c27b614e3aecd69fc8caffe2b1bd4fb7ded781268bc108f9db1069a2383595b46574d447e50647fda06ee8f2c02f8f27849e66ee28501d25be85eb7d6eb012f822d8d369fc696f009d22694116e550ad80c4fdc13857bd3eb1af5a59b3e12e76ae7f1234a3f836aeba0ce946134a2deb7f8e0c8159f89cd072e57e94c0ad0060be976736bbdb42bcd8756f1e801fa9ff0baf779cb6568836e64833e0d3ca5072a053edb7906d67f4e42642fa874133aa1eec80d825624a16a8c513c60988dcfd15aa976a79225cec61c1ffeaef74c4c0a4960ee9c0e8bafe5db3c5f091cf0973fa3c8d51f6b911d38faf63cf123b8cae6074d8f02e76e21a7ca048cd38f8453bc2cded242c31cafd1e80cf9a974b77a68821a5a9fb8a0e269437155f16412fd964c5dc987eb64c8e50faa5137f439dab8e3a314711dd51db0d2c63d7494b9c5bd5ecd8e47e97b9fbccc59e5e2e83e69c84a8bcf8835a51a0829065599263e3b1139332d015c805a50e40bac9939322ffe3e4a6ed4125f4b8a2b890ac94a2be27c1a455d29e98813a565fb87be4a72f07ffa3957f368882a97511511afa416de3ec402eb74ffcabe7919297a3fdf0793d9394f8f342ebb957c9da1e0b998b07bec968103977bf7c9722d3448a7d10c43861b8e5b289527c4696afeb91fd5733f799658c627ea3f8b7e589414e9656708a43d8de0c348b26655afd3491638cd6375774530f38081b20ea3f038f3d9ca98c2c91822d269f97a8060590368efdf0d059ac6ad37ad9b1bcd4e2b70dafd2a46c6490a579117e0bd5ac006e0ae77e801a234422cc6ff3b5b9940faaf3e60e7bb4907aa65d28120e702e4890d6f2db5bd2129e128ab0a7fa63534f46b6e7977891a97f79001ce8cdc29c43470b7c4c968d9cdae1df843ef23445f10456dd763a9eb787084df06cca66e6f8232d5438c07b4964839a6c48c9b5975f6cc78d07dc65b79caf1d05f8863b0481b9cd0ff8fb3c9d5e0ab2c621a03c18a2933e5ac767cba70b1f5e8150876ea1925fc2c11693ec0a10ad5743e9f7bc0238215d740bc59a31e8cd25a722ed0c548525725aa1383ea649809b3fd9b63e822e7ee3dd597a4d6164f49716e72b85c48f119427011350dbcd4200e72b66e5504f9e1bfa68dcf600dae459b311c26bf1aea2263de8e927b903e441d2073fdd0582953214418b43d147c7878ce1a48e5c94e2ffb5305a107d57e6eaba23cc51c5459c7a46fbb67948f4e6b243d88bc45e998f8148d0aa33a8fcfc7714f15103e436147aed61df0ebc2c79518a808119002ff7216e02ff4b4f801356fb6d8944077b93a4565d31e7fa0c0d725f93f9a58e69efdcc1396eb7a0ace78daa01b583b6136a10d99d432b5cad6565a7e284a57ea3cf16dfc79c88e4d7313abcffe07061497e1ccefa8cd117bf9cda903dae7ac18be1b73c42610fb5f67f96f5c71532131ddaca72ad56a9d3202f1c0c49028beac0353f9ceacfc922b67edc5b5f05449c02e11ca7546b5dcced58ec0b852d5b5a7110bfcbe6239a490c7f343bbafd12a87015e9881307b9733c09c3554823068ccb8d79645d328acbcf38009499191cc2e79329ba993a3acc6995b55455b1940d448999330f9d78912a4d6fd1ac49bf41f428a3a897bd090dacdb904801a23cc4ceb1dadc9806934f3b435042f1d4be68cc456fb0421d2e33bfdbf14cc9df30fad483c962136eca4b208bafac515802df1f9a5662e382edace7aa7725322c742a053219b8cf6dee06b2581476a700bbac8f009c8cf020b0f85fd647c7efc3605bdb99c2845b07877f800ce4d7a5ad3884c718dce480765ba4a2aadc6cb988ab0ec9e79829e8463e5d6cc8c5e36b13abdc8185974792e25c2af16b1f9ab884b2c2505d1d432d35eedd2edde7fb271d4998bc9f566552b05cee6f6112439f89ee471ae285afe6e415bd5a71c3d955a2bb2843bcbbb808fdc99d629421fa14d6f548e2f27d4ada5e684a9f9d66510e021c04a8861e795015560027b5ca0fdd8a5863b245b9031b9bdf74510e21c2fff234511d36bb0b17df1c0ebdff23ba40b80df13796178824081096b2b4840dc0bb1219833ace1d2492733302e9e343cd5861fed6ed9dd70b0b6e5ba272d2bf2375e11eda710cc86efd78adb80f6491e826a8b8a3ddc1b5632b799558617d89c88f155e4fb1bf4bd9752d2fe9ed941b2910b883d83e7e13d4393fbdb937a293d95e7449b9e6faf9c98b2a90e3851b105975f40e90e93a57fddedbaa0708832ebf305252573df0d5e1ac9a7c0bbc73edf8a744b76c4e6c746cbdccec260bf9a30d06dd3ee487298bcc8636a67c158a09cb55e978433ee07b376ddf25be7b7cc19f7b3fc7991582fb7ea2b2a4061281a9813fe47051e35415b72fd30c76815dfa417807e76870efc85122ef972c0585b6cc67c759b30ac437e6b06de217ee0e3acd99bc9a9738347d7eeedc86290cc71ccf0a7201cdce84998a2026297a8db8dccd8e3e610f55642aac2f9b983b07e4562b4df3272cc9bf6393c06af1b8607d60988500dc0ea4401e2bd2341179e31f10ae0a7bf7a9cc7f1affd4cb6ada338ed1daceb0e5f4ee2614c45c880c04b71709809abdf27791166a8f9d15123abb29eec78a7895037cd2d02580531cb4bd7b95a5976465befe23a1df21f9222e7a22ef68d8f24eb08dee49df2561c979b62206269c0f7747b5119068450a921ae463146e0930797bddc0d424306e554890fc602e0d7c67538fb0332ebd5d3ed50016388dbfc0f579bb5a6be39a04f5bd149d7b4f67afa6794e0b39b9441305c83071403098d9ebfeacf4fa2d3e1c76826483179cc27ad5f9ac09752006c63a8a105149bafccb6080718cef6db4bff2e78961b35d22d87d973d57f0b3d8026c25ce9adb457f5d519f5cca220f1d6d8e5e6130025c3c62095834c5bcb7b2f4b16f59f9192d97f4aa8d964b22e59f2011b169f5f31de00f5e2b4090b79b5979c4410d21623ab034ea8c5fad5c79aa9e372ac6ae4605c82525477f3109406d7e0b55daa0e2caa0caf7891aeb9bed94c36396e1b114d3c2177cfabf34356226e3d28c6221815b25c7994044b2e064cd53837ad49e0613b86c36712f4b8e3a9cf245a59c80d682fae5bcbc768c723f9b82ebf50c4123a9144b38eae095238ae6698b6c219d452e733e0a84fbeb5ec45de9a3fec69fa535dcc2613e8fb615c5750a4cb2dba2411442d6edc21198dcbf1243556c1e169b6431fe30a2d253b1ffc59e7f9376761a23d28089ae0cbb71ace388323def837eb2729e40a1472fe0b70360f789bdaeebf8609dd563c8ec48560e7df26f488a458699661da8b5ef168cf9dbcb4a</script>
   <div class="hbe hbe-content">
     <div class="hbe hbe-input hbe-input-xray">
       <input class="hbe hbe-input-field hbe-input-field-xray" type="password" id="hbePass">
@@ -176,72 +226,416 @@
     </div>
   </div>
 </div>
-<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css"></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://www.lfischl.xyz">LFischl</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/">https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://www.lfischl.xyz" target="_blank">Midnight Phantasmagoria!</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Server/">Server</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/SSH/">SSH</a></div><div class="post-share"><div class="social-share" data-image="/img/cover/How_to_use_Server.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/09/27/robot/Unet%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%88%E8%BD%A6%E9%81%93%E7%BA%BF%E6%89%93%E6%A0%87%E7%AD%BE%E6%96%B9%E6%B3%95%EF%BC%89&amp;%E8%BD%A6%E9%81%93%E7%BA%BF%E6%A0%87%E7%AD%BE%E7%9A%84%E8%AE%AD%E7%BB%83&amp;%E5%B0%8F%E8%BD%A6%E7%9A%84%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/" title="UNet 与机器人视觉训练"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/Unet_and_robot_training.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">UNet 与机器人视觉训练</div></div><div class="info-2"><div class="info-item-1">  ...</div></div></div></a><a class="pagination-related" href="/2025/11/27/robot/%E5%B0%8F%E8%BD%A6%E5%9B%BE%E7%89%87%E5%9B%BE%E5%83%8F%E4%BC%A0%E8%BE%93/" title="小车图片图像传输"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E5%B0%8F%E8%BD%A6%E5%9B%BE%E7%89%87%E5%9B%BE%E5%83%8F%E4%BC%A0%E8%BE%93.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">小车图片图像传输</div></div><div class="info-2"><div class="info-item-1">  ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/07/29/Server/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89/" title="本地小服务器搭建（未完待续）"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-29</div><div class="info-item-2">本地小服务器搭建（未完待续）</div></div><div class="info-2"><div class="info-item-1">   本地小服务器搭建的话先要组装好一台电脑，我的简单服务器是 ubuntu 2024 server 的操作系统，安装系统 服务器的基本配置板 U 的配置如下，内存我用的是自己家里的 DDR3 4G 、 电源我用的是长城神威 4000SW，额定 300W，ATXTX，配置如下：  机箱：  SSD 固态硬盘：  总表格：    CPU Intel...</div></div></div></a><a class="pagination-related" href="/2026/01/19/robot/%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E5%92%8C%E5%B7%A5%E5%85%B7/" title="一些软件和工具"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E5%92%8C%E5%B7%A5%E5%85%B7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-19</div><div class="info-item-2">一些软件和工具</div></div><div class="info-2"><div class="info-item-1">  ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LFischl</div><div class="author-info-description">「在哪里去追寻意义。夜色已深，梦还活着。」</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>LFischl</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog. Daisuki Fischl von Luftschloss Narfidort</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content toc-div-class" style="display:none"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%B4%AD%E4%B9%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">一、购买服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">二、连接服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">三、服务器上传文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83"><span class="toc-number">4.</span> <span class="toc-text">四、开始训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.</span> <span class="toc-text">五、注意事项</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/29/Server/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89/" title="本地小服务器搭建（未完待续）"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="本地小服务器搭建（未完待续）"/></a><div class="content"><a class="title" href="/2026/07/29/Server/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89/" title="本地小服务器搭建（未完待续）">本地小服务器搭建（未完待续）</a><time datetime="2026-07-29T03:45:14.000Z" title="发表于 2026-07-29 11:45:14">2026-07-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/30/2026CTF/2026%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2026 御网杯 Writeup"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026ywwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026 御网杯 Writeup"/></a><div class="content"><a class="title" href="/2026/05/30/2026CTF/2026%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2026 御网杯 Writeup">2026 御网杯 Writeup</a><time datetime="2026-05-30T03:45:14.000Z" title="发表于 2026-05-30 11:45:14">2026-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/18/2026CTF/2026ISCCwp/" title="2026 ISCC Writeup"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026ISCCwp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026 ISCC Writeup"/></a><div class="content"><a class="title" href="/2026/05/18/2026CTF/2026ISCCwp/" title="2026 ISCC Writeup">2026 ISCC Writeup</a><time datetime="2026-05-18T03:45:14.000Z" title="发表于 2026-05-18 11:45:14">2026-05-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/27/sha1/SHA-1%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3/" title="SHA-1 消息摘要算法实验讲解"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/SHA-1%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SHA-1 消息摘要算法实验讲解"/></a><div class="content"><a class="title" href="/2026/04/27/sha1/SHA-1%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3/" title="SHA-1 消息摘要算法实验讲解">SHA-1 消息摘要算法实验讲解</a><time datetime="2026-04-27T14:00:00.000Z" title="发表于 2026-04-27 22:00:00">2026-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026 PolarisCTF Writeup"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026PolarisCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026 PolarisCTF Writeup"/></a><div class="content"><a class="title" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026 PolarisCTF Writeup">2026 PolarisCTF Writeup</a><time datetime="2026-04-11T03:45:14.000Z" title="发表于 2026-04-11 11:45:14">2026-04-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2026 By LFischl</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css"></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://www.lfischl.xyz">LFischl</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/">https://www.lfischl.xyz/2025/10/27/robot/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%B8%E5%85%B3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://www.lfischl.xyz" target="_blank">Midnight Phantasmagoria!</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Server/">Server</a><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/SSH/">SSH</a></div><div class="post-share"><div class="social-share" data-image="/img/cover/How_to_use_Server.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2025/11/27/robot/%E5%B0%8F%E8%BD%A6%E5%9B%BE%E7%89%87%E5%9B%BE%E5%83%8F%E4%BC%A0%E8%BE%93/" title="小车图片图像传输"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E5%B0%8F%E8%BD%A6%E5%9B%BE%E7%89%87%E5%9B%BE%E5%83%8F%E4%BC%A0%E8%BE%93.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">小车图片图像传输</div></div></div></a><a class="pagination-related  no-desc" href="/2025/09/27/robot/Unet%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95%EF%BC%88%E8%BD%A6%E9%81%93%E7%BA%BF%E6%89%93%E6%A0%87%E7%AD%BE%E6%96%B9%E6%B3%95%EF%BC%89&amp;%E8%BD%A6%E9%81%93%E7%BA%BF%E6%A0%87%E7%AD%BE%E7%9A%84%E8%AE%AD%E7%BB%83&amp;%E5%B0%8F%E8%BD%A6%E7%9A%84%E8%BF%90%E8%A1%8C%E6%96%B9%E6%B3%95/" title="UNet 与机器人视觉训练"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/Unet_and_robot_training.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">UNet 与机器人视觉训练</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/07/29/Server/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89/" title="本地小服务器搭建（未完待续）"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-29</div><div class="info-item-2">本地小服务器搭建（未完待续）</div></div><div class="info-2"><div class="info-item-1">   本地小服务器搭建的话先要组装好一台电脑，我的简单服务器是 ubuntu 2024 server 的操作系统，安装系统 服务器的基本配置板 U 的配置如下，内存我用的是自己家里的 DDR3 4G 、 电源我用的是长城神威 4000SW，额定 300W，ATXTX，配置如下：  机箱：  SSD 固态硬盘：  总表格：    CPU Intel Co...</div></div></div></a><a class="pagination-related no-desc" href="/2026/01/19/robot/%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E5%92%8C%E5%B7%A5%E5%85%B7/" title="一些软件和工具"><img class="cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E4%B8%80%E4%BA%9B%E8%BD%AF%E4%BB%B6%E5%92%8C%E5%B7%A5%E5%85%B7.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-01-19</div><div class="info-item-2">一些软件和工具</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LFischl</div><div class="author-info-description">「在哪里去追寻意义。夜色已深，梦还活着。」</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">33</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">42</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Fischl0527"><i class="fab fa-github"></i><span>LFischl</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Fischl0527" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:1587607874@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog. Daisuki Fischl von Luftschloss Narfidort</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content toc-div-class" style="display:none"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%B4%AD%E4%B9%B0%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">1.</span> <span class="toc-text">一、购买服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">2.</span> <span class="toc-text">二、连接服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="toc-number">3.</span> <span class="toc-text">三、服务器上传文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%A7%8B%E8%AE%AD%E7%BB%83"><span class="toc-number">4.</span> <span class="toc-text">四、开始训练</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">5.</span> <span class="toc-text">五、注意事项</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2026/07/29/Server/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89/" title="本地小服务器搭建（未完待续）"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="本地小服务器搭建（未完待续）"/></a><div class="content"><a class="title" href="/2026/07/29/Server/%E6%9C%AC%E5%9C%B0%E5%B0%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%90%AD%E5%BB%BA%EF%BC%88%E6%9C%AA%E5%AE%8C%E5%BE%85%E7%BB%AD%EF%BC%89/" title="本地小服务器搭建（未完待续）">本地小服务器搭建（未完待续）</a><time datetime="2026-07-29T03:45:14.000Z" title="发表于 2026-07-29 11:45:14">2026-07-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/30/2026CTF/2026%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2026 御网杯 Writeup"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026ywwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026 御网杯 Writeup"/></a><div class="content"><a class="title" href="/2026/05/30/2026CTF/2026%E5%BE%A1%E7%BD%91%E6%9D%AFwp/" title="2026 御网杯 Writeup">2026 御网杯 Writeup</a><time datetime="2026-05-30T03:45:14.000Z" title="发表于 2026-05-30 11:45:14">2026-05-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/05/18/2026CTF/2026ISCCwp/" title="2026 ISCC Writeup"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026ISCCwp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026 ISCC Writeup"/></a><div class="content"><a class="title" href="/2026/05/18/2026CTF/2026ISCCwp/" title="2026 ISCC Writeup">2026 ISCC Writeup</a><time datetime="2026-05-18T03:45:14.000Z" title="发表于 2026-05-18 11:45:14">2026-05-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/27/sha1/SHA-1%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3/" title="SHA-1 消息摘要算法实验讲解"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/SHA-1%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SHA-1 消息摘要算法实验讲解"/></a><div class="content"><a class="title" href="/2026/04/27/sha1/SHA-1%E6%B6%88%E6%81%AF%E6%91%98%E8%A6%81%E7%AE%97%E6%B3%95%E5%AE%9E%E9%AA%8C%E8%AE%B2%E8%A7%A3/" title="SHA-1 消息摘要算法实验讲解">SHA-1 消息摘要算法实验讲解</a><time datetime="2026-04-27T14:00:00.000Z" title="发表于 2026-04-27 22:00:00">2026-04-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026 PolarisCTF Writeup"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/cover/2026PolarisCTFwp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="2026 PolarisCTF Writeup"/></a><div class="content"><a class="title" href="/2026/04/11/2026CTF/2026PolarisCTFwp/" title="2026 PolarisCTF Writeup">2026 PolarisCTF Writeup</a><time datetime="2026-04-11T03:45:14.000Z" title="发表于 2026-04-11 11:45:14">2026-04-11</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2024 - 2026 By LFischl</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.0</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.7.0"></script><script src="/js/main.js?v=5.7.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.1.14/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page@5.2.0/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar@0.1.16/dist/snackbar.min.js"></script><div class="js-pjax"><script>(() => {
+  const changeScriptToMath = article => {
+    article.querySelectorAll('script[type^="math/tex"]').forEach(el => {
+      const display = /mode=display/.test(el.type)
+      const node = document.createElement(display ? 'div' : 'span')
+      node.textContent = display
+        ? `$$${el.textContent}$$`
+        : `$${el.textContent}$`
+      el.parentNode.replaceChild(node, el)
+    })
+  }
+
   const loadMathjax = () => {
+    const article = document.getElementById('article-container')
+    if (!article || article.querySelector('.hbe-container')) return
+    changeScriptToMath(article)
+
     if (!window.MathJax) {
       window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem',
+            'ui/lazy'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
         tex: {
           inlineMath: [['$', '$'], ['\\(', '\\)']],
           tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
         },
         chtml: {
           scale: 1.1
         },
         options: {
+          lazyMargin: '200px',
           enableMenu: true,
-          renderActions: {
-            findScript: [10, doc => {
-              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
-                const display = !!node.type.match(/; *mode=display/)
-                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
-                const text = document.createTextNode('')
-                node.parentNode.replaceChild(text, node)
-                math.start = {node: text, delim: '', n: 0}
-                math.end = {node: text, delim: '', n: 0}
-                doc.math.push(math)
-              }
-            }, '']
-          }
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
         }
       }
 
       const script = document.createElement('script')
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.1.3/tex-mml-chtml.min.js'
       script.id = 'MathJax-script'
       script.async = true
       document.head.appendChild(script)
     } else {
-      MathJax.startup.document.state(0)
-      MathJax.texReset()
-      MathJax.typesetPromise()
+      MathJax.typesetClear()
+      MathJax.typesetPromise([ article ])
     }
   }
 
   btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
   window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
 })()</script><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.innerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+
+    setTimeout(() => URL.revokeObjectURL(url), 5000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    // Clean up previous event listeners and pending frames
+    if (wrap.__mermaidAbortController) {
+      wrap.__mermaidAbortController.abort()
+      if (wrap.__mermaidRafId) cancelAnimationFrame(wrap.__mermaidRafId)
+    }
+    const ac = new AbortController()
+    wrap.__mermaidAbortController = ac
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+    // Disable default gestures to prevent scroll chaining and pinch-zoom penetration in Chrome
+    svg.style.touchAction = 'none'
+
+    // Cache BoundingClientRect, throttled on scroll to reduce reflow
+    let cachedRect = svg.getBoundingClientRect()
+    let rectDirty = false
+    const markRectDirty = () => { rectDirty = true }
+    window.addEventListener('resize', markRectDirty, { signal: ac.signal })
+    window.addEventListener('scroll', markRectDirty, { signal: ac.signal, capture: true })
+    const getRect = () => {
+      if (rectDirty) {
+        cachedRect = svg.getBoundingClientRect()
+        rectDirty = false
+      }
+      return cachedRect
+    }
+
+    // Precompute clamp bounds from initial viewBox
+    const minW = initVb[2] * 0.1
+    const maxW = initVb[2] * 10
+    const minH = initVb[3] * 0.1
+    const maxH = initVb[3] * 10
+    const clampVb = vb => {
+      const out = vb.slice()
+      out[2] = clamp(out[2], minW, maxW)
+      out[3] = clamp(out[3], minH, maxH)
+      return out
+    }
+
+    // Throttle DOM updates using requestAnimationFrame
+    let pendingVb = null
+    let rafId = null
+    const applyVb = () => {
+      if (pendingVb) {
+        wrap.__mermaidCurViewBox = pendingVb
+        setSvgViewBox(svg, pendingVb)
+        pendingVb = null
+      }
+      rafId = null
+      wrap.__mermaidRafId = null
+    }
+    const setCurVb = vb => {
+      pendingVb = clampVb(vb)
+      if (!rafId) {
+        rafId = requestAnimationFrame(applyVb)
+        wrap.__mermaidRafId = rafId
+      }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      lastPointerX: 0,
+      lastPointerY: 0
+    }
+
+    const onPointerDown = e => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      const curVb = wrap.__mermaidCurViewBox
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      if (state.pointers.size === 1) {
+        state.startVb = curVb.slice()
+        state.lastPointerX = e.clientX
+        state.lastPointerY = e.clientY
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = curVb.slice()
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = state.pointers.values().next().value
+        const dxClient = p.x - state.lastPointerX
+        const dyClient = p.y - state.lastPointerY
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+        const dx = dxClient * (curVb[2] / rect.width)
+        const dy = dyClient * (curVb[3] / rect.height)
+        setCurVb([curVb[0] - dx, curVb[1] - dy, curVb[2], curVb[3]])
+        return
+      }
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const px = curVb[0] + (cx - rect.left) * (curVb[2] / rect.width)
+        const py = curVb[1] + (cy - rect.top) * (curVb[3] / rect.height)
+        setCurVb(zoomAtPoint(state.startVb, factor, px, py))
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      // Release PointerCapture to avoid event capture anomalies
+      if (svg.hasPointerCapture && svg.hasPointerCapture(e.pointerId)) {
+        svg.releasePointerCapture(e.pointerId)
+      }
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+      } else if (state.pointers.size === 1) {
+        const p = state.pointers.values().next().value
+        state.lastPointerX = p.x
+        state.lastPointerY = p.y
+      }
+    }
+
+    const onWheel = e => {
+      // Prevent event bubbling from triggering external scroll
+      e.preventDefault()
+      e.stopPropagation()
+      // Normalize deltaY across deltaMode (Chrome uses pixels, Safari uses lines)
+      let delta = e.deltaY
+      if (e.deltaMode === 1) delta *= 16
+      else if (e.deltaMode === 2) delta *= 400
+
+      // Continuous zoom factor: smoother than fixed 1.1/0.9 steps
+      const zoomFactor = Math.pow(1.001, delta)
+
+      const curVb = wrap.__mermaidCurViewBox
+      const rect = getRect()
+      const px = curVb[0] + (e.clientX - rect.left) * (curVb[2] / rect.width)
+      const py = curVb[1] + (e.clientY - rect.top) * (curVb[3] / rect.height)
+      setCurVb(zoomAtPoint(curVb, zoomFactor, px, py))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (init) setCurVb(init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown, { signal: ac.signal })
+    svg.addEventListener('pointermove', onPointerMove, { signal: ac.signal })
+    svg.addEventListener('pointerup', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('pointercancel', onPointerUpOrCancel, { signal: ac.signal })
+    svg.addEventListener('wheel', onWheel, { passive: false, signal: ac.signal })
+    svg.addEventListener('dblclick', onDblClick, { signal: ac.signal })
+  }
+
   const runMermaid = ele => {
     window.loadMermaid = true
     const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
-
     ele.forEach((item, index) => {
       const mermaidSrc = item.firstElementChild
-      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      // Clean up event listeners before removing old SVG
+      if (item.__mermaidAbortController) {
+        item.__mermaidAbortController.abort()
+      }
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      let config = {}
+      try {
+        config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      } catch (e) {
+        console.warn('[mermaid] failed to parse dataset.config:', e)
+      }
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
       const mermaidID = `mermaid-${index}`
       const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
 
-      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
       const renderMermaid = svg => {
         mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
       }
 
-      // mermaid v9 and v10 compatibility
-      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+      const handleError = err => {
+        console.error(`[mermaid] render failed for block #${index}:`, err)
+        const errorEl = document.createElement('div')
+        errorEl.className = 'mermaid-error'
+        errorEl.textContent = `Mermaid render error: ${err.message || err}`
+        mermaidSrc.insertAdjacentElement('afterend', errorEl)
+      }
+
+      try {
+        const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+        // mermaid v9 and v10 compatibility
+        if (typeof renderFn === 'string') {
+          renderMermaid(renderFn)
+        } else {
+          renderFn.then(({ svg }) => renderMermaid(svg)).catch(handleError)
+        }
+      } catch (err) {
+        handleError(err)
+      }
     })
   }
 
-  const codeToMermaid = () => {
-    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+  const codeToMermaid = $article => {
+    const codeMermaidEle = $article.querySelectorAll('pre > code.mermaid')
     if (codeMermaidEle.length === 0) return
 
     codeMermaidEle.forEach(ele => {
@@ -257,13 +651,16 @@
   }
 
   const loadMermaid = () => {
-    if (true) codeToMermaid()
-    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    const $article = document.getElementById('article-container')
+    if (!$article) return
+
+    if (true) codeToMermaid($article)
+    const $mermaid = $article.querySelectorAll('.mermaid-wrap')
     if ($mermaid.length === 0) return
 
     const runMermaidFn = () => runMermaid($mermaid)
     btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
-    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaidFn)
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.min.js').then(runMermaidFn)
   }
 
   btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
@@ -343,32 +740,15 @@
   } else {
     window.loadOtherComment = loadGiscus
   }
-})()</script></div><script src="/js/hbe-enhance.js"></script><script src="/js/fischl-lightning.js"></script><script src="/js/fischl-particles.js"></script><script src="/js/fischl-feathers.js"></script><div id="lf-butterfly-aplayer" class="aplayer no-destroy"></div><script defer src="/js/butterfly-music.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+})()</script></div><script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script><script src="/js/hbe-enhance.js"></script><script src="/js/fischl-effects.js"></script><div id="lf-butterfly-aplayer" class="aplayer no-destroy"></div><script defer src="/js/butterfly-music.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
 POWERMODE.shake = false;
 POWERMODE.mobile = false;
 document.body.addEventListener('input', POWERMODE);
-</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,FISCHL" data-fontsize="15px" data-random="false" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
-  const destroyAplayer = () => {
-    if (window.aplayers) {
-      for (let i = 0; i < window.aplayers.length; i++) {
-        if (!window.aplayers[i].options.fixed) {
-          window.aplayers[i].destroy()
-        }
-      }
-    }
-  }
-
-  const runMetingJS = () => {
-    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
-  }
-
-  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
-  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
-})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+</script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/click-show-text.min.js" data-mobile="false" data-text="I,LOVE,FISCHL" data-fontsize="15px" data-random="false" async="async"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
   const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
 
   window.pjax = new Pjax({
-    elements: 'a:not([target="_blank"])',
+    elements: 'a:not([target="_blank"]):not([data-fancybox])',
     selectors: pjaxSelectors,
     cacheBust: false,
     analytics: false,
@@ -377,7 +757,13 @@ document.body.addEventListener('input', POWERMODE);
 
   const triggerPjaxFn = (val) => {
     if (!val) return
-    Object.values(val).forEach(fn => fn())
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
   }
 
   document.addEventListener('pjax:send', () => {
@@ -395,8 +781,9 @@ document.body.addEventListener('input', POWERMODE);
   document.addEventListener('pjax:complete', () => {
     btf.removeGlobalFnEvent('pjaxCompleteOnce')
     document.querySelectorAll('script[data-pjax]').forEach(item => {
+      if (!item.parentNode) return
       const newScript = document.createElement('script')
-      const content = item.text || item.textContent || item.innerHTML || ""
+      const content = item.text || item.textContent || ''
       Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
       newScript.appendChild(document.createTextNode(content))
       item.parentNode.replaceChild(newScript, item)
@@ -406,11 +793,13 @@ document.body.addEventListener('input', POWERMODE);
   })
 
   document.addEventListener('pjax:error', e => {
-    if (e.request.status === 404) {
-      const usePjax = true
-      true 
-        ? (usePjax ? pjax.loadUrl('/404.html') : window.location.href = '/404.html')
-        : window.location.href = e.request.responseURL
+    const responseURL = e.request && e.request.responseURL
+    if (e.request && e.request.status === 404) {
+      true
+        ? pjax.loadUrl('/404.html')
+        : responseURL && (window.location.href = responseURL)
+    } else if (responseURL) {
+      window.location.href = responseURL
     }
   })
-})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.7.0"></script></div></div></body></html>

@@ -1,150 +1,161 @@
 (function () {
-  const LOCK_MS = 3000;
+  'use strict';
 
-  function triggerUnlock(mainElement) {
-    const event = new Event('keydown', {
-      bubbles: true,
-      cancelable: true
+  var LOCK_MS = 3000;
+  var controller = null;
+
+  function currentElements() {
+    var main = document.getElementById('hexo-blog-encrypt');
+    return {
+      main: main,
+      button: main ? main.querySelector('.hbe-unlock-btn') : null,
+      message: main ? main.querySelector('.hbe-unlock-message') : null
+    };
+  }
+
+  function triggerUnlock(main) {
+    var event = new Event('keydown', { bubbles: true, cancelable: true });
+    Object.defineProperties(event, {
+      key: { value: 'Enter' },
+      code: { value: 'Enter' },
+      keyCode: { value: 13 },
+      which: { value: 13 },
+      isComposing: { value: false }
     });
-
-    Object.defineProperty(event, 'key', { value: 'Enter' });
-    Object.defineProperty(event, 'code', { value: 'Enter' });
-    Object.defineProperty(event, 'keyCode', { value: 13 });
-    Object.defineProperty(event, 'which', { value: 13 });
-    Object.defineProperty(event, 'isComposing', { value: false });
-
-    mainElement.dispatchEvent(event);
+    main.dispatchEvent(event);
   }
 
-  function isLocked(button) {
-    return !!button && (button.disabled || button.dataset.locked === '1');
-  }
-
-  function lockButton(button, messageEl) {
+  function lockCurrentButton(button, message, signal) {
     if (!button || button.dataset.locked === '1') return;
 
     button.dataset.locked = '1';
     button.disabled = true;
+    button.dataset.originText = button.dataset.originText || button.textContent || '解锁文章';
+    var secondsLeft = Math.ceil(LOCK_MS / 1000);
 
-    let left = Math.ceil(LOCK_MS / 1000);
-    const originText = button.dataset.originText || '解锁文章';
-    button.dataset.originText = originText;
-
-    function updateText() {
-      button.textContent = `密码错误（${left}s）`;
-      if (messageEl) {
-        messageEl.textContent = `密码错误，请 ${left} 秒后重试`;
-        messageEl.style.display = 'inline-block';
+    function update() {
+      if (!button.isConnected) return;
+      button.textContent = '密码错误（' + secondsLeft + 's）';
+      if (message && message.isConnected) {
+        message.textContent = '密码错误，请 ' + secondsLeft + ' 秒后重试';
+        message.style.display = 'inline-block';
       }
     }
 
-    updateText();
-
-    const timer = setInterval(function () {
-      left -= 1;
-
-      if (left > 0) {
-        updateText();
-        return;
-      }
-
-      clearInterval(timer);
+    var timer;
+    function unlock() {
+      window.clearInterval(timer);
+      if (!button.isConnected) return;
       button.disabled = false;
       button.dataset.locked = '0';
-      button.textContent = originText;
-
-      if (messageEl) {
-        messageEl.textContent = '';
-        messageEl.style.display = 'none';
+      button.textContent = button.dataset.originText;
+      if (message && message.isConnected) {
+        message.textContent = '';
+        message.style.display = 'none';
       }
+    }
+
+    update();
+    timer = window.setInterval(function () {
+      secondsLeft -= 1;
+      if (secondsLeft > 0) update();
+      else unlock();
     }, 1000);
+    signal.addEventListener('abort', function () { window.clearInterval(timer); }, { once: true });
   }
 
-  function patchAlert(button, messageEl, wrongPassMessage) {
-    if (window.__hbeAlertPatched) return;
-    window.__hbeAlertPatched = true;
+  function patchAlert() {
+    if (window.__lfHbeAlertPatched) return;
+    window.__lfHbeAlertPatched = true;
+    window.__lfHbeOriginalAlert = window.alert.bind(window);
 
-    const originalAlert = window.alert;
-    window.alert = function (msg) {
-      if (msg === wrongPassMessage) {
-        lockButton(button, messageEl);
+    window.alert = function (value) {
+      var elements = currentElements();
+      var wrongPasswordMessage = elements.main && elements.main.dataset.wpm;
+      if (
+        controller &&
+        wrongPasswordMessage &&
+        String(value) === String(wrongPasswordMessage)
+      ) {
+        lockCurrentButton(elements.button, elements.message, controller.signal);
+        return;
       }
-      return originalAlert.apply(this, arguments);
+      window.__lfHbeOriginalAlert(value);
     };
   }
 
-  function initHbeEnhance() {
-    const mainElement = document.getElementById('hexo-blog-encrypt');
-    if (!mainElement) return;
-    if (mainElement.dataset.hbeEnhanced === '1') return;
+  function isLocked(button) {
+    return !button || button.disabled || button.dataset.locked === '1';
+  }
 
-    const content = mainElement.querySelector('.hbe-content');
-    const input = document.getElementById('hbePass');
+  function hasCryptoSupport() {
+    return window.isSecureContext && window.crypto && window.crypto.subtle;
+  }
+
+  function submit(main, button, message) {
+    if (isLocked(button)) return;
+    if (!hasCryptoSupport()) {
+      window.alert('当前页面未启用安全加密环境，请使用 HTTPS 访问后再解锁。');
+      return;
+    }
+    message.textContent = '';
+    message.style.display = 'none';
+    triggerUnlock(main);
+  }
+
+  function destroy() {
+    if (controller) controller.abort();
+    controller = null;
+  }
+
+  function init() {
+    destroy();
+    patchAlert();
+
+    var main = document.getElementById('hexo-blog-encrypt');
+    if (!main) return;
+    var content = main.querySelector('.hbe-content');
+    var input = main.querySelector('#hbePass') || document.getElementById('hbePass');
     if (!content || !input) return;
 
-    const wrongPassMessage = mainElement.dataset.wpm || '密码错误';
+    controller = new AbortController();
+    var signal = controller.signal;
+    var previousAction = content.querySelector('.hbe-action-wrap');
+    if (previousAction) previousAction.remove();
 
-    const oldAction = content.querySelector('.hbe-action-wrap');
-    if (oldAction) oldAction.remove();
-
-    const actionWrap = document.createElement('div');
-    actionWrap.className = 'hbe-action-wrap';
-
-    const button = document.createElement('button');
+    var action = document.createElement('div');
+    action.className = 'hbe-action-wrap';
+    var button = document.createElement('button');
     button.type = 'button';
     button.className = 'hbe-unlock-btn';
     button.textContent = '解锁文章';
-
-    const messageEl = document.createElement('div');
-    messageEl.className = 'hbe-unlock-message';
-    messageEl.style.display = 'none';
-
-    actionWrap.appendChild(button);
-    actionWrap.appendChild(messageEl);
-    content.appendChild(actionWrap);
-
-    patchAlert(button, messageEl, wrongPassMessage);
+    var message = document.createElement('div');
+    message.className = 'hbe-unlock-message';
+    message.style.display = 'none';
+    message.setAttribute('role', 'status');
+    message.setAttribute('aria-live', 'polite');
+    action.appendChild(button);
+    action.appendChild(message);
+    content.appendChild(action);
 
     button.addEventListener('click', function () {
-      if (isLocked(button)) return;
+      submit(main, button, message);
+    }, { signal: signal });
 
-      if (!window.isSecureContext || !(window.crypto && window.crypto.subtle)) {
-        alert('当前页面未启用安全加密环境，请使用 HTTPS 访问后再解锁。');
-        return;
-      }
-
-      messageEl.textContent = '';
-      messageEl.style.display = 'none';
-      triggerUnlock(mainElement);
-    });
-
-    input.addEventListener(
-      'keydown',
-      function (event) {
-        if (event.key !== 'Enter') return;
-
-        event.preventDefault();
-        event.stopPropagation();
-        event.stopImmediatePropagation();
-
-        if (isLocked(button)) return;
-
-        if (!window.isSecureContext || !(window.crypto && window.crypto.subtle)) {
-          alert('当前页面未启用安全加密环境，请使用 HTTPS 访问后再解锁。');
-          return;
-        }
-
-        messageEl.textContent = '';
-        messageEl.style.display = 'none';
-        triggerUnlock(mainElement);
-      },
-      true
-    );
-
-    mainElement.dataset.hbeEnhanced = '1';
+    input.addEventListener('keydown', function (event) {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
+      submit(main, button, message);
+    }, { capture: true, signal: signal });
   }
 
-  document.addEventListener('DOMContentLoaded', initHbeEnhance);
-  window.addEventListener('load', initHbeEnhance);
-  window.addEventListener('pjax:complete', initHbeEnhance);
+  document.addEventListener('pjax:send', destroy);
+  document.addEventListener('pjax:complete', init);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 })();
